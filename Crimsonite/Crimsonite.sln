@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Crimsonite", "Crimsonite\Crimsonite.vcxproj", "{3015946E-B567-4421-8833-985A602C2D7F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo", "..\Demo\Demo.vcxproj", "{902E351F-B30E-4EA2-8520-E190318EA316}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{3015946E-B567-4421-8833-985A602C2D7F}.Debug|x64.Build.0 = Release|x64
 		{3015946E-B567-4421-8833-985A602C2D7F}.Release|x64.ActiveCfg = Release|x64
 		{3015946E-B567-4421-8833-985A602C2D7F}.Release|x64.Build.0 = Release|x64
+		{902E351F-B30E-4EA2-8520-E190318EA316}.Debug|x64.ActiveCfg = Debug|x64
+		{902E351F-B30E-4EA2-8520-E190318EA316}.Debug|x64.Build.0 = Debug|x64
+		{902E351F-B30E-4EA2-8520-E190318EA316}.Release|x64.ActiveCfg = Release|x64
+		{902E351F-B30E-4EA2-8520-E190318EA316}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

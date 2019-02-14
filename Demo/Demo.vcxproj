@@ -57,6 +57,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -71,6 +74,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\Crimsonite\Crimsonite\Crimsonite.vcxproj">

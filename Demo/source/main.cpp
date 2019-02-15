@@ -6,6 +6,5 @@ namespace Crimson
 int main()
 {
 	Crimson::Test();
-	while (true) {};
 	return 0;
 }

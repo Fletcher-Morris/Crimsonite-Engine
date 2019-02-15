@@ -6,5 +6,6 @@ namespace Crimson
 	void Test()
 	{
 		printf("CRIMSONITE");
+		while (true) {};
 	}
 }

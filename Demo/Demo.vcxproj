@@ -58,8 +58,12 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -75,8 +79,12 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\Crimsonite\Crimsonite\Crimsonite.vcxproj">

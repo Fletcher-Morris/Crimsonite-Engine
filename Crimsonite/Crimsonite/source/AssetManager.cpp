@@ -1,10 +1,13 @@
 #include "AssetManager.h"
 
-AssetManager * Crimsonite::AssetManager::Instance()
+AssetManager * AssetManager::m_instance(0);
+AssetManager * AssetManager::Instance()
 {
-	return nullptr;
+	if (!m_instance) m_instance = new AssetManager();
+	return m_instance;
 }
 
-Crimsonite::AssetManager::~AssetManager()
+AssetManager::~AssetManager()
 {
+	m_instance = 0;
 }

@@ -3,6 +3,8 @@
 #include <map>
 #include <vector>
 
+#include "Asset.h"
+
 class AssetManager
 {
 
@@ -22,6 +24,7 @@ public:
 
 private:
 
+	std::map<std::string, Asset> m_assets;
 	//	TEXTURE MAP
 	//	MESH MAP
 	//	SHADER MAP

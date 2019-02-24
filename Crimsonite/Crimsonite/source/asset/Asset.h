@@ -7,6 +7,7 @@ class Asset
 
 public:
 
+	virtual void OnLoad(bool _success);
 
 private:
 

@@ -13,14 +13,41 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\asset">
+      <UniqueIdentifier>{c76814d1-250b-466c-ac54-4fc91a6b8fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\asset">
+      <UniqueIdentifier>{773aea3b-bbce-4f9e-af18-a27564a01794}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\AssetManager.cpp">
+      <Filter>Source Files\asset</Filter>
+    </ClCompile>
+    <ClCompile Include="source\asset\Asset.cpp">
+      <Filter>Source Files\asset</Filter>
+    </ClCompile>
+    <ClCompile Include="source\asset\MeshAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AssetManager.h">
+      <Filter>Source Files\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\asset\Asset.h">
+      <Filter>Header Files\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\asset\AssetManager.h">
+      <Filter>Header Files\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\asset\MeshAsset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

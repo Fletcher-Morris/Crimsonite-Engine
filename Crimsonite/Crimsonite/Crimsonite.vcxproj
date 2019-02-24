@@ -11,9 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\AssetManager.cpp" />
+    <ClCompile Include="source\asset\Asset.cpp" />
+    <ClCompile Include="source\asset\MeshAsset.cpp" />
     <ClCompile Include="source\core.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\AssetManager.h" />
+    <ClInclude Include="source\asset\Asset.h" />
+    <ClInclude Include="source\asset\AssetManager.h" />
+    <ClInclude Include="source\asset\MeshAsset.h" />
     <ClInclude Include="source\core.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

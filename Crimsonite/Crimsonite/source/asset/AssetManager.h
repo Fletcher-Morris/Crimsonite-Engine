@@ -2,6 +2,7 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
 
 #include "Asset.h"
 #include "../mesh/Mesh.h"
@@ -22,6 +23,7 @@ public:
 	//	MESH METHODS
 	void LoadMesh(std::string _meshName, std::string _filePath);
 	Mesh * GetMesh(std::string _meshName);
+	void WriteMeshFile(Mesh _mesh, std::string _filePath);
 
 	//	SHADER METHODS
 
@@ -37,6 +39,7 @@ private:
 
 	//	MESH MAP
 	std::vector<std::string> m_loadedMeshNames;
+	int m_latestMeshRevision = 1;
 
 	//	SHADER MAP
 

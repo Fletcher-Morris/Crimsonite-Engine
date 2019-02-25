@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Asset.h"
-#include "Mesh.h"
+#include "../mesh/Mesh.h"
 
 class AssetManager
 {

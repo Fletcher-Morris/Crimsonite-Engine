@@ -22,9 +22,9 @@ private:
 
 enum AssetType
 {
-	Texture,
-	Mesh,
-	Shader,
-	Material,
-	Scene
+	TextureAsset,
+	MeshAsset,
+	ShaderAsset,
+	MaterialAsset,
+	SceneAsset
 };

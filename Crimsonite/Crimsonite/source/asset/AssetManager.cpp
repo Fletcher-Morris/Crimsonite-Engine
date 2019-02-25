@@ -23,9 +23,10 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 	std::vector<unsigned int>	output_indices;
 
 	struct stat statFile;
-	//	Check if a mesh version of the file allready exists.
+	//	Check if a MESH version of the file allready exists.
 	if (stat((_filePath + ".mesh").c_str(), &statFile) == 0)
 	{
+		std::cout << "Loading MESH file : " << _filePath << std::endl;
 		//	Proccess the mesh file.
 
 //	Temporary error-suppressor.
@@ -84,9 +85,14 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				this->m_loadedMeshNames.push_back(_meshName);
 			}
 		}
-	}
 //	End error-suppressor.
 #pragma warning(pop)
+	}
+	else
+	{
+		//	Load the basic OBJ version.
+		std::cout << "Loading OBJ file : " << _filePath << std::endl;
+	}
 }
 
 void AssetManager::WriteMeshFile(Mesh _mesh, std::string _filePath)
@@ -132,7 +138,7 @@ void AssetManager::WriteMeshFile(Mesh _mesh, std::string _filePath)
 
 	//	Prepare the mesh index data.
 	int i = 0;
-	while (i < _mesh.indices.size())
+	while (i < _mesh.indices.size() - 1)
 	{
 		fileData += "\ni ";
 		fileData.append(std::to_string(_mesh.indices[i]));

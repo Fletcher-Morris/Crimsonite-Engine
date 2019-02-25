@@ -1,3 +1,5 @@
+#include <string>
+
 namespace Crimson
 {
 	_declspec(dllimport) void Test();

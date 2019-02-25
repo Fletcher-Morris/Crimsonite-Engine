@@ -163,3 +163,7 @@ Mesh * AssetManager::GetMesh(std::string _meshName)
 {
 	return &m_meshes.at(_meshName);
 }
+
+void AssetManager::LoadShader(std::string _shaderName, std::string _filePath)
+{
+}

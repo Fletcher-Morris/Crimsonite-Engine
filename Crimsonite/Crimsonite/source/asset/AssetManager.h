@@ -23,11 +23,12 @@ public:
 	//	TEXTURE METHODS
 
 	//	MESH METHODS
-	__declspec(dllexport) void LoadMesh(std::string _meshName, std::string _filePath);
+	void LoadMesh(std::string _meshName, std::string _filePath);
 	void WriteMeshFile(Mesh _mesh, std::string _filePath);
 	Mesh * GetMesh(std::string _meshName);
 
 	//	SHADER METHODS
+	void LoadShader(std::string _shaderName, std::string _filePath);
 
 	//	MATERIAL METHODS
 

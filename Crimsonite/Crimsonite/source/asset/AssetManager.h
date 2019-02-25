@@ -38,6 +38,7 @@ private:
 	//	TEXTURE MAP
 
 	//	MESH MAP
+	std::map<std::string, Mesh> m_meshes;
 	std::vector<std::string> m_loadedMeshNames;
 	int m_latestMeshRevision = 1;
 

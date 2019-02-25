@@ -57,6 +57,25 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				newVertex.uv = newUv;
 				output_vertices.push_back(newVertex);
 			}
+			//	Check for index header.
+			else if (strcmp(lineHeader, "i") == 0)
+			{
+				int newIndex;
+				fscanf(file, "%d", &newIndex);
+				output_indices.push_back(newIndex);
+			}
+
+			//	Create the new mesh.
+			Mesh newMesh(output_vertices, output_indices);
+			//	Upload the new mesh to the GPU.
+			newMesh.UploadToGpu();
+			//	Store the new mesh in the asset manager.
+			this->m_meshes[_meshName] = newMesh;
+			//	Add this mesh's name to the list of loaded mesh names.
+			if (std::find(m_loadedMeshNames.begin(), m_loadedMeshNames.end(), _meshName) == m_loadedMeshNames.end())
+			{
+				this->m_loadedMeshNames.push_back(_meshName);
+			}
 		}
 	}
 }

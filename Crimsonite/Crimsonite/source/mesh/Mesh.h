@@ -16,6 +16,7 @@ public:
 	std::vector<Vertex> vertices;
 	//	A vector holding the indices of vertices used in the mesh.
 	std::vector<unsigned int> indeces;
+	void UploadToGpu();
 
 private:
 

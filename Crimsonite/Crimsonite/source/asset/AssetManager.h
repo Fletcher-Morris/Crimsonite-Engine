@@ -3,6 +3,8 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <chrono>
 
 #include "Asset.h"
 #include "../mesh/Mesh.h"
@@ -21,9 +23,9 @@ public:
 	//	TEXTURE METHODS
 
 	//	MESH METHODS
-	void LoadMesh(std::string _meshName, std::string _filePath);
-	Mesh * GetMesh(std::string _meshName);
+	void LoadMesh(std::string _meshName, std::string _filePath);	
 	void WriteMeshFile(Mesh _mesh, std::string _filePath);
+	Mesh * GetMesh(std::string _meshName);
 
 	//	SHADER METHODS
 

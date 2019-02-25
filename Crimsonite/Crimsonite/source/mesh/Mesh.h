@@ -11,11 +11,12 @@ public:
 
 	Mesh();
 	//	Constructor for mesh using vertices and indices parameters.
-	Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indeces);
+	Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices);
 	//	A vector holding the unique vertices used in the mesh.
 	std::vector<Vertex> vertices;
 	//	A vector holding the indices of vertices used in the mesh.
-	std::vector<unsigned int> indeces;
+	std::vector<unsigned int> indices;
+
 	void UploadToGpu();
 
 private:

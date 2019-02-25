@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include "Shader.h"
 
 Shader::Shader()
 {
@@ -43,11 +44,6 @@ Shader::Shader(const char * _vertexPath, const char * _fragmentPath)
 	Compile(vertexCode, fragmentCode);
 }
 
-Shader::Shader(const std::string _vertexPath, const std::string _fragmentPath)
-{
-	Shader(_vertexPath.c_str(), _fragmentPath.c_str());
-}
-
 Shader::Shader(const char * _comboPath)
 {
 }
@@ -62,6 +58,7 @@ void Shader::Compile(std::string _vertexCode, std::string _fragmentCode)
 
 void Shader::Compile(const std::string _comboPath)
 {
+
 }
 
 void Shader::Bind() const

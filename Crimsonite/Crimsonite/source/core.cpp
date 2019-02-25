@@ -11,6 +11,8 @@ namespace Crimson
 		AssetManager::Instance()->LoadMesh("cube", "assets/cube");
 		AssetManager::Instance()->WriteMeshFile(*AssetManager::Instance()->GetMesh("cube"), "assets/cube2.mesh");
 
+		AssetManager::Instance()->LoadShader("shader", "assets/vertex.vert", "assets/fragment.frag");
+
 		while (true) {};
 	}
 }

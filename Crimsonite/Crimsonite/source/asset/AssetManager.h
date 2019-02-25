@@ -29,7 +29,9 @@ public:
 	Mesh * GetMesh(std::string _meshName);
 
 	//	SHADER METHODS
+	void AddShader(std::string _shaderName);
 	void LoadShader(std::string _shaderName, std::string _filePath);
+	void LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath);
 	Shader * GetShader(std::string _shaderName);
 
 	//	MATERIAL METHODS
@@ -48,6 +50,7 @@ private:
 	int m_latestMeshRevision = 1;
 
 	//	SHADER MAP
+	std::map<std::string, Shader> m_shaders;
 
 	//	MATERIAL MAP
 

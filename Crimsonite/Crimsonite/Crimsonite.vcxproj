@@ -15,6 +15,7 @@
     <ClCompile Include="source\asset\AssetManager.cpp" />
     <ClCompile Include="source\core.cpp" />
     <ClCompile Include="source\mesh\Mesh.cpp" />
+    <ClCompile Include="source\render\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\AssetManager.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="source\core.h" />
     <ClInclude Include="source\mesh\Mesh.h" />
     <ClInclude Include="source\mesh\Vertex.h" />
+    <ClInclude Include="source\render\Shader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

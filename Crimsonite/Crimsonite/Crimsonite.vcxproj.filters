@@ -25,6 +25,12 @@
     <Filter Include="Header Files\mesh">
       <UniqueIdentifier>{ed8d26c5-f543-49f8-bbc0-6f311abc7918}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\render">
+      <UniqueIdentifier>{546ed25d-d9c8-4141-bd6b-3a4a92bbba96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render">
+      <UniqueIdentifier>{97802d7f-07c0-48e6-a977-03d872957e45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core.cpp">
@@ -38,6 +44,9 @@
     </ClCompile>
     <ClCompile Include="source\asset\AssetManager.cpp">
       <Filter>Source Files\asset</Filter>
+    </ClCompile>
+    <ClCompile Include="source\render\Shader.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="source\mesh\Vertex.h">
       <Filter>Header Files\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="source\render\Shader.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

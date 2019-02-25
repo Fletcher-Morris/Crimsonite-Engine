@@ -164,6 +164,16 @@ Mesh * AssetManager::GetMesh(std::string _meshName)
 	return &m_meshes.at(_meshName);
 }
 
+void AssetManager::AddShader(std::string _shaderName)
+{
+	m_shaders[_shaderName] = Shader();
+}
+
 void AssetManager::LoadShader(std::string _shaderName, std::string _filePath)
 {
+}
+
+void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath)
+{
+	m_shaders[_shaderName] = Shader(_vertexPath.c_str(), _fragmentPath.c_str());
 }

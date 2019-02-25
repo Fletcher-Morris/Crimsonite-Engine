@@ -15,6 +15,9 @@ public:
 	Shader(const char* _comboPath);
 	Shader(const std::string _comboPath);
 
+	void Compile(std::string _vertexCode, std::string _fragmentCode);
+	void Compile(const std::string _comboPath);
+
 	void Bind() const;
 	void Unbind() const;
 };

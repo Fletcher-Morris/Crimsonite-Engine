@@ -16,7 +16,7 @@ private:
 	//	The name of the asset (shown in-engine)
 	std::string m_assetName;
 	//	The type of asset, e.g. texture, mesh, shader
-	AssetType m_assetType;
+	enum AssetType m_assetType;
 
 };
 

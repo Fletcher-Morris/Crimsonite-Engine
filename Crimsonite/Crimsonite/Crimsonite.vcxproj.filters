@@ -19,19 +19,25 @@
     <Filter Include="Header Files\asset">
       <UniqueIdentifier>{773aea3b-bbce-4f9e-af18-a27564a01794}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\mesh">
+      <UniqueIdentifier>{790de3c0-77fb-482e-942f-7d117468bc44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mesh">
+      <UniqueIdentifier>{ed8d26c5-f543-49f8-bbc0-6f311abc7918}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\AssetManager.cpp">
-      <Filter>Source Files\asset</Filter>
-    </ClCompile>
     <ClCompile Include="source\asset\Asset.cpp">
       <Filter>Source Files\asset</Filter>
     </ClCompile>
-    <ClCompile Include="source\asset\MeshAsset.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="source\mesh\Mesh.cpp">
+      <Filter>Source Files\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="source\asset\AssetManager.cpp">
+      <Filter>Source Files\asset</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -47,8 +53,11 @@
     <ClInclude Include="source\asset\AssetManager.h">
       <Filter>Header Files\asset</Filter>
     </ClInclude>
-    <ClInclude Include="source\asset\MeshAsset.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="source\mesh\Mesh.h">
+      <Filter>Header Files\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="source\mesh\Vertex.h">
+      <Filter>Header Files\mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

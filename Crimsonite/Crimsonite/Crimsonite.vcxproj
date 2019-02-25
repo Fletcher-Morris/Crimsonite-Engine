@@ -11,17 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\AssetManager.cpp" />
     <ClCompile Include="source\asset\Asset.cpp" />
-    <ClCompile Include="source\asset\MeshAsset.cpp" />
+    <ClCompile Include="source\asset\AssetManager.cpp" />
     <ClCompile Include="source\core.cpp" />
+    <ClCompile Include="source\mesh\Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\AssetManager.h" />
     <ClInclude Include="source\asset\Asset.h" />
     <ClInclude Include="source\asset\AssetManager.h" />
-    <ClInclude Include="source\asset\MeshAsset.h" />
     <ClInclude Include="source\core.h" />
+    <ClInclude Include="source\mesh\Mesh.h" />
+    <ClInclude Include="source\mesh\Vertex.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

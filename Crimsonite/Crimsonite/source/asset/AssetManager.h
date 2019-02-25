@@ -8,6 +8,7 @@
 
 #include "Asset.h"
 #include "../mesh/Mesh.h"
+#include "../render/Shader.h"
 
 class AssetManager
 {
@@ -29,6 +30,7 @@ public:
 
 	//	SHADER METHODS
 	void LoadShader(std::string _shaderName, std::string _filePath);
+	Shader * GetShader(std::string _shaderName);
 
 	//	MATERIAL METHODS
 

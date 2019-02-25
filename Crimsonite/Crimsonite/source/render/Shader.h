@@ -18,3 +18,9 @@ public:
 	void Bind() const;
 	void Unbind() const;
 };
+
+struct ShaderCode
+{
+	std::string vertexCode;
+	std::string fragmentCode;
+};

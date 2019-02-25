@@ -1,5 +1,4 @@
 #include "Shader.h"
-#include "Shader.h"
 
 Shader::Shader()
 {
@@ -54,6 +53,50 @@ Shader::Shader(const std::string _comboPath)
 
 void Shader::Compile(std::string _vertexCode, std::string _fragmentCode)
 {
+	const char * vertexCode = _vertexCode.c_str();
+	const char * fragmentCode = _fragmentCode.c_str();
+
+	unsigned int vertexShader;
+	unsigned int fragmentShader;
+
+	int success;
+	char info[512];
+
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vertexCode, NULL);
+	glCompileShader(vertexShader);
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(vertexShader, 512, NULL, info);
+		std::cout << "Failed to compile vertex shader :\n" << info << std::endl;
+	}
+
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragmentCode, NULL);
+	glCompileShader(fragmentShader);
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(vertexShader, 512, NULL, info);
+		std::cout << "Failed to compile fragment shader :\n" << info << std::endl;
+	}
+
+	shaderId = glCreateProgram();
+	glAttachShader(shaderId, vertexShader);
+	glAttachShader(shaderId, fragmentShader);
+	glLinkProgram(shaderId);
+
+	glGetProgramiv(shaderId, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		glGetProgramInfoLog(shaderId, 512, NULL, info);
+		std::cout << "Failed to link shader :\n" << info << std::endl;
+	}
+	std::cout << "Linked shader : " << shaderId << std::endl;
+
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
 }
 
 void Shader::Compile(const std::string _comboPath)

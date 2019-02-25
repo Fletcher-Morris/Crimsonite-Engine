@@ -5,6 +5,9 @@
 #include <fstream>
 #include <sstream>
 
+#include <gl/glew.h>
+#include <gl/GLU.h>
+
 class Shader
 {
 	

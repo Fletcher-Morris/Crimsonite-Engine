@@ -85,6 +85,8 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				this->m_loadedMeshNames.push_back(_meshName);
 			}
 		}
+
+		std::cout << "Loaded MESH file : " << _filePath << std::endl;
 //	End error-suppressor.
 #pragma warning(pop)
 	}
@@ -138,7 +140,7 @@ void AssetManager::WriteMeshFile(Mesh _mesh, std::string _filePath)
 
 	//	Prepare the mesh index data.
 	int i = 0;
-	while (i < _mesh.indices.size() - 1)
+	while (i < _mesh.indices.size())
 	{
 		fileData += "\ni ";
 		fileData.append(std::to_string(_mesh.indices[i]));

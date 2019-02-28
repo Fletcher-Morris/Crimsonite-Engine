@@ -14,6 +14,8 @@ AssetManager::~AssetManager()
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 {
+	std::cout << "Attempting to load mesh : " << _filePath << std::endl;
+
 	//	Prepare the vertex vectors.
 	std::vector<glm::vec3>		input_positions;
 	std::vector<glm::vec3>		input_normals;
@@ -71,29 +73,37 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				int newIndex;
 				fscanf(file, "%d", &newIndex);
 				output_indices.push_back(newIndex);
-			}
-
-			//	Create the new mesh.
-			Mesh newMesh(output_vertices, output_indices);
-			//	Upload the new mesh to the GPU.
-			newMesh.UploadToGpu();
-			//	Store the new mesh in the asset manager.
-			this->m_meshes[_meshName] = newMesh;
-			//	Add this mesh's name to the list of loaded mesh names.
-			if (std::find(m_loadedMeshNames.begin(), m_loadedMeshNames.end(), _meshName) == m_loadedMeshNames.end())
-			{
-				this->m_loadedMeshNames.push_back(_meshName);
-			}
+			}			
+		}
+		//	Create the new mesh.
+		Mesh newMesh(output_vertices, output_indices);
+		//	Upload the new mesh to the GPU.
+		newMesh.UploadToGpu();
+		//	Store the new mesh in the asset manager.
+		this->m_meshes[_meshName] = newMesh;
+		//	Add this mesh's name to the list of loaded mesh names.
+		if (std::find(m_loadedMeshNames.begin(), m_loadedMeshNames.end(), _meshName) == m_loadedMeshNames.end())
+		{
+			this->m_loadedMeshNames.push_back(_meshName);
 		}
 
 		std::cout << "Loaded MESH file : " << _filePath << std::endl;
 //	End error-suppressor.
 #pragma warning(pop)
 	}
-	else
+	else if (stat((_filePath + ".obj").c_str(), &statFile) == 0)
 	{
 		//	Load the basic OBJ version.
 		std::cout << "Loading OBJ file : " << _filePath << std::endl;
+	}
+	else if (stat((_filePath).c_str(), &statFile) == 0)
+	{
+		//	Load the basic OBJ version.
+		std::cout << "Loading MISC file : " << _filePath << std::endl;
+	}
+	else
+	{
+		std::cout << "Could not locate mesh file at : " << _filePath << std::endl;
 	}
 }
 

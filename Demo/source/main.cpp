@@ -1,4 +1,5 @@
 #include <string>
+#include <stdio.h>
 
 namespace Crimson
 {

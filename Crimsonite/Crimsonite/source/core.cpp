@@ -1,5 +1,6 @@
 #include "core.h"
 #include <stdio.h>
+#include <direct.h>
 #include "asset/AssetManager.h"
 
 namespace Crimson
@@ -8,8 +9,10 @@ namespace Crimson
 	{
 		printf("CRIMSONITE\n");
 
-		AssetManager::Instance()->LoadMesh("cube", "assets/cube");
-		AssetManager::Instance()->WriteMeshFile(*AssetManager::Instance()->GetMesh("cube"), "assets/cube2.mesh");
+		std::cout << _getcwd(NULL, 0) << std::endl;
+
+		AssetManager::Instance()->LoadMesh("cube", "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/cube");
+		AssetManager::Instance()->WriteMeshFile(*AssetManager::Instance()->GetMesh("cube"), "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/cube2.mesh");
 
 		AssetManager::Instance()->LoadShader("shader", "assets/vertex.vert", "assets/fragment.frag");
 

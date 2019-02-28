@@ -13,6 +13,10 @@ namespace Crimson
 		{
 			std::cout << "Failed to initialise GLEW!" << std::endl;
 		}
+		if (err == GLEW_ERROR_NO_GL_VERSION)
+		{
+			sd::cout << "FAILED TO INITIALISE GLEW MISSING GL VERSION"
+		}
 		std::cout << "Initialised GLEW (" << glewGetString(GLEW_VERSION) << ")" << std::endl;
 
 		printf("CRIMSONITE\n");

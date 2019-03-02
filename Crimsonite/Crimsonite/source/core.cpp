@@ -15,7 +15,7 @@ namespace Crimson
 		}
 		if (err == GLEW_ERROR_NO_GL_VERSION)
 		{
-			sd::cout << "FAILED TO INITIALISE GLEW MISSING GL VERSION"
+			std::cout << "FAILED TO INITIALISE GLEW MISSING GL VERSION" << std::endl;
 		}
 		std::cout << "Initialised GLEW (" << glewGetString(GLEW_VERSION) << ")" << std::endl;
 

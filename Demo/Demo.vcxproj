@@ -56,13 +56,15 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <PreBuildEvent>
       <Command>
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
+      <Command>del "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\Crimsonite.dll"
+xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -73,6 +75,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -83,7 +86,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
+      <Command>del "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\Crimsonite.dll"
+xcopy "$(SolutionDir)..\Crimsonite (Output)\$(Configuration)\Crimsonite.dll" "$(SolutionDir)..\$(ProjectName) (Output)\$(Configuration)\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

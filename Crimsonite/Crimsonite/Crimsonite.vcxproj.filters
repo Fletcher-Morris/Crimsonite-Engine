@@ -13,15 +13,63 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\asset">
+      <UniqueIdentifier>{c76814d1-250b-466c-ac54-4fc91a6b8fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\asset">
+      <UniqueIdentifier>{773aea3b-bbce-4f9e-af18-a27564a01794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mesh">
+      <UniqueIdentifier>{790de3c0-77fb-482e-942f-7d117468bc44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\mesh">
+      <UniqueIdentifier>{ed8d26c5-f543-49f8-bbc0-6f311abc7918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\render">
+      <UniqueIdentifier>{546ed25d-d9c8-4141-bd6b-3a4a92bbba96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render">
+      <UniqueIdentifier>{97802d7f-07c0-48e6-a977-03d872957e45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\asset\Asset.cpp">
+      <Filter>Source Files\asset</Filter>
+    </ClCompile>
+    <ClCompile Include="source\mesh\Mesh.cpp">
+      <Filter>Source Files\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="source\asset\AssetManager.cpp">
+      <Filter>Source Files\asset</Filter>
+    </ClCompile>
+    <ClCompile Include="source\render\Shader.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AssetManager.h">
+      <Filter>Source Files\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\asset\Asset.h">
+      <Filter>Header Files\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\asset\AssetManager.h">
+      <Filter>Header Files\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\mesh\Mesh.h">
+      <Filter>Header Files\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="source\mesh\Vertex.h">
+      <Filter>Header Files\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="source\render\Shader.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

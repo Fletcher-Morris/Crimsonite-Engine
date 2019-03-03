@@ -74,7 +74,7 @@ public:
 	std::string GetName() { return m_name; }
 	bool IsEnabled() { return m_enabled; }
 	bool IsDestroyed() { return m_doDestroy; }
-	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; m_doDestroy = true;}
+	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; m_system->AlertEntityDestruction(); m_doDestroy = true; }
 	int GetEcsEntityId() { return m_ecsEntityId; }
 
 	void Update();
@@ -114,7 +114,20 @@ public:
 class EcsSystem
 {
 
+private:
+
+	//	The most recently created entity.
+	EcsEntity * m_newestEntity;
+	//	The total number of entities (both live or destroyed).
+	int m_totalEntityCount;
+	//	The total number of live (not destroyed) entities.
+	int m_liveEntityCount;
+	//	The total number of destroyed (not live) entities.
+	int m_destroyedEntityCount;
+
 public:
+
+	EcsSystem() { Refresh(); }
 
 	//	A vector of all created entities.
 	std::vector<std::unique_ptr<EcsEntity>> entities;
@@ -137,9 +150,15 @@ public:
 	}
 
 	//	Destroy a given entity.
-	void DeleteEntity(EcsEntity & _deleteEntity) { _deleteEntity.Destroy(); }
+	void DestroyEntity(EcsEntity & _deleteEntity) { _deleteEntity.Destroy(); }
 	//	Destroy an entity with a given name.
-	void DeleteEntity(std::string _entityName) { DeleteEntity(FindEntity(_entityName)); }
+	void DestroyEntity(std::string _entityName) { DestroyEntity(FindEntity(_entityName)); }
+	//	Alert the system of a deleted entity.
+	void AlertEntityDestruction()
+	{
+		m_destroyedEntityCount++;
+		if (m_liveEntityCount > 0) m_liveEntityCount--;
+	}
 
 	//	Clear out all destroyed entities.
 	void Refresh()
@@ -150,12 +169,4 @@ public:
 		m_liveEntityCount = m_totalEntityCount;
 		m_destroyedEntityCount = 0;
 	}
-
-private:
-
-	EcsEntity * m_newestEntity;
-	int m_totalEntityCount;
-	int m_liveEntityCount;
-	int m_destroyedEntityCount;
-
 };

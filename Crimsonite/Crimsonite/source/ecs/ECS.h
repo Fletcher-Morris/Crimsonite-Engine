@@ -7,17 +7,18 @@
 #include <algorithm>
 #include <iostream>
 
+//	Forward-declare ECS classes for compiler.
 class EcsEntity;
 class EcsComponent;
+class EcsSystem;
 
+//	Tyhe maximum number of components on any entity.
 const int MAX_ENT_COMPONENTS = 32;
-
 inline int GetComponentId()
 {
 	static int prevComponentId = 0;
 	return prevComponentId++;
 }
-
 
 //	The template class for all ecs components.
 class EcsComponent
@@ -25,8 +26,11 @@ class EcsComponent
 
 private:
 
+	//	The unique id assigned to this component.
 	int m_ecsComponentId = 0;
+	//	Should the component be used?
 	bool m_enabled = true;
+	//	Can there be more than one of this component on a sngle entity?
 	bool m_uniquePerEntity = false;
 
 public:
@@ -34,17 +38,28 @@ public:
 	//	Entity reference
 	virtual ~EcsComponent() {}
 
+	//	Called when the component is first initialised.
 	virtual void OnInit() {}
+	//	Called every frame.
 	virtual void OnUpdate() {}
+	//	Called at fixed intervals.
 	virtual void OnFixedUpdate() {}
+	//	Called by the renderer.
 	virtual void OnRender() {}
+	//	Called when the complnent becomes enabled.
 	virtual void OnEnable() {}
+	//	Called when the component becomes disabled.
 	virtual void OnDisable() {}
 
+	//	Returns true if the component is enabled.
 	bool IsEnabled() { return m_enabled; }
+	//	Enables the component and calls the OnEnable() method.
 	void Enable() { if (!m_enabled) { m_enabled = true; OnEnable(); } }
+	//	Disables the component and calls the OnDisable() method.
 	void Enable() { if (m_enabled) { m_enabled = true; OnDisable(); } }
+	//	Returns true if the component is entity-unique.
 	bool IsUnique() { return m_uniquePerEntity; }
+	//	Returns the unique identity assigned to this component.
 	int GetEcsComponentId() { return m_ecsComponentId; }
 
 };
@@ -54,10 +69,15 @@ class EcsEntity
 	
 private:
 
+	//	Pointer toe the EcsSystem this entity is part of.
 	EcsSystem * m_system;
+	//	The unique id assigned to this entity.
 	int m_ecsEntityId;
+	//	The name of this entity.
 	std::string m_name;
+	//	The enabled state of this entity.
 	bool m_enabled;
+	//	Should this entity be destroyed upon ECS refresh?
 	bool m_doDestroy;
 
 	std::vector<std::unique_ptr<EcsComponent>> m_componentsVector;
@@ -70,25 +90,34 @@ public:
 	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; m_name = _entityName; };
 	EcsEntity(std::string _entityName, EcsSystem * _system) { m_system = _system; m_name = _entityName; };
 
+	//	Set the name of this entity.
 	void SetName(std::string _name) { m_name = _name; }
+	//	Return the name of this entity.
 	std::string GetName() { return m_name; }
+	//	Return true of this entity is enabled.
 	bool IsEnabled() { return m_enabled; }
+	//	Return true if this entity is marked as destroyed.
 	bool IsDestroyed() { return m_doDestroy; }
+	//	Mark this entity for destruction.
 	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; m_system->AlertEntityDestruction(); m_doDestroy = true; }
+	//	Return the unique identity assigned to this entity.
 	int GetEcsEntityId() { return m_ecsEntityId; }
 
+	//	Called every frame.
 	void Update();
+	//	Called at fixed intervals.
 	void FixedUpdate();
+	//	Called by the renderer.
 	void Render();
 
 
-	//	Check if an entity has a specific component attached.
+	//	Check if this entity has a specific component attached.
 	template<typename T> bool HasComponent()
 	{
 		return m_componentsBitset[GetComponentId<T>];
 	}
 
-	//	Add a component to an entity and return a reference.
+	//	Add a component to this entity and return a reference.
 	template<typename T, typename... args>
 	T& AttachComponent(args&&... _args)
 	{
@@ -102,7 +131,7 @@ public:
 		return *newComponent;
 	}
 
-	//	Return a reference to a component on an entity.
+	//	Return a reference to a component on this entity.
 	template<typename T> T& GetComponent()
 	{
 		auto ptr(m_componentsArray[GetComponentId<T>()]);
@@ -160,7 +189,7 @@ public:
 		if (m_liveEntityCount > 0) m_liveEntityCount--;
 	}
 
-	//	Clear out all destroyed entities.
+	//	Clear out all destroyed entities and reset counters.
 	void Refresh()
 	{
 		entities.erase(std::remove_if(std::begin(entities), std::end(entities),

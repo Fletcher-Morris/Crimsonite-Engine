@@ -54,6 +54,7 @@ class EcsEntity
 	
 private:
 
+	EcsSystem * m_system;
 	int m_ecsEntityId;
 	std::string m_name;
 	bool m_enabled;
@@ -65,11 +66,15 @@ private:
 
 public:
 
+	EcsEntity(EcsSystem * _system) { m_system = _system; };
+	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; m_name = _entityName; };
+	EcsEntity(std::string _entityName, EcsSystem * _system) { m_system = _system; m_name = _entityName; };
+
 	void SetName(std::string _name) { m_name = _name; }
 	std::string GetName() { return m_name; }
 	bool IsEnabled() { return m_enabled; }
 	bool IsDestroyed() { return m_doDestroy; }
-	void Destroy() { m_doDestroy = true; }
+	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; m_doDestroy = true;}
 	int GetEcsEntityId() { return m_ecsEntityId; }
 
 	void Update();
@@ -103,5 +108,54 @@ public:
 		auto ptr(m_componentsArray[GetComponentId<T>()]);
 		return *static_cast<T*>(ptr);
 	}
+
+};
+
+class EcsSystem
+{
+
+public:
+
+	//	A vector of all created entities.
+	std::vector<std::unique_ptr<EcsEntity>> entities;
+
+	//	Create a new entity with a given name.
+	EcsEntity& NewEntity(std::string _entityName)
+	{
+		EcsEntity * newEntity = new EcsEntity(this, _entityName);
+		std::unique_ptr<EcsEntity>entPtr{ newEntity };
+		entities.emplace_back(std::move(entPtr));
+		std::cout << "Created new entity : " << _entityName << std::endl;
+		m_newestEntity = newEntity;
+	}
+
+	//	Find an entity with a given name.
+	EcsEntity & FindEntity(std::string _entityName)
+	{
+		auto it = std::find_if(entities.begin(), entities.end(), [&_entityName](EcsEntity & ent) {return ent.GetName() == _entityName; });
+		if (it != entities.end()) { return *entities[std::distance(entities.begin(), it)]; }
+	}
+
+	//	Destroy a given entity.
+	void DeleteEntity(EcsEntity & _deleteEntity) { _deleteEntity.Destroy(); }
+	//	Destroy an entity with a given name.
+	void DeleteEntity(std::string _entityName) { DeleteEntity(FindEntity(_entityName)); }
+
+	//	Clear out all destroyed entities.
+	void Refresh()
+	{
+		entities.erase(std::remove_if(std::begin(entities), std::end(entities),
+		[](const std::unique_ptr<EcsEntity> &ent) {return ent->IsDestroyed(); }), std::end(entities));
+		m_totalEntityCount = entities.size();
+		m_liveEntityCount = m_totalEntityCount;
+		m_destroyedEntityCount = 0;
+	}
+
+private:
+
+	EcsEntity * m_newestEntity;
+	int m_totalEntityCount;
+	int m_liveEntityCount;
+	int m_destroyedEntityCount;
 
 };

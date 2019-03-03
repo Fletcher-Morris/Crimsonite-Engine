@@ -31,6 +31,12 @@
     <Filter Include="Source Files\render">
       <UniqueIdentifier>{97802d7f-07c0-48e6-a977-03d872957e45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ecs">
+      <UniqueIdentifier>{340340ef-8858-4773-aa1c-2de520e2f6cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs">
+      <UniqueIdentifier>{e26c8794-e5ef-4750-9af7-3a50a830dfed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core.cpp">
@@ -70,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="source\render\Shader.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ecs\ECS.h">
+      <Filter>Header Files\ecs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

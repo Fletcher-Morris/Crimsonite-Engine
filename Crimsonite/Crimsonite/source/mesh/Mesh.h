@@ -24,6 +24,10 @@ public:
 
 	bool IsInitialized() { return m_initialized; }
 
+	unsigned int GetVao() { return VAO; }
+	unsigned int GetVbo() { return VBO; }
+	unsigned int GetEbo() { return EBO; }
+
 private:
 
 	//	The VAO location on the GPU.
@@ -39,7 +43,7 @@ private:
 	int m_indexCount = 0;
 
 	//	The size of a single vertex.
-	unsigned long long m_sizeOfVertex;
+	unsigned long long m_vertexSize;
 
 	//	Has the mesh been initialized and sent to the gpu?
 	bool m_initialized = false;

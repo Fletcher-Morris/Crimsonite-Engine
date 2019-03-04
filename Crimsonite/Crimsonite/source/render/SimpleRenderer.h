@@ -7,6 +7,8 @@ class SimpleRenderer : public Renderer
 
 private:
 
+	std::vector<Mesh*> m_meshes;
+	std::vector<Shader*> m_shaders;
 	std::vector<MeshRenderer*> m_meshRenderers;
 
 public:

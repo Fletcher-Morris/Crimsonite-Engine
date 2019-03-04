@@ -18,6 +18,7 @@
     <ClCompile Include="source\mesh\Mesh.cpp" />
     <ClCompile Include="source\render\Renderer.cpp" />
     <ClCompile Include="source\render\Shader.cpp" />
+    <ClCompile Include="source\render\SimpleRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\AssetManager.h" />
@@ -30,6 +31,7 @@
     <ClInclude Include="source\mesh\Vertex.h" />
     <ClInclude Include="source\render\Renderer.h" />
     <ClInclude Include="source\render\Shader.h" />
+    <ClInclude Include="source\render\SimpleRenderer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

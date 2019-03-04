@@ -66,6 +66,9 @@
     <ClCompile Include="source\ecs\components\MeshRenderer.cpp">
       <Filter>Source Files\ecs\components</Filter>
     </ClCompile>
+    <ClCompile Include="source\render\SimpleRenderer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="source\ecs\components\MeshRenderer.h">
       <Filter>Header Files\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="source\render\SimpleRenderer.h">
+      <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

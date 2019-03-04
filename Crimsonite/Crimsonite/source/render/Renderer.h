@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Shader.h"
-#include "../mesh/Mesh.h"
+#include "../ecs/components/MeshRenderer.h"
+
+class MeshRenderer;
 
 class Renderer
 {
@@ -11,6 +13,8 @@ private:
 
 
 public:
+
+	virtual void Init();
 
 	virtual void Submit();
 	virtual void Submit(Mesh * _mesh);

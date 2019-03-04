@@ -12,4 +12,5 @@ Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indeces)
 
 void Mesh::UploadToGpu()
 {
+	m_initialized = true;
 }

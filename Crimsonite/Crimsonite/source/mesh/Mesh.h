@@ -19,6 +19,8 @@ public:
 
 	void UploadToGpu();
 
+	bool IsInitialized() { return m_initialized; }
+
 private:
 
 	//	The VAO location on the GPU.
@@ -33,5 +35,9 @@ private:
 	//	The number on indeces in the mesh.
 	int m_indexCount = 0;
 
+	//	The size of a single vertex.
 	unsigned long long m_sizeOfVertex;
+
+	//	Has the mesh been initialized and sent to the gpu?
+	bool m_initialized = false;
 };

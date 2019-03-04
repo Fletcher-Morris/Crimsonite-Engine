@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "../ecs/components/MeshRenderer.h"
 
+class Mesh;
 class MeshRenderer;
 
 class Renderer

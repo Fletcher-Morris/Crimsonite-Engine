@@ -52,6 +52,7 @@ namespace Crimson
 
 
 		AssetManager::Instance()->LoadMesh("cube", "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/cube");
+		std::cout << AssetManager::Instance()->GetMesh("cube")->IndexCount() << " indices" << std::endl;
 		AssetManager::Instance()->WriteMeshFile(*AssetManager::Instance()->GetMesh("cube"), "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/cube2.mesh");
 
 		AssetManager::Instance()->LoadShader("shader", "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/vertex.vert", "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/fragment.frag");

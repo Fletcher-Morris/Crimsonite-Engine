@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Vertex.h"
+#include "../render/Renderer.h"
 
 class Mesh
 {
@@ -14,8 +15,10 @@ public:
 	Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices);
 	//	A vector holding the unique vertices used in the mesh.
 	std::vector<Vertex> vertices;
+	int VertexCount() { return m_vertexCount; }
 	//	A vector holding the indices of vertices used in the mesh.
 	std::vector<unsigned int> indices;
+	int IndexCount() { return m_indexCount; }
 
 	void UploadToGpu();
 

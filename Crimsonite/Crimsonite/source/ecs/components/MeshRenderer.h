@@ -4,6 +4,8 @@
 #include "../../mesh/Mesh.h"
 #include "../../render/Renderer.h"
 
+class Mesh;
+
 class MeshRenderer : public EcsComponent
 {
 

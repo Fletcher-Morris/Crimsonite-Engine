@@ -17,7 +17,7 @@ void SimpleRenderer::Submit(Mesh * _mesh, Shader * _shader)
 	m_shaders.push_back(_shader);
 }
 
-void SimpleRenderer::submit(MeshRenderer * _meshRenderer)
+void SimpleRenderer::Submit(MeshRenderer * _meshRenderer)
 {
 	if (_meshRenderer->GetMesh()->IsInitialized() == false)
 		_meshRenderer->GetMesh()->UploadToGpu();

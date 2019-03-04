@@ -7,6 +7,9 @@
 #include <algorithm>
 #include <iostream>
 
+#include "../asset/AssetManager.h"
+#include "Components.h"
+
 //	Forward-declare ECS classes for compiler.
 class EcsEntity;
 class EcsComponent;
@@ -166,6 +169,8 @@ public:
 
 	//	A vector of all created entities.
 	std::vector<std::unique_ptr<EcsEntity>> entities;
+
+	EcsEntity * LastEntity() { return m_newestEntity; }
 
 	//	Create a new entity with a given name.
 	EcsEntity& NewEntity(std::string _entityName)

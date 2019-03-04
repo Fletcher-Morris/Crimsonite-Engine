@@ -19,7 +19,7 @@ public:
 
 	virtual void Submit(Mesh * _mesh);
 	virtual void Submit(Mesh * _mesh, Shader * _shader);
-	virtual void submit(MeshRenderer * _meshRenderer);
+	virtual void Submit(MeshRenderer * _meshRenderer);
 
 	virtual void Proccess();
 	virtual void Flush();

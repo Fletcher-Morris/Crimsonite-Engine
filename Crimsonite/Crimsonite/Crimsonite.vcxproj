@@ -25,6 +25,7 @@
     <ClInclude Include="source\asset\Asset.h" />
     <ClInclude Include="source\asset\AssetManager.h" />
     <ClInclude Include="source\core.h" />
+    <ClInclude Include="source\ecs\Components.h" />
     <ClInclude Include="source\ecs\components\MeshRenderer.h" />
     <ClInclude Include="source\ecs\ECS.h" />
     <ClInclude Include="source\mesh\Mesh.h" />

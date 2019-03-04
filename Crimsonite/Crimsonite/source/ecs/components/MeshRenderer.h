@@ -13,6 +13,7 @@ private:
 
 	Mesh * m_mesh;
 	Shader * m_shader;
+	Renderer * m_renderer;
 
 public:
 
@@ -32,5 +33,7 @@ public:
 	void SetShader(std::string _shaderName);
 	Shader * GetShader() { return m_shader; }
 
+	void SetRenderer(Renderer * _renderer);
 	void SubmitToRenderer();
+	void SubmitToRenderer(Renderer * _renderer);
 };

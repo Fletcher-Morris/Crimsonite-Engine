@@ -104,5 +104,8 @@
     <ClInclude Include="source\render\SimpleRenderer.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
+    <ClInclude Include="source\ecs\Components.h">
+      <Filter>Header Files\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

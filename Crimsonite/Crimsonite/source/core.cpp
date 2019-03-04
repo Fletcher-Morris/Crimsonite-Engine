@@ -60,7 +60,7 @@ namespace Crimson
 
 		EcsSystem ecs;
 		ecs.NewEntity("ENTITY");
-		ecs.DestroyEntity("ENTITY");
+		ecs.LastEntity()->AttachComponent<MeshRenderer>();
 
 		while (true) {};
 	}

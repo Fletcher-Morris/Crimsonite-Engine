@@ -19,6 +19,12 @@ inline int GetComponentId()
 	static int prevComponentId = 0;
 	return prevComponentId++;
 }
+template <typename T>
+inline int GetComponentId() noexcept
+{
+	static int id = GetComponentId();
+	return id;
+}
 
 //	The template class for all ecs components.
 class EcsComponent
@@ -56,7 +62,7 @@ public:
 	//	Enables the component and calls the OnEnable() method.
 	void Enable() { if (!m_enabled) { m_enabled = true; OnEnable(); } }
 	//	Disables the component and calls the OnDisable() method.
-	void Enable() { if (m_enabled) { m_enabled = true; OnDisable(); } }
+	void Disable() { if (m_enabled) { m_enabled = false; OnDisable(); } }
 	//	Returns true if the component is entity-unique.
 	bool IsUnique() { return m_uniquePerEntity; }
 	//	Returns the unique identity assigned to this component.
@@ -99,7 +105,7 @@ public:
 	//	Return true if this entity is marked as destroyed.
 	bool IsDestroyed() { return m_doDestroy; }
 	//	Mark this entity for destruction.
-	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; m_system->AlertEntityDestruction(); m_doDestroy = true; }
+	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; /*m_system->AlertEntityDestruction();*/ m_doDestroy = true; }
 	//	Return the unique identity assigned to this entity.
 	int GetEcsEntityId() { return m_ecsEntityId; }
 
@@ -169,19 +175,35 @@ public:
 		entities.emplace_back(std::move(entPtr));
 		std::cout << "Created new entity : " << _entityName << std::endl;
 		m_newestEntity = newEntity;
+		m_totalEntityCount++;
+		m_liveEntityCount++;
+		return *newEntity;
 	}
 
 	//	Find an entity with a given name.
-	EcsEntity & FindEntity(std::string _entityName)
+	EcsEntity * FindEntity(std::string _entityName)
 	{
-		auto it = std::find_if(entities.begin(), entities.end(), [&_entityName](EcsEntity & ent) {return ent.GetName() == _entityName; });
-		if (it != entities.end()) { return *entities[std::distance(entities.begin(), it)]; }
+		//	MAKE THIS FASTER
+		for (int i = 0; i < m_totalEntityCount; i++)
+		{
+			if (entities[i]->IsDestroyed() == false)
+			{
+				if (entities[i]->GetName() == _entityName)
+				{
+					std::cout << "Found entity : " << _entityName << std::endl;
+					return &*entities[i];
+				}
+			}
+		}
+
+		std::cout << "Could not find entity : " << _entityName << std::endl;
+		return NULL;
 	}
 
 	//	Destroy a given entity.
 	void DestroyEntity(EcsEntity & _deleteEntity) { _deleteEntity.Destroy(); }
 	//	Destroy an entity with a given name.
-	void DestroyEntity(std::string _entityName) { DestroyEntity(FindEntity(_entityName)); }
+	void DestroyEntity(std::string _entityName) { FindEntity(_entityName)->Destroy(); }
 	//	Alert the system of a deleted entity.
 	void AlertEntityDestruction()
 	{

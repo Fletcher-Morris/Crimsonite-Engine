@@ -37,6 +37,12 @@
     <Filter Include="Source Files\ecs">
       <UniqueIdentifier>{e26c8794-e5ef-4750-9af7-3a50a830dfed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ecs\components">
+      <UniqueIdentifier>{15a96a46-6b32-4492-aa50-9849001514cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs\components">
+      <UniqueIdentifier>{550c434f-2416-4cc1-9d77-adc75c5c6bb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core.cpp">
@@ -53,6 +59,12 @@
     </ClCompile>
     <ClCompile Include="source\render\Shader.cpp">
       <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\render\Renderer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ecs\components\MeshRenderer.cpp">
+      <Filter>Source Files\ecs\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="source\ecs\ECS.h">
       <Filter>Header Files\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="source\render\Renderer.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ecs\components\MeshRenderer.h">
+      <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

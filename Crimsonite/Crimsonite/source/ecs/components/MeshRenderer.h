@@ -29,4 +29,6 @@ public:
 	void SetShader(Shader * _newShader);
 	void SetShader(std::string _shaderName);
 	Shader * GetShader() { return m_shader; }
+
+	void SubmitToRenderer();
 };

@@ -7,6 +7,8 @@
 
 #include "asset/AssetManager.h"
 #include "ecs/ECS.h"
+#include "render/SimpleRenderer.h"
+#include "ecs/components/MeshRenderer.h"
 
 namespace Crimson
 {
@@ -55,12 +57,13 @@ namespace Crimson
 		AssetManager::Instance()->WriteMeshFile(*AssetManager::Instance()->GetMesh("cube"), path + "cube2.mesh");
 		AssetManager::Instance()->LoadShader("shader", path + "vertex.vert", path + "fragment.frag");
 
-		//Renderer renderer = Renderer();
+		Renderer renderer = SimpleRenderer();
 		EcsSystem ecs;
 		ecs.NewEntity("ENTITY");
-		/*MeshRenderer * mr = &ecs.LastEntity()->AttachComponent<MeshRenderer>();
+		MeshRenderer * mr = &ecs.LastEntity()->AttachComponent<MeshRenderer>();
 		mr->SetRenderer(&renderer);
-		mr->SetMesh("cube");*/
+		mr->SetMesh("cube");
+		mr->SetShader("shader");
 
 		while (true) {};
 	}

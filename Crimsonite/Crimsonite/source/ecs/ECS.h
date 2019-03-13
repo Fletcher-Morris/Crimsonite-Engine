@@ -45,6 +45,9 @@ private:
 public:
 
 	//	Entity reference
+	EcsEntity * entity;
+
+	//	Component destructor
 	virtual ~EcsComponent() {}
 
 	//	Called when the component is first initialised.

@@ -1,5 +1,7 @@
 #include "MeshRenderer.h"
 
+#include "../../render/Shader.h"
+
 void MeshRenderer::OnInit()
 {
 }
@@ -27,45 +29,51 @@ void MeshRenderer::OnDisable()
 void MeshRenderer::SetMesh(Mesh * _newMesh)
 {
 	m_mesh = _newMesh;
+	std::cout << entity->GetName() << " : MeshRenderer : SetMesh() : " << m_mesh->IndexCount() << std::endl;
 }
 
 void MeshRenderer::SetMesh(std::string _meshName)
 {
-	m_mesh = AssetManager::Instance()->GetMesh(_meshName);
+	SetMesh(AssetManager::Instance()->GetMesh(_meshName));
 }
 
-//void MeshRenderer::SetShader(Shader * _newShader)
-//{
-//	m_shader = _newShader;
-//}
-//
-//void MeshRenderer::SetShader(std::string _shaderName)
-//{
-//	m_shader = AssetManager::Instance()->GetShader(_shaderName);
-//}
+void MeshRenderer::SetShader(Shader * _newShader)
+{
+	m_shader = _newShader;
+}
 
-//void MeshRenderer::SetRenderer(Renderer * _renderer)
-//{
-//	if (_renderer != NULL)
-//	{
-//		m_renderer = _renderer;
-//		m_renderer->Submit(this);
-//	}
-//}
-//
-//void MeshRenderer::SubmitToRenderer()
-//{
-//	if (m_renderer != NULL)
-//	{
-//		m_renderer->Submit(this);
-//	}
-//}
-//
-//void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
-//{
-//	if (_renderer != NULL)
-//	{
-//		m_renderer = _renderer;
-//		m_renderer->Submit(this);
-//	}
-//}
+void MeshRenderer::SetShader(std::string _shaderName)
+{
+	m_shader = AssetManager::Instance()->GetShader(_shaderName);
+}
+
+Shader * MeshRenderer::GetShader()
+{
+	return m_shader;
+}
+
+void MeshRenderer::SetRenderer(Renderer * _renderer)
+{
+	if (_renderer != NULL)
+	{
+		m_renderer = _renderer;
+		m_renderer->Submit(this);
+	}
+}
+
+void MeshRenderer::SubmitToRenderer()
+{
+	if (m_renderer != NULL)
+	{
+		m_renderer->Submit(this);
+	}
+}
+
+void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
+{
+	if (_renderer != NULL)
+	{
+		m_renderer = _renderer;
+		m_renderer->Submit(this);
+	}
+}

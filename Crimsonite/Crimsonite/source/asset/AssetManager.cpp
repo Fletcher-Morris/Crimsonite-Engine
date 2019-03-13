@@ -189,3 +189,8 @@ void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, 
 {
 	m_shaders[_shaderName] = Shader(_vertexPath.c_str(), _fragmentPath.c_str());
 }
+
+Shader * AssetManager::GetShader(std::string _shaderName)
+{
+	return &m_shaders.at(_shaderName);
+}

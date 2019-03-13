@@ -49,18 +49,18 @@ namespace Crimson
 		std::cout << "Initialised GLEW (" << glewGetString(GLEW_VERSION) << ")" << std::endl;
 		std::cout << "Initialised OpenGL (" << glGetString(GL_VERSION) << ")" << std::endl;
 
+		std::string path = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
 
+		AssetManager::Instance()->LoadMesh("cube", path + "cube");
+		AssetManager::Instance()->WriteMeshFile(*AssetManager::Instance()->GetMesh("cube"), path + "cube2.mesh");
+		AssetManager::Instance()->LoadShader("shader", path + "vertex.vert", path + "fragment.frag");
 
-		AssetManager::Instance()->LoadMesh("cube", "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/cube");
-		std::cout << AssetManager::Instance()->GetMesh("cube")->IndexCount() << " indices" << std::endl;
-		AssetManager::Instance()->WriteMeshFile(*AssetManager::Instance()->GetMesh("cube"), "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/cube2.mesh");
-
-		AssetManager::Instance()->LoadShader("shader", "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/vertex.vert", "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/fragment.frag");
-
-
+		//Renderer renderer = Renderer();
 		EcsSystem ecs;
 		ecs.NewEntity("ENTITY");
-		ecs.LastEntity()->AttachComponent<MeshRenderer>();
+		/*MeshRenderer * mr = &ecs.LastEntity()->AttachComponent<MeshRenderer>();
+		mr->SetRenderer(&renderer);
+		mr->SetMesh("cube");*/
 
 		while (true) {};
 	}

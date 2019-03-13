@@ -2,9 +2,7 @@
 
 #include "../ECS.h"
 #include "../../mesh/Mesh.h"
-#include "../../render/Renderer.h"
-
-class Mesh;
+#include "../../render/SimpleRenderer.h"
 
 class MeshRenderer : public EcsComponent
 {
@@ -13,7 +11,7 @@ private:
 
 	Mesh * m_mesh;
 	Shader * m_shader;
-	Renderer * m_renderer;
+	//Renderer * m_renderer;
 
 public:
 
@@ -29,11 +27,11 @@ public:
 	void SetMesh(std::string _meshName);
 	Mesh * GetMesh() { return m_mesh; }
 
-	void SetShader(Shader * _newShader);
+	/*void SetShader(Shader * _newShader);
 	void SetShader(std::string _shaderName);
-	Shader * GetShader() { return m_shader; }
+	Shader * GetShader() { return m_shader; }*/
 
-	void SetRenderer(Renderer * _renderer);
+	/*void SetRenderer(Renderer * _renderer);
 	void SubmitToRenderer();
-	void SubmitToRenderer(Renderer * _renderer);
+	void SubmitToRenderer(Renderer * _renderer);*/
 };

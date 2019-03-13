@@ -2,8 +2,11 @@
 
 #include <vector>
 
+#include <gl/glew.h>
+//#include <gl/GLU.h>
+
 #include "Vertex.h"
-#include "../render/Renderer.h"
+//#include "../render/Renderer.h"
 
 class Mesh
 {

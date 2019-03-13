@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "../asset/AssetManager.h"
-#include "Components.h"
+//#include "Components.h"
 
 //	Forward-declare ECS classes for compiler.
 class EcsEntity;

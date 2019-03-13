@@ -5,6 +5,8 @@
 
 void SimpleRenderer::Init()
 {
+	std::cout << "Renderer INIT" << std::endl;
+	SetClearColor(0.5f, 0.5f,0.5f);
 }
 
 void SimpleRenderer::Submit(Mesh * _mesh)
@@ -33,6 +35,9 @@ void SimpleRenderer::Proccess()
 
 void SimpleRenderer::Flush()
 {
+	glClearColor(p_r, p_g, p_g, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	for (int i = 0; i < m_meshes.size(); i++)
 	{
 		glBindVertexArray(m_meshes[i]->GetVao());
@@ -40,7 +45,25 @@ void SimpleRenderer::Flush()
 	}
 	for (int i = 0; i < m_meshRenderers.size(); i++)
 	{
-		glBindVertexArray(m_meshRenderers[i]->GetMesh()->GetVao());
-		glDrawElements(GL_TRIANGLES, m_meshRenderers[i]->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+		MeshRenderer * m = m_meshRenderers[i];
+		m->GetShader()->Bind();
+
+		glBindVertexArray(m->GetMesh()->GetVao());
+		glDrawElements(GL_LINES, m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
 	}
+	std::cout << "Renderer FLUSH : " << m_meshRenderers.size() << std::endl;
+}
+
+void SimpleRenderer::SetClearColor(float _clearColor[3])
+{
+	p_r = _clearColor[0];
+	p_g = _clearColor[1];
+	p_b = _clearColor[2];
+}
+
+void SimpleRenderer::SetClearColor(float _r, float _g, float _b)
+{
+	p_r = _r;
+	p_g = _g;
+	p_b = _b;
 }

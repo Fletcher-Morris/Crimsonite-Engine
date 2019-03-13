@@ -18,6 +18,7 @@ void MeshRenderer::OnFixedUpdate()
 
 void MeshRenderer::OnRender()
 {
+	SubmitToRenderer();
 }
 
 void MeshRenderer::OnEnable()
@@ -61,6 +62,8 @@ void MeshRenderer::SetRenderer(Renderer * _renderer)
 		m_renderer = _renderer;
 		m_renderer->Submit(this);
 	}
+	else
+	std::cout << "NO RENDERER" << std::endl;
 }
 
 void MeshRenderer::SubmitToRenderer()
@@ -69,6 +72,8 @@ void MeshRenderer::SubmitToRenderer()
 	{
 		m_renderer->Submit(this);
 	}
+	else
+	std::cout << "NO RENDERER" << std::endl;
 }
 
 void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
@@ -78,4 +83,6 @@ void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
 		m_renderer = _renderer;
 		m_renderer->Submit(this);
 	}
+	else
+	std::cout << "NO RENDERER" << std::endl;
 }

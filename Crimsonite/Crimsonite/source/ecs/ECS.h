@@ -6,6 +6,7 @@
 #include <bitset>
 #include <algorithm>
 #include <iostream>
+#include <typeinfo>
 
 #include "../asset/AssetManager.h"
 //#include "Components.h"
@@ -96,6 +97,8 @@ private:
 	std::array<EcsComponent*, MAX_ENT_COMPONENTS> m_componentsArray;
 	std::bitset<MAX_ENT_COMPONENTS> m_componentsBitset;
 
+	int m_componentsCount = 0;
+
 public:
 
 	EcsEntity(EcsSystem * _system) { m_system = _system; };
@@ -116,11 +119,31 @@ public:
 	int GetEcsEntityId() { return m_ecsEntityId; }
 
 	//	Called every frame.
-	void Update();
+	void Update()
+	{
+		for (int i = 0; i < m_componentsCount; i++)
+		{
+			m_componentsVector[i]->OnUpdate();
+		}
+	}
+
 	//	Called at fixed intervals.
-	void FixedUpdate();
+	void FixedUpdate()
+	{
+		for (int i = 0; i < m_componentsCount; i++)
+		{
+			m_componentsVector[i]->OnFixedUpdate();
+		}
+	}
+
 	//	Called by the renderer.
-	void Render();
+	void Render()
+	{
+		for (int i = 0; i < m_componentsCount; i++)
+		{
+			m_componentsVector[i]->OnRender();
+		}
+	}
 
 
 	//	Check if this entity has a specific component attached.
@@ -139,6 +162,8 @@ public:
 		m_componentsVector.emplace_back(std::move(uniquePtr));
 		m_componentsArray[GetComponentId<T>()] = newComponent;
 		m_componentsBitset[GetComponentId<T>()] = true;
+		m_componentsCount++;
+		std::cout << "Attached Component : " << typeid(T).name() << " : To Entity : " << m_name << std::endl;
 		newComponent->OnInit();
 		return *newComponent;
 	}

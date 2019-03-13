@@ -9,11 +9,15 @@ class Shader;
 class Renderer
 {
 	
-private:
+protected:
 
-
+	float p_r = 0.863f;
+	float p_g = 0.78f;
+	float p_b = 0.235f;
 
 public:
+
+	Renderer() {}
 
 	virtual void Init() {}
 
@@ -23,5 +27,8 @@ public:
 
 	virtual void Proccess() {}
 	virtual void Flush() {}
+
+	virtual void SetClearColor(float _clearColor [3]) {}
+	virtual void SetClearColor(float _r, float _g, float _b) {}
 
 };

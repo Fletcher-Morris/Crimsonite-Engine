@@ -17,6 +17,8 @@ private:
 
 public:
 
+	SimpleRenderer() { Init(); }
+
 	virtual void Init() override;
 
 	virtual void Submit(Mesh * _mesh) override;
@@ -25,5 +27,8 @@ public:
 
 	virtual void Proccess() override;
 	virtual void Flush() override;
+
+	virtual void SetClearColor(float _clearColor[3]) override;
+	virtual void SetClearColor(float _r, float _g, float _b) override;
 
 };

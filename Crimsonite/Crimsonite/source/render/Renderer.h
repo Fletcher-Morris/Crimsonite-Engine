@@ -2,10 +2,6 @@
 
 #include <vector>
 
-//#include "Shader.h"
-//#include "../ecs/components/MeshRenderer.h"
-//#include "../mesh/Mesh.h"
-
 class Mesh;
 class MeshRenderer;
 class Shader;
@@ -21,8 +17,8 @@ public:
 
 	virtual void Init() {}
 
-	//virtual void Submit(Mesh * _mesh);
-	//virtual void Submit(Mesh * _mesh, Shader * _shader);
+	virtual void Submit(Mesh * _mesh) {}
+	virtual void Submit(Mesh * _mesh, Shader * _shader) {}
 	virtual void Submit(MeshRenderer * _meshRenderer) {}
 
 	virtual void Proccess() {}

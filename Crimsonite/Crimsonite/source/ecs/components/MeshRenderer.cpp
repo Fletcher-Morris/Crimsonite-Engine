@@ -1,6 +1,8 @@
 #include "MeshRenderer.h"
 
+#include "../../mesh/Mesh.h"
 #include "../../render/Shader.h"
+#include "../../render/Renderer.h"
 
 void MeshRenderer::OnInit()
 {

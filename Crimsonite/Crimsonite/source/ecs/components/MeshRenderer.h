@@ -1,8 +1,10 @@
 #pragma once
 
 #include "../ECS.h"
-#include "../../mesh/Mesh.h"
-#include "../../render/SimpleRenderer.h"
+
+class Mesh;
+class Shader;
+class Renderer;
 
 class MeshRenderer : public EcsComponent
 {

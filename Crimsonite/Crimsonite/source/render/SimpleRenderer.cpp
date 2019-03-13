@@ -7,18 +7,18 @@ void SimpleRenderer::Init()
 {
 }
 
-//void SimpleRenderer::Submit(Mesh * _mesh)
-//{
-//	if (_mesh->IsInitialized() == false) _mesh->UploadToGpu();
-//	m_meshes.push_back(_mesh);
-//}
-//
-//void SimpleRenderer::Submit(Mesh * _mesh, Shader * _shader)
-//{
-//	if (_mesh->IsInitialized()) _mesh->UploadToGpu();
-//	m_meshes.push_back(_mesh);
-//	m_shaders.push_back(_shader);
-//}
+void SimpleRenderer::Submit(Mesh * _mesh)
+{
+	if (_mesh->IsInitialized() == false) _mesh->UploadToGpu();
+	m_meshes.push_back(_mesh);
+}
+
+void SimpleRenderer::Submit(Mesh * _mesh, Shader * _shader)
+{
+	if (_mesh->IsInitialized()) _mesh->UploadToGpu();
+	m_meshes.push_back(_mesh);
+	m_shaders.push_back(_shader);
+}
 
 void SimpleRenderer::Submit(MeshRenderer * _meshRenderer)
 {

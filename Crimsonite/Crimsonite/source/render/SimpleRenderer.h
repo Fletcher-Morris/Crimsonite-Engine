@@ -19,8 +19,8 @@ public:
 
 	virtual void Init() override;
 
-	//virtual void Submit(Mesh * _mesh) override;
-	//virtual void Submit(Mesh * _mesh, Shader * _shader) override;
+	virtual void Submit(Mesh * _mesh) override;
+	virtual void Submit(Mesh * _mesh, Shader * _shader) override;
 	virtual void Submit(MeshRenderer * _meshRenderer) override;
 
 	virtual void Proccess() override;

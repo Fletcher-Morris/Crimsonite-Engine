@@ -23,6 +23,8 @@ public:
 	void InitializeGlfw(std::string _appName);
 	void InitializeGlew();
 
+	void RunEngine();
+
 private:
 
 

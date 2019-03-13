@@ -14,6 +14,7 @@
     <ClCompile Include="source\asset\Asset.cpp" />
     <ClCompile Include="source\asset\AssetManager.cpp" />
     <ClCompile Include="source\core.cpp" />
+    <ClCompile Include="source\core\CrimsonCore.cpp" />
     <ClCompile Include="source\ecs\components\MeshRenderer.cpp" />
     <ClCompile Include="source\mesh\Mesh.cpp" />
     <ClCompile Include="source\render\Renderer.cpp" />
@@ -25,6 +26,7 @@
     <ClInclude Include="source\asset\Asset.h" />
     <ClInclude Include="source\asset\AssetManager.h" />
     <ClInclude Include="source\core.h" />
+    <ClInclude Include="source\core\CrimsonCore.h" />
     <ClInclude Include="source\ecs\Components.h" />
     <ClInclude Include="source\ecs\components\MeshRenderer.h" />
     <ClInclude Include="source\ecs\ECS.h" />

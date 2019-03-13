@@ -43,6 +43,12 @@
     <Filter Include="Source Files\ecs\components">
       <UniqueIdentifier>{550c434f-2416-4cc1-9d77-adc75c5c6bb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{5492a89f-ee0a-4a8a-b6de-d092225a7ce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{0ac7661e-5bf1-4f35-be25-df21b7c2070b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core.cpp">
@@ -68,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="source\render\SimpleRenderer.cpp">
       <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\CrimsonCore.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="source\ecs\Components.h">
       <Filter>Header Files\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\CrimsonCore.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -60,7 +60,10 @@ void MeshRenderer::SetRenderer(Renderer * _renderer)
 	if (_renderer != NULL)
 	{
 		m_renderer = _renderer;
-		m_renderer->Submit(this);
+		if (m_mesh != NULL)
+		{
+			m_renderer->Submit(this);
+		}
 	}
 	else
 	std::cout << "NO RENDERER" << std::endl;
@@ -68,6 +71,7 @@ void MeshRenderer::SetRenderer(Renderer * _renderer)
 
 void MeshRenderer::SubmitToRenderer()
 {
+	if (m_mesh == NULL) return;
 	if (m_renderer != NULL)
 	{
 		m_renderer->Submit(this);

@@ -15,9 +15,9 @@ CrimsonCore::CrimsonCore(std::string _appName)
 	printf("CRIMSONITE\n");
 	std::cout << "==========" << std::endl;
 
-	m_assetManager = AssetManager::Instance();
-	m_ecs = EcsSystem();
-	m_assetPath = (std::string)_getcwd(NULL, 0) + "/assets/";
+	Assets = AssetManager::Instance();
+	//m_assetPath = (std::string)_getcwd(NULL, 0) + "/assets/";
+	m_assetPath = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
 	std::cout << "Assets path is : " << m_assetPath << std::endl;
 
 	InitializeEngine(_appName);
@@ -28,6 +28,9 @@ void CrimsonCore::InitializeEngine(std::string _appName)
 {
 	InitializeGlfw(_appName);
 	InitializeGlew();
+
+	m_renderer = new SimpleRenderer();
+	m_ecs = new EcsSystem();
 }
 
 void CrimsonCore::InitializeGlfw(std::string _appName)
@@ -66,28 +69,26 @@ void CrimsonCore::InitializeGlew()
 
 void CrimsonCore::RunEngine()
 {
-	m_renderer.Init();
-	int col = 0;
+	Assets->LoadMesh("cube", m_assetPath + "cube");
+	Assets->WriteMeshFile(*Assets->GetMesh("cube"), m_assetPath + "cube2.mesh");
+	Assets->LoadMesh("spring", m_assetPath + "spring");
+	Assets->LoadShader("shader", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
+
+	m_ecs->NewEntity("ENTITY");
+	MeshRenderer * mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
+	mr->SetRenderer(m_renderer);
+	mr->SetMesh("cube");
+	mr->SetShader("shader");
+
 	while (!glfwWindowShouldClose(m_window))
 	{
-		for (auto& ent : m_ecs.entities)ent->Update();
-		for (auto& ent : m_ecs.entities)ent->Render();
+		for (auto& ent : m_ecs->entities)ent->Update();
+		for (auto& ent : m_ecs->entities)ent->Render();
 
+		m_renderer->Submit(Assets->GetMesh("spring"), Assets->GetShader("shader"));
 
-		if (col == 0)
-		{
-			m_renderer.SetClearColor(0.0f, 0.0f, 0.0f);
-			col = 1;
-		}
-		else
-		{
-			m_renderer.SetClearColor(1.0f, 1.0f, 1.0f);
-			col = 0;
-		}
-
-
-		m_renderer.Proccess();
-		m_renderer.Flush();
+		m_renderer->Proccess();
+		m_renderer->Flush();
 
 		glfwSwapBuffers(m_window);
 

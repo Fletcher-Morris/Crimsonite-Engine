@@ -34,9 +34,9 @@ private:
 
 	GLFWwindow * m_window;
 
-	Renderer m_renderer;
-	AssetManager * m_assetManager;
-	EcsSystem m_ecs;
+	Renderer * m_renderer;
+	AssetManager * Assets;
+	EcsSystem * m_ecs;
 
 	std::string m_assetPath = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
 

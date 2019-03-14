@@ -11,13 +11,11 @@ class Renderer
 	
 protected:
 
-	float p_r = 0.863f;
-	float p_g = 0.78f;
-	float p_b = 0.235f;
+	float p_r = 0.0f;
+	float p_g = 0.0f;
+	float p_b = 0.0f;
 
 public:
-
-	Renderer() {}
 
 	virtual void Init() {}
 

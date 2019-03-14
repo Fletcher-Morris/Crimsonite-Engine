@@ -5,8 +5,9 @@
 
 void SimpleRenderer::Init()
 {
-	std::cout << "Renderer INIT" << std::endl;
-	SetClearColor(0.5f, 0.5f,0.5f);
+	SetClearColor(0.863f, 0.78f, 0.235f);
+
+	glEnable(GL_MULTISAMPLE);
 }
 
 void SimpleRenderer::Submit(Mesh * _mesh)
@@ -49,9 +50,8 @@ void SimpleRenderer::Flush()
 		m->GetShader()->Bind();
 
 		glBindVertexArray(m->GetMesh()->GetVao());
-		glDrawElements(GL_LINES, m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
 	}
-	std::cout << "Renderer FLUSH : " << m_meshRenderers.size() << std::endl;
 }
 
 void SimpleRenderer::SetClearColor(float _clearColor[3])

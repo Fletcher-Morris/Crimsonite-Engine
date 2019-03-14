@@ -5,6 +5,6 @@ namespace Crimson
 {
 	void Test()
 	{
-		CrimsonCore("YEET");
+		CrimsonCore();
 	}
 }

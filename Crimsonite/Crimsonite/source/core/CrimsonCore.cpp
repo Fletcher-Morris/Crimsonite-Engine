@@ -78,8 +78,10 @@ void CrimsonCore::RunEngine()
 	m_ecs->NewEntity("ENTITY");
 	MeshRenderer * mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
 	mr->SetRenderer(m_renderer);
-	mr->SetMesh("test2");
+	mr->SetMesh("spring");
 	mr->SetShader("shader");
+
+	m_renderer->SetClearColor(0.863f, 0.078f, 0.235f);
 
 	while (!glfwWindowShouldClose(m_window))
 	{

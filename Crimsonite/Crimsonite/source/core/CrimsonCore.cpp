@@ -19,7 +19,9 @@ CrimsonCore::CrimsonCore(std::string _appName)
 	m_ecs = EcsSystem();
 	m_assetPath = (std::string)_getcwd(NULL, 0) + "/assets/";
 	std::cout << "Assets path is : " << m_assetPath << std::endl;
+
 	InitializeEngine(_appName);
+	RunEngine();
 }
 
 void CrimsonCore::InitializeEngine(std::string _appName)
@@ -35,8 +37,8 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 		std::cout << "Failed to initialise GLFW!" << std::endl; return;
 	}
 	std::cout << "Initialised GLFW (" << glfwGetVersionString() << ")" << std::endl;
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	m_window = glfwCreateWindow(1280, 720, _appName.c_str(), NULL, NULL);
 	if (!m_window)
 	{

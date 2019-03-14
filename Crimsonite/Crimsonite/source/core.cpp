@@ -3,10 +3,8 @@
 
 namespace Crimson
 {
-	CrimsonCore engine;
-
 	void Test()
 	{
-		engine = CrimsonCore("YEET");
+		CrimsonCore("YEET");
 	}
 }

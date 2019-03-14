@@ -1,9 +1,6 @@
 #include "Camera.h"
 
-void Camera::SetCameraSettings(CameraSettings _newSettings)
-{
-	m_settings = _newSettings;
-}
+#include "../../render/MatrixMaths.h"
 
 void Camera::SetCameraSettings(float _fov)
 {
@@ -30,5 +27,7 @@ void Camera::SetCameraSettings(int _width, int _height)
 
 void Camera::ReInit()
 {
-
+	m_projectionMatrix = CreateProjectionMatrix(m_settings);
+	m_viewMatrix = CreateViewMatrix(*this);
+	m_projectionViewMatrix = m_projectionMatrix * m_viewMatrix;
 }

@@ -10,6 +10,9 @@ class Transform;
 class Camera;
 class CameraSettings;
 
+//	Create a model matrix using a given Transform.
 glm::mat4 CreateModelMatrix(const Transform & _transform);
+//	Create a view matrix using given Camera reference.
 glm::mat4 CreateViewMatrix(const Camera & _camera);
+//	Create a projection matrix using given CameraSettings.
 glm::mat4 CreateProjectionMatrix(const CameraSettings & _settings);

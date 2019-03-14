@@ -14,7 +14,9 @@ public:
 		rotation = glm::vec3();
 	}
 
+	//	The position of this transform in world-space.
 	glm::vec3 position;
+	//	The rotation of this transform.
 	glm::vec3 rotation;
 
 private:

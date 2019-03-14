@@ -4,9 +4,13 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <unordered_map>
 
 #include <gl/glew.h>
 #include <gl/GLU.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
 
 class Shader
 {
@@ -25,6 +29,14 @@ public:
 
 	void Bind() const;
 	void Unbind() const;
+
+	void SetMvpMatrix(const glm::mat4 _mvp);
+
+private:
+
+	unsigned int GetUniformLocation(const std::string & _uniformName);
+	std::unordered_map<std::string, int> m_locations;
+
 };
 
 struct ShaderCode

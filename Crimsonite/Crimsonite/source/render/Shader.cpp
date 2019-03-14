@@ -111,3 +111,23 @@ void Shader::Bind() const
 void Shader::Unbind() const
 {
 }
+
+void Shader::SetMvpMatrix(const glm::mat4 _mvp)
+{
+	glUniformMatrix4fv(GetUniformLocation("u_MVP"), 1, GL_FALSE, glm::value_ptr(_mvp));
+}
+
+unsigned int Shader::GetUniformLocation(const std::string & _uniformName)
+{
+	if (m_locations.find(_uniformName) != m_locations.end())
+	{
+		return m_locations[_uniformName];
+	}
+	int location = glGetUniformLocation(shaderId, _uniformName.c_str());
+	if (location == -1)
+	{
+		std::cout << "Uniform '" << _uniformName << "' does not exist!" << std::endl;
+	}
+	m_locations[_uniformName] = location;
+	return location;
+}

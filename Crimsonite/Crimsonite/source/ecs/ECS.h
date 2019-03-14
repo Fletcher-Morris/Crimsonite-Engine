@@ -106,8 +106,6 @@ public:
 	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; m_name = _entityName; };
 	EcsEntity(std::string _entityName, EcsSystem * _system) { m_system = _system; m_name = _entityName; };
 
-	Transform transform;
-
 	//	Set the name of this entity.
 	void SetName(std::string _name) { m_name = _name; }
 	//	Return the name of this entity.
@@ -120,6 +118,11 @@ public:
 	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; /*m_system->AlertEntityDestruction();*/ m_doDestroy = true; }
 	//	Return the unique identity assigned to this entity.
 	int GetEcsEntityId() { return m_ecsEntityId; }
+
+	//	The Transform of the entity.
+	Transform transform;
+	//	Return a reference to the entity's Transform.
+	Transform * GetTransformRef() { return &transform; }
 
 	//	Called every frame.
 	void Update()

@@ -7,6 +7,26 @@ void Camera::OnInit()
 	ReInit();
 }
 
+void Camera::OnUpdate()
+{
+}
+
+void Camera::OnFixedUpdate()
+{
+}
+
+void Camera::OnRender()
+{
+}
+
+void Camera::OnEnable()
+{
+}
+
+void Camera::OnDisable()
+{
+}
+
 void Camera::SetCameraSettings(CameraSettings _newSettings)
 {
 	m_settings = _newSettings;
@@ -32,6 +52,7 @@ void Camera::SetCameraSettings(int _width, int _height)
 	CameraSettings newSettings;
 	newSettings.width = _width;
 	newSettings.height = _height;
+	std::cout << _width << ", " << _height << std::endl;
 	SetCameraSettings(newSettings);
 }
 

@@ -3,6 +3,7 @@
 #include "CrimsonCore.h"
 
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
+EcsSystem * ecsSystem;
 
 CrimsonCore::CrimsonCore()
 {
@@ -31,6 +32,7 @@ void CrimsonCore::InitializeEngine(std::string _appName)
 
 	m_renderer = new SimpleRenderer();
 	m_ecs = new EcsSystem();
+	ecsSystem = m_ecs;
 }
 
 void CrimsonCore::InitializeGlfw(std::string _appName)
@@ -75,7 +77,8 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMesh("spring", m_assetPath + "spring");
 	Assets->LoadShader("shader", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
 
-
+	m_ecs->NewEntity("Camera");
+	Camera * mainCamera = &m_ecs->LastEntity()->AttachComponent<Camera>();
 
 	m_ecs->NewEntity("ENTITY");
 	MeshRenderer * mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
@@ -102,4 +105,9 @@ void CrimsonCore::RunEngine()
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
 	glViewport(0, 0, _width, _height);
+
+	if (ecsSystem->FindEntity("Camera"))
+	{
+		ecsSystem->FindEntity("Camera")->GetComponent<Camera>().SetCameraSettings(_width, _height);
+	}
 }

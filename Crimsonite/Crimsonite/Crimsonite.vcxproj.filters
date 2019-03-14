@@ -81,6 +81,9 @@
     <ClCompile Include="source\ecs\components\Camera.cpp">
       <Filter>Source Files\ecs\components</Filter>
     </ClCompile>
+    <ClCompile Include="source\render\MatrixMaths.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
@@ -124,6 +127,12 @@
     </ClInclude>
     <ClInclude Include="source\ecs\components\Camera.h">
       <Filter>Header Files\ecs\components</Filter>
+    </ClInclude>
+    <ClInclude Include="source\render\MatrixMaths.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ecs\Transform.h">
+      <Filter>Header Files\ecs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

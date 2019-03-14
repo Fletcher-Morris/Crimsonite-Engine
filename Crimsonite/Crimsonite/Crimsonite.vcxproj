@@ -18,6 +18,7 @@
     <ClCompile Include="source\ecs\components\Camera.cpp" />
     <ClCompile Include="source\ecs\components\MeshRenderer.cpp" />
     <ClCompile Include="source\mesh\Mesh.cpp" />
+    <ClCompile Include="source\render\MatrixMaths.cpp" />
     <ClCompile Include="source\render\Renderer.cpp" />
     <ClCompile Include="source\render\Shader.cpp" />
     <ClCompile Include="source\render\SimpleRenderer.cpp" />
@@ -32,8 +33,10 @@
     <ClInclude Include="source\ecs\components\Camera.h" />
     <ClInclude Include="source\ecs\components\MeshRenderer.h" />
     <ClInclude Include="source\ecs\ECS.h" />
+    <ClInclude Include="source\ecs\Transform.h" />
     <ClInclude Include="source\mesh\Mesh.h" />
     <ClInclude Include="source\mesh\Vertex.h" />
+    <ClInclude Include="source\render\MatrixMaths.h" />
     <ClInclude Include="source\render\Renderer.h" />
     <ClInclude Include="source\render\Shader.h" />
     <ClInclude Include="source\render\SimpleRenderer.h" />

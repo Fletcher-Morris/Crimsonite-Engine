@@ -105,6 +105,8 @@ public:
 	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; m_name = _entityName; };
 	EcsEntity(std::string _entityName, EcsSystem * _system) { m_system = _system; m_name = _entityName; };
 
+	Transform transform;
+
 	//	Set the name of this entity.
 	void SetName(std::string _name) { m_name = _name; }
 	//	Return the name of this entity.

@@ -27,3 +27,8 @@ void Camera::SetCameraSettings(int _width, int _height)
 	newSettings.height = _height;
 	SetCameraSettings(newSettings);
 }
+
+void Camera::ReInit()
+{
+
+}

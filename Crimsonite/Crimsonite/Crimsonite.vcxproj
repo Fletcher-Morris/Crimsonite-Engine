@@ -36,6 +36,7 @@
     <ClInclude Include="source\ecs\Transform.h" />
     <ClInclude Include="source\mesh\Mesh.h" />
     <ClInclude Include="source\mesh\Vertex.h" />
+    <ClInclude Include="source\render\CameraSettings.h" />
     <ClInclude Include="source\render\MatrixMaths.h" />
     <ClInclude Include="source\render\Renderer.h" />
     <ClInclude Include="source\render\Shader.h" />

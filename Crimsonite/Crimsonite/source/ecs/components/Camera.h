@@ -5,7 +5,7 @@
 #include <glm/common.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
-
+#include "../../render/CameraSettings.h"
 
 class Camera : public EcsComponent
 {
@@ -39,13 +39,4 @@ private:
 	glm::mat4 m_viewMatrix;
 	glm::mat4 m_projectionViewMatrix;
 
-};
-
-struct CameraSettings
-{
-	int width = 265;
-	int height = 256;
-	float fov = 60.0f;
-	float nearClip = 0.1f;
-	float farClip = 100.0f;
 };

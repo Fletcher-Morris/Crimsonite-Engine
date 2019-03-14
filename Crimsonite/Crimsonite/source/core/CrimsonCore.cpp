@@ -75,6 +75,8 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMesh("spring", m_assetPath + "spring");
 	Assets->LoadShader("shader", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
 
+
+
 	m_ecs->NewEntity("ENTITY");
 	MeshRenderer * mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
 	mr->SetRenderer(m_renderer);

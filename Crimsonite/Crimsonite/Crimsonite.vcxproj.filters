@@ -134,5 +134,8 @@
     <ClInclude Include="source\ecs\Transform.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="source\render\CameraSettings.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

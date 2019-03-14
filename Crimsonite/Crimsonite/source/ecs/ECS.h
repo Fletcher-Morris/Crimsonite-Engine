@@ -9,6 +9,7 @@
 #include <typeinfo>
 
 #include "../asset/AssetManager.h"
+#include "Transform.h"
 //#include "Components.h"
 
 //	Forward-declare ECS classes for compiler.

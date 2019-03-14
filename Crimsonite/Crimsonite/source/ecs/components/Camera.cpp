@@ -2,6 +2,16 @@
 
 #include "../../render/MatrixMaths.h"
 
+void Camera::OnInit()
+{
+	ReInit();
+}
+
+void Camera::SetCameraSettings(CameraSettings _newSettings)
+{
+	m_settings = _newSettings;
+}
+
 void Camera::SetCameraSettings(float _fov)
 {
 	CameraSettings newSettings;

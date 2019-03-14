@@ -14,6 +14,8 @@ AssetManager::~AssetManager()
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 {
+
+
 	std::cout << "Attempting to load mesh : " << _filePath << std::endl;
 
 	//	Prepare the vertex vectors.
@@ -104,6 +106,7 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 	else
 	{
 		std::cout << "Could not locate mesh file at : " << _filePath << std::endl;
+		this->m_meshes[_meshName] = GetErrorMesh();
 	}
 }
 
@@ -173,6 +176,8 @@ void AssetManager::WriteMeshFile(Mesh _mesh, std::string _filePath)
 
 Mesh * AssetManager::GetMesh(std::string _meshName)
 {
+	if (&m_meshes.at(_meshName) == NULL) return &GetErrorMesh();
+
 	return &m_meshes.at(_meshName);
 }
 
@@ -193,4 +198,70 @@ void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, 
 Shader * AssetManager::GetShader(std::string _shaderName)
 {
 	return &m_shaders.at(_shaderName);
+}
+
+void AssetManager::CreateErrorMesh()
+{
+	if (m_errorMeshCreated) return;
+
+	Vertex v;
+	v.position = { 0.0, 0.5, 0.0 };
+	v.normal = { 0.0, 0.0, 0.0 };
+	v.uv = { 0.0, 1.0};
+	m_errorMesh.vertices.push_back(v);
+	v.position = { 0.0, -0.5, 0.0 };
+	v.normal = { 0.0, 0.0, 0.0 };
+	v.uv = { 0.0, 1.0 };
+	m_errorMesh.vertices.push_back(v);
+	v.position = { 0.5, 0.0, 0.0 };
+	v.normal = { 0.0, 0.0, 0.0 };
+	v.uv = { 0.0, 1.0 };
+	m_errorMesh.vertices.push_back(v);
+	v.position = { -0.5, 0.0, 0.0 };
+	v.normal = { 0.0, 0.0, 0.0 };
+	v.uv = { 0.0, 1.0 };
+	m_errorMesh.vertices.push_back(v);
+	v.position = { 0.0, 0.0, 0.5 };
+	v.normal = { 0.0, 0.0, 0.0 };
+	v.uv = { 0.0, 1.0 };
+	m_errorMesh.vertices.push_back(v);
+	v.position = { 0.0, 0.0, -0.5 };
+	v.normal = { 0.0, 0.0, 0.0 };
+	v.uv = { 0.0, 1.0 };
+	m_errorMesh.vertices.push_back(v);
+	m_errorMesh.indices.push_back(2);
+	m_errorMesh.indices.push_back(5);
+	m_errorMesh.indices.push_back(0);
+	m_errorMesh.indices.push_back(2);
+	m_errorMesh.indices.push_back(4);
+	m_errorMesh.indices.push_back(0);
+	m_errorMesh.indices.push_back(3);
+	m_errorMesh.indices.push_back(5);
+	m_errorMesh.indices.push_back(0);
+	m_errorMesh.indices.push_back(3);
+	m_errorMesh.indices.push_back(4);
+	m_errorMesh.indices.push_back(1);
+	m_errorMesh.indices.push_back(2);
+	m_errorMesh.indices.push_back(5);
+	m_errorMesh.indices.push_back(1);
+	m_errorMesh.indices.push_back(2);
+	m_errorMesh.indices.push_back(4);
+	m_errorMesh.indices.push_back(1);
+	m_errorMesh.indices.push_back(3);
+	m_errorMesh.indices.push_back(5);
+	m_errorMesh.indices.push_back(1);
+	m_errorMesh.indices.push_back(3);
+	m_errorMesh.indices.push_back(4);
+	m_errorMesh.indices.push_back(4);
+	m_errorMesh.indices.push_back(4);
+	m_errorMesh.indices.push_back(4);
+	m_errorMesh.UploadToGpu();
+
+	m_errorMeshCreated = true;
+}
+
+Mesh AssetManager::GetErrorMesh()
+{
+	CreateErrorMesh();
+	return m_errorMesh;
 }

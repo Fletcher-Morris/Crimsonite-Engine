@@ -72,14 +72,13 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMesh("test", m_assetPath + "test");
 	Assets->LoadMesh("cube", m_assetPath + "cube");
 	Assets->WriteMeshFile(*Assets->GetMesh("cube"), m_assetPath + "cube2.mesh");
-	Assets->WriteMeshFile(*Assets->GetMesh("error"), m_assetPath + "error.mesh");
 	Assets->LoadMesh("spring", m_assetPath + "spring");
 	Assets->LoadShader("shader", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
 
 	m_ecs->NewEntity("ENTITY");
 	MeshRenderer * mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
 	mr->SetRenderer(m_renderer);
-	mr->SetMesh("test");
+	mr->SetMesh("test2");
 	mr->SetShader("shader");
 
 	while (!glfwWindowShouldClose(m_window))

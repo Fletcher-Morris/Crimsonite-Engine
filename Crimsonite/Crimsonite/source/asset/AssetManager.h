@@ -47,6 +47,7 @@ private:
 	//	MESH MAP
 	std::map<std::string, Mesh> m_meshes;
 	std::vector<std::string> m_loadedMeshNames;
+	bool MeshExists(std::string _meshName);
 	int m_latestMeshRevision = 1;
 	Mesh m_errorMesh;
 	void CreateErrorMesh();

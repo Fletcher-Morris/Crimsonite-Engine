@@ -176,7 +176,7 @@ void AssetManager::WriteMeshFile(Mesh _mesh, std::string _filePath)
 
 Mesh * AssetManager::GetMesh(std::string _meshName)
 {
-	if (&m_meshes.at(_meshName) == NULL) return &GetErrorMesh();
+	if (!MeshExists(_meshName)) return &m_errorMesh;
 
 	return &m_meshes.at(_meshName);
 }
@@ -198,6 +198,15 @@ void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, 
 Shader * AssetManager::GetShader(std::string _shaderName)
 {
 	return &m_shaders.at(_shaderName);
+}
+
+bool AssetManager::MeshExists(std::string _meshName)
+{
+	for (int i = 0; i < m_loadedMeshNames.size(); i++)
+	{
+		if (m_loadedMeshNames[i] == _meshName) return true;
+	}
+	return false;
 }
 
 void AssetManager::CreateErrorMesh()

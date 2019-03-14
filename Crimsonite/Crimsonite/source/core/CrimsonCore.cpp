@@ -17,7 +17,7 @@ CrimsonCore::CrimsonCore(std::string _appName)
 
 	Assets = AssetManager::Instance();
 	//m_assetPath = (std::string)_getcwd(NULL, 0) + "/assets/";
-	m_assetPath = "C:/Users/fmorris/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
+	m_assetPath = "C:/Users/Fletcher/Documents/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
 	std::cout << "Assets path is : " << m_assetPath << std::endl;
 
 	InitializeEngine(_appName);

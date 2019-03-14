@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../ECS.h"
+#include <glm/common.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
 
 
 class Camera : public EcsComponent
@@ -18,13 +21,12 @@ public:
 	void SetCameraSettings(CameraSettings _newSettings);
 	void SetCameraSettings(float _fov);
 	void SetCameraSettings(float _near, float _far);
-	void SetCameraSettings(int _width, int _height)
+	void SetCameraSettings(int _width, int _height);
 	CameraSettings GetCameraSettings() { return m_settings; }
 
 private:
 
 	CameraSettings m_settings;
-
 
 };
 

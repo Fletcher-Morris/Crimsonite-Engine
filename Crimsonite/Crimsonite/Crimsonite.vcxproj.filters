@@ -78,6 +78,9 @@
     <ClCompile Include="source\core\CrimsonCore.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="source\ecs\components\Camera.cpp">
+      <Filter>Source Files\ecs\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="source\core\CrimsonCore.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ecs\components\Camera.h">
+      <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

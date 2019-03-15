@@ -10,7 +10,6 @@ void MeshRenderer::OnInit()
 
 void MeshRenderer::OnUpdate()
 {
-	entity->transform.SetPosition(0, 0, -1);
 	entity->transform.Rotate(0.0f, 0.02f, 0.0f);
 }
 

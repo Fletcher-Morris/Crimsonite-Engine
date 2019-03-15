@@ -73,6 +73,7 @@ void CrimsonCore::RunEngine()
 {
 	Assets->LoadMesh("test", m_assetPath + "test");
 	Assets->LoadMesh("cube", m_assetPath + "cube");
+	Assets->LoadMesh("dragon", m_assetPath + "dragon");
 	Assets->WriteMeshFile(*Assets->GetMesh("cube"), m_assetPath + "cube2.mesh");
 	Assets->LoadMesh("spring", m_assetPath + "spring");
 	Assets->LoadShader("shader", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
@@ -85,8 +86,21 @@ void CrimsonCore::RunEngine()
 	mr->SetRenderer(m_renderer);
 	mr->SetMesh("spring");
 	mr->SetShader("shader");
+	mr->entity->transform.SetPosition(1, 0, -2);
 
-	m_renderer->SetClearColor(0.863f, 0.078f, 0.235f);
+	m_ecs->NewEntity("ERROR");
+	mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
+	mr->SetRenderer(m_renderer);
+	mr->SetMesh("error");
+	mr->SetShader("shader");
+	mr->entity->transform.SetPosition(-1, 0, -2);
+
+	m_ecs->NewEntity("DRAGON");
+	mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
+	mr->SetRenderer(m_renderer);
+	mr->SetMesh("dragon");
+	mr->SetShader("shader");
+	mr->entity->transform.SetPosition(0, 0, -2.5);
 
 	while (!glfwWindowShouldClose(m_window))
 	{

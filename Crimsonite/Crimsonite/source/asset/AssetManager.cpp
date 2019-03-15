@@ -212,7 +212,6 @@ bool AssetManager::MeshExists(std::string _meshName)
 void AssetManager::CreateErrorMesh()
 {
 	if (m_errorMeshCreated) return;
-
 	Vertex v;
 	v.position = { 0.0, 0.5, 0.0 };
 	v.normal = { 0.0, 0.0, 0.0 };
@@ -238,34 +237,31 @@ void AssetManager::CreateErrorMesh()
 	v.normal = { 0.0, 0.0, 0.0 };
 	v.uv = { 0.0, 1.0 };
 	m_errorMesh.vertices.push_back(v);
-	m_errorMesh.indices.push_back(2);
-	m_errorMesh.indices.push_back(5);
-	m_errorMesh.indices.push_back(0);
-	m_errorMesh.indices.push_back(2);
-	m_errorMesh.indices.push_back(4);
-	m_errorMesh.indices.push_back(0);
-	m_errorMesh.indices.push_back(3);
-	m_errorMesh.indices.push_back(5);
-	m_errorMesh.indices.push_back(0);
-	m_errorMesh.indices.push_back(3);
-	m_errorMesh.indices.push_back(4);
-	m_errorMesh.indices.push_back(1);
-	m_errorMesh.indices.push_back(2);
-	m_errorMesh.indices.push_back(5);
-	m_errorMesh.indices.push_back(1);
-	m_errorMesh.indices.push_back(2);
-	m_errorMesh.indices.push_back(4);
-	m_errorMesh.indices.push_back(1);
-	m_errorMesh.indices.push_back(3);
-	m_errorMesh.indices.push_back(5);
-	m_errorMesh.indices.push_back(1);
-	m_errorMesh.indices.push_back(3);
-	m_errorMesh.indices.push_back(4);
-	m_errorMesh.indices.push_back(4);
-	m_errorMesh.indices.push_back(4);
-	m_errorMesh.indices.push_back(4);
+	m_errorMesh.indices.push_back(0);//top
+	m_errorMesh.indices.push_back(2);//right
+	m_errorMesh.indices.push_back(4);//front
+	m_errorMesh.indices.push_back(0);//top
+	m_errorMesh.indices.push_back(4);//front
+	m_errorMesh.indices.push_back(3);//left
+	m_errorMesh.indices.push_back(0);//top
+	m_errorMesh.indices.push_back(5);//back
+	m_errorMesh.indices.push_back(2);//right
+	m_errorMesh.indices.push_back(0);//top
+	m_errorMesh.indices.push_back(3);//left
+	m_errorMesh.indices.push_back(5);//back
+	m_errorMesh.indices.push_back(1);//bottom
+	m_errorMesh.indices.push_back(4);//front
+	m_errorMesh.indices.push_back(2);//right
+	m_errorMesh.indices.push_back(1);//bottom
+	m_errorMesh.indices.push_back(3);//left
+	m_errorMesh.indices.push_back(4);//front
+	m_errorMesh.indices.push_back(1);//bottom
+	m_errorMesh.indices.push_back(2);//back
+	m_errorMesh.indices.push_back(5);//right
+	m_errorMesh.indices.push_back(1);//bottom
+	m_errorMesh.indices.push_back(5);//back
+	m_errorMesh.indices.push_back(3);//left
 	m_errorMesh.UploadToGpu();
-
 	m_errorMeshCreated = true;
 }
 

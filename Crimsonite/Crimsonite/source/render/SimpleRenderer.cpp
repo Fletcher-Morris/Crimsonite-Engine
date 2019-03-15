@@ -5,9 +5,15 @@
 
 void SimpleRenderer::Init()
 {
-	SetClearColor(0.863f, 0.78f, 0.235f);
+	SetClearColor(0.2f, 0.2f, 0.2f);
 
 	glEnable(GL_MULTISAMPLE);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 }
 
 void SimpleRenderer::Submit(Mesh * _mesh)
@@ -37,7 +43,7 @@ void SimpleRenderer::Proccess()
 void SimpleRenderer::Flush()
 {
 	glClearColor(p_r, p_g, p_g, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (int i = 0; i < m_meshes.size(); i++)
 	{

@@ -10,6 +10,8 @@ void MeshRenderer::OnInit()
 
 void MeshRenderer::OnUpdate()
 {
+	entity->transform.SetPosition(0, 0, -1);
+	entity->transform.Rotate(0.0f, 0.02f, 0.0f);
 }
 
 void MeshRenderer::OnFixedUpdate()
@@ -85,8 +87,19 @@ void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
 	if (_renderer != NULL)
 	{
 		m_renderer = _renderer;
-		m_renderer->Submit(this);
+		SubmitToRenderer();
 	}
 	else
 	std::cout << "NO RENDERER" << std::endl;
+}
+
+void MeshRenderer::SetShaderMvp()
+{
+	glm::mat4 p = glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f);
+	glm::mat4 t = glm::translate(p, entity->transform.position);
+	glm::mat4 y = glm::rotate(t, entity->transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 x = glm::rotate(y, entity->transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 z = glm::rotate(x, entity->transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	m_shader->SetMvpMatrix(z);
 }

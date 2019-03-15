@@ -29,6 +29,13 @@ public:
 		position.y += _move.y;
 		position.z += _move.z;
 	}
+	//	Adjust the position with three floats.
+	void Move(float _x, float _y, float _z)
+	{
+		position.x += _x;
+		position.y += _y;
+		position.z += _z;
+	}
 
 	//	Adjust the rotation with another Vec3.
 	void Rotate(glm::vec3 _rotate)
@@ -36,6 +43,13 @@ public:
 		rotation.x += _rotate.x;
 		rotation.y += _rotate.y;
 		rotation.z += _rotate.z;
+	}
+	//	Adjust the rotation with three floats.
+	void Rotate(float _x, float _y, float _z)
+	{
+		rotation.x += _x;
+		rotation.y += _y;
+		rotation.z += _z;
 	}
 
 private:

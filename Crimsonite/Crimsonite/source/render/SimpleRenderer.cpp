@@ -48,10 +48,14 @@ void SimpleRenderer::Flush()
 	{
 		MeshRenderer * m = m_meshRenderers[i];
 		m->GetShader()->Bind();
+		m->SetShaderMvp();
 
 		glBindVertexArray(m->GetMesh()->GetVao());
 		glDrawElements(GL_TRIANGLES, m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
 	}
+
+	m_meshes.clear();
+	m_meshRenderers.clear();
 }
 
 void SimpleRenderer::SetClearColor(float _clearColor[3])

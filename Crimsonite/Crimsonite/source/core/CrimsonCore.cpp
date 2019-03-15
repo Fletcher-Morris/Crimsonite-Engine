@@ -93,8 +93,6 @@ void CrimsonCore::RunEngine()
 		for (auto& ent : m_ecs->entities)ent->Update();
 		for (auto& ent : m_ecs->entities)ent->Render();
 
-		m_renderer->Submit(Assets->GetMesh("error"), Assets->GetShader("shader"));
-
 		m_renderer->Proccess();
 		m_renderer->Flush();
 

@@ -36,4 +36,6 @@ public:
 	void SetRenderer(Renderer * _renderer);
 	void SubmitToRenderer();
 	void SubmitToRenderer(Renderer * _renderer);
+
+	void SetShaderMvp();
 };

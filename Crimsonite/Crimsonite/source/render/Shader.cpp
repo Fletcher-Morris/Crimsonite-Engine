@@ -106,10 +106,12 @@ void Shader::Compile(const std::string _comboPath)
 
 void Shader::Bind() const
 {
+	glUseProgram(shaderId);
 }
 
 void Shader::Unbind() const
 {
+	glUseProgram(0);
 }
 
 void Shader::SetMvpMatrix(const glm::mat4 _mvp)

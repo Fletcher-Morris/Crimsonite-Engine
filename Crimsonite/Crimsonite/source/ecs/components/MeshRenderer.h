@@ -15,6 +15,9 @@ private:
 	Shader * m_shader;
 	Renderer * m_renderer;
 
+	int m_renderMode = GL_LINES;
+	int i = 0;
+
 public:
 
 	virtual void OnInit() override;
@@ -38,4 +41,11 @@ public:
 	void SubmitToRenderer(Renderer * _renderer);
 
 	void SetShaderMvp();
+
+	void SetRenderMode(int _mode)
+	{
+		m_renderMode = _mode;
+		std::cout << "Set Mesh Render Mode Of '" << entity->GetName() << "' To '" << m_renderMode << "'." << std::endl;
+	}
+	int GetRenderMode() { return m_renderMode; }
 };

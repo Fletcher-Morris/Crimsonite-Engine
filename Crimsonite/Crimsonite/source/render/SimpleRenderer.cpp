@@ -57,7 +57,7 @@ void SimpleRenderer::Flush()
 		m->SetShaderMvp();
 
 		glBindVertexArray(m->GetMesh()->GetVao());
-		glDrawElements(GL_TRIANGLES, m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+		glDrawElements(m->GetRenderMode(), m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
 	}
 
 	m_meshes.clear();

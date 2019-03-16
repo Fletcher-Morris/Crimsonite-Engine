@@ -87,6 +87,9 @@
     <ClCompile Include="source\core\Time.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="source\ecs\components\Rotator.cpp">
+      <Filter>Source Files\ecs\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="source\core\Time.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ecs\components\Rotator.h">
+      <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -89,7 +89,7 @@ void CrimsonCore::RunEngine()
 	mr->SetMesh("dragon");
 	mr->SetShader("shader");
 	mr->entity->transform.SetPosition(0, 0, -1.5);
-	mr->SetRenderMode(GL_POINTS);
+	m_ecs->NewestEntity()->AttachComponent<Rotator>();
 
 	while (!glfwWindowShouldClose(m_window))
 	{

@@ -81,26 +81,13 @@ void CrimsonCore::RunEngine()
 	m_ecs->NewEntity("Camera");
 	Camera * mainCamera = &m_ecs->LastEntity()->AttachComponent<Camera>();
 
-	m_ecs->NewEntity("ENTITY");
-	MeshRenderer * mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
-	mr->SetRenderer(m_renderer);
-	mr->SetMesh("spring");
-	mr->SetShader("shader");
-	mr->entity->transform.SetPosition(1, 0, -2);
-
-	m_ecs->NewEntity("ERROR");
-	mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
-	mr->SetRenderer(m_renderer);
-	mr->SetMesh("error");
-	mr->SetShader("shader");
-	mr->entity->transform.SetPosition(-1, 0, -2);
-
 	m_ecs->NewEntity("DRAGON");
-	mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
+	MeshRenderer * mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
 	mr->SetRenderer(m_renderer);
 	mr->SetMesh("dragon");
 	mr->SetShader("shader");
-	mr->entity->transform.SetPosition(0, 0, -2.5);
+	mr->entity->transform.SetPosition(0, 0, -1.5);
+	mr->SetRenderMode(GL_POINTS);
 
 	while (!glfwWindowShouldClose(m_window))
 	{

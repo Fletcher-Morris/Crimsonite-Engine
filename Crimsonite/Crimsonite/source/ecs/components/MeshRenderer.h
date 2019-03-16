@@ -15,8 +15,7 @@ private:
 	Shader * m_shader;
 	Renderer * m_renderer;
 
-	int m_renderMode = GL_LINES;
-	int i = 0;
+	int m_renderMode = GL_TRIANGLES;
 
 public:
 

@@ -10,26 +10,7 @@ void MeshRenderer::OnInit()
 
 void MeshRenderer::OnUpdate()
 {
-	entity->transform.Rotate(0.0f, 0.02f, 0.0f);
-	int j = GL_TRIANGLES;
-	if (i >= 50)
-	{
-		if (m_renderMode == GL_TRIANGLES)
-		{
-			j = GL_LINES;
-		}
-		else if(m_renderMode == GL_LINES)
-		{
-			j = GL_POINTS;
-		}
-		else if (m_renderMode == GL_POINTS)
-		{
-			j = GL_TRIANGLES;
-		}
-		i = 0;
-		SetRenderMode(j);
-	}
-	i++;
+	entity->transform.Rotate(0.0f, 0.002f, 0.0f);
 }
 
 void MeshRenderer::OnFixedUpdate()

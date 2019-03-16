@@ -93,6 +93,8 @@ void CrimsonCore::RunEngine()
 
 	while (!glfwWindowShouldClose(m_window))
 	{
+		Time::SetFrameTime(glfwGetTime());
+
 		for (auto& ent : m_ecs->entities)ent->Update();
 		for (auto& ent : m_ecs->entities)ent->Render();
 

@@ -10,7 +10,7 @@ void MeshRenderer::OnInit()
 
 void MeshRenderer::OnUpdate()
 {
-	entity->transform.Rotate(0.0f, 0.002f, 0.0f);
+	entity->transform.Rotate(0.0f, 0.2f * Time::DeltaTime(), 0.0f);
 }
 
 void MeshRenderer::OnFixedUpdate()

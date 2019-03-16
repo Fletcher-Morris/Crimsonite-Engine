@@ -10,7 +10,7 @@
 
 #include "../asset/AssetManager.h"
 #include "Transform.h"
-//#include "Components.h"
+#include "../core/Time.h"
 
 //	Forward-declare ECS classes for compiler.
 class EcsEntity;

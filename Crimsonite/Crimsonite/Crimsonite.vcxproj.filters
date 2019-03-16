@@ -84,6 +84,9 @@
     <ClCompile Include="source\render\MatrixMaths.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\Time.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
@@ -136,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="source\render\CameraSettings.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\Time.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

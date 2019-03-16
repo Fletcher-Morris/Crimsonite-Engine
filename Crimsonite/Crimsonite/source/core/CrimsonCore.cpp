@@ -17,8 +17,8 @@ CrimsonCore::CrimsonCore(std::string _appName)
 	std::cout << "==========" << std::endl;
 
 	Assets = AssetManager::Instance();
-	//m_assetPath = (std::string)_getcwd(NULL, 0) + "/assets/";
-	m_assetPath = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
+	m_assetPath = (std::string)_getcwd(NULL, 0) + "/assets/";
+	//m_assetPath = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
 	std::cout << "Assets path is : " << m_assetPath << std::endl;
 
 	InitializeEngine(_appName);
@@ -51,7 +51,7 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 	}
 	glfwMakeContextCurrent(m_window);
 	glfwSetFramebufferSizeCallback(m_window, GlfwFrameBufferSizeCallback);
-	glfwSwapInterval(1);
+	glfwSwapInterval(0);
 }
 
 void CrimsonCore::InitializeGlew()
@@ -71,6 +71,8 @@ void CrimsonCore::InitializeGlew()
 
 void CrimsonCore::RunEngine()
 {
+	glfwWindowHint(GLFW_SAMPLES, 4);
+
 	Assets->LoadMesh("test", m_assetPath + "test");
 	Assets->LoadMesh("cube", m_assetPath + "cube");
 	Assets->LoadMesh("dragon", m_assetPath + "dragon");
@@ -79,10 +81,10 @@ void CrimsonCore::RunEngine()
 	Assets->LoadShader("shader", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
 
 	m_ecs->NewEntity("Camera");
-	Camera * mainCamera = &m_ecs->LastEntity()->AttachComponent<Camera>();
+	Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
 
 	m_ecs->NewEntity("DRAGON");
-	MeshRenderer * mr = &m_ecs->LastEntity()->AttachComponent<MeshRenderer>();
+	MeshRenderer * mr = &m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
 	mr->SetRenderer(m_renderer);
 	mr->SetMesh("dragon");
 	mr->SetShader("shader");

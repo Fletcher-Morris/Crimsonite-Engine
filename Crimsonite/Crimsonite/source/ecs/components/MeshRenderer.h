@@ -17,6 +17,8 @@ private:
 
 	int m_renderMode = GL_TRIANGLES;
 
+	int i = 0;
+
 public:
 
 	virtual void OnInit() override;

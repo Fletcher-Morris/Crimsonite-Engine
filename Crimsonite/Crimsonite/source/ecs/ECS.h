@@ -118,6 +118,8 @@ public:
 	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; /*m_system->AlertEntityDestruction();*/ m_doDestroy = true; }
 	//	Return the unique identity assigned to this entity.
 	int GetEcsEntityId() { return m_ecsEntityId; }
+	//	Return the EcsSystem this entity is part of.
+	EcsSystem * GetEcsSystem() { return m_system; }
 
 	//	The Transform of the entity.
 	Transform transform;
@@ -204,7 +206,7 @@ public:
 	//	A vector of all created entities.
 	std::vector<std::unique_ptr<EcsEntity>> entities;
 
-	EcsEntity * LastEntity() { return m_newestEntity; }
+	EcsEntity * NewestEntity() { return m_newestEntity; }
 
 	//	Create a new entity with a given name.
 	EcsEntity& NewEntity(std::string _entityName)

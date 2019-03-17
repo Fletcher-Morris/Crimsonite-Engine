@@ -357,6 +357,36 @@ Mesh AssetManager::GetErrorMesh()
 
 void AssetManager::CreateDefaultShader()
 {
+	if (m_defaultShaderCreated == true) return;
+	std::string vertexString =
+		"#version 330 core\n"
+		"layout(location = 0) in vec4 position;\n"
+		"layout(location = 1) in vec3 normal;\n"
+		"layout(location = 2) in vec2 texCoord;\n"
+		"out vec2 v_TexCoord;\n"
+		"uniform mat4 u_MVP;\n"
+		"void main()\n"
+		"{\n"
+		"\tgl_Position = u_MVP * vec4(position.x, position.y, position.z, 1.0);\n"
+		"\tv_TexCoord = texCoord;\n"
+		"}";
+	std::string fragmentString =
+		"#version 330 core\n"
+		"layout(location = 0) out vec4 color;\n"
+		"in vec2 v_TexCoord;\n"
+		"uniform vec4 u_Color;\n"
+		"uniform sampler2D u_Texture;\n"
+		"vec3 colour;\n"
+		"void main()\n"
+		"{\n"
+		"\tvec4 texColor = texture(u_Texture, v_TexCoord);\n"
+		"\tcolor = texColor * u_Color;\n"
+		"}";
+
+	Shader shader = Shader();
+	shader.Compile(vertexString, fragmentString);
+	m_shaders.at("default") = shader;
+	m_defaultShaderCreated = true;
 }
 
 Shader * AssetManager::GetDefaultShader()
@@ -372,6 +402,7 @@ void AssetManager::CreateDefaultMaterial()
 	newMat.SetShader("default");
 	newMat.SetColor({ 0.5f,0.5f,0.5f });
 	m_materials.at("default") = newMat;
+	m_defaultMaterialCreated = true;
 }
 
 Material * AssetManager::GetDefaultMaterial()

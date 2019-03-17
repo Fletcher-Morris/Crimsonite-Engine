@@ -19,7 +19,12 @@ public:
 	std::map<std::string, glm::vec2> vec2Properties;
 	std::map<std::string, glm::vec3> vec3Properties;
 	std::map<std::string, glm::vec4> vec4Properties;
+	std::map<std::string, std::string> textureProperties;
 
+	void UpdateShaderProperties();
+
+	std::string GetName() { return m_name; }
+	Shader * GetShader() { return m_shader; }
 
 private:
 

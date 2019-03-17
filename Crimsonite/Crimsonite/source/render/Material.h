@@ -37,4 +37,5 @@ private:
 
 	std::string m_name = "New Material";
 	Shader * m_shader;
+	glm::vec3 m_color;
 };

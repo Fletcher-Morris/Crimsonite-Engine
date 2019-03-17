@@ -122,6 +122,54 @@ void Shader::SetMvpMatrix(const glm::mat4 _mvp)
 	glUniformMatrix4fv(GetUniformLocation("u_MVP"), 1, GL_FALSE, glm::value_ptr(_mvp));
 }
 
+void Shader::SetBool(const std::string & _name, bool _value)
+{
+	if (shaderId == 0) return;
+	glUniform1i(glGetUniformLocation(shaderId, _name.c_str()), (int)_value);
+}
+
+void Shader::SetInt(const std::string & _name, int _value)
+{
+	if (shaderId == 0) return;
+	glUniform1i(glGetUniformLocation(shaderId, _name.c_str()), (int)_value);
+}
+
+void Shader::SetFloat(const std::string & _name, float _value)
+{
+	if (shaderId == 0) return;
+	glUniform1i(glGetUniformLocation(shaderId, _name.c_str()), _value);
+}
+
+void Shader::SetColor(const glm::vec3 & _color)
+{
+	if (shaderId == 0) return;
+	glUniform4f(GetUniformLocation("u_Color"), _color.x, _color.y, _color.z, 1.0f);
+}
+
+void Shader::SetColor(const glm::vec4 & _color)
+{
+	if (shaderId == 0) return;
+	glUniform4f(GetUniformLocation("u_Color"), _color.x, _color.y, _color.z, _color.w);
+}
+
+void Shader::SetVector2(const std::string & _name, glm::vec2 _value)
+{
+	if (shaderId == 0) return;
+	glUniform2f(GetUniformLocation(_name), _value.x, _value.y);
+}
+
+void Shader::SetVector3(const std::string & _name, glm::vec3 _value)
+{
+	if (shaderId == 0) return;
+	glUniform3f(GetUniformLocation(_name), _value.x, _value.y, _value.z);
+}
+
+void Shader::SetVector4(const std::string & _name, glm::vec4 _value)
+{
+	if (shaderId == 0) return;
+	glUniform4f(GetUniformLocation(_name), _value.x, _value.y, _value.z, _value.w);
+}
+
 unsigned int Shader::GetUniformLocation(const std::string & _uniformName)
 {
 	if (m_locations.find(_uniformName) != m_locations.end())

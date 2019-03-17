@@ -35,8 +35,10 @@ public:
 	void SetInt(const std::string& _name, int _value);
 	void SetFloat(const std::string& _name, float _value);
 	void SetColor(const glm::vec3& _color);
+	void SetColor(const glm::vec4& _color);
 	void SetVector2(const std::string& _name, glm::vec2 _value);
 	void SetVector3(const std::string& _name, glm::vec3 _value);
+	void SetVector4(const std::string& _name, glm::vec4 _value);
 
 private:
 

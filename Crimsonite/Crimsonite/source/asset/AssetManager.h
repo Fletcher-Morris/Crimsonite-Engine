@@ -9,6 +9,7 @@
 #include "Asset.h"
 #include "../mesh/Mesh.h"
 #include "../render/Shader.h"
+#include "../render/Material.h"
 
 class AssetManager
 {
@@ -35,6 +36,10 @@ public:
 	Shader * GetShader(std::string _shaderName);
 
 	//	MATERIAL METHODS
+	void AddMaterial(std::string _materialName);
+	void AddMaterial(std::string _materialName, Material _material);
+	void LoadMaterial(std::string _materialName, std::string _filePath);
+	Material * GetMaterial(std::string _materialName);
 
 	//	SCENE METHODS
 
@@ -58,6 +63,7 @@ private:
 	std::map<std::string, Shader> m_shaders;
 
 	//	MATERIAL MAP
+	std::map<std::string, Material> m_materials;
 
 	//	SCENE MAP
 

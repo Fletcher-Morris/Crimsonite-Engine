@@ -149,5 +149,8 @@
     <ClInclude Include="source\ecs\components\Rotator.h">
       <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
+    <ClInclude Include="source\render\Material.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

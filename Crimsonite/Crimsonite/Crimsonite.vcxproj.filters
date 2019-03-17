@@ -90,13 +90,13 @@
     <ClCompile Include="source\ecs\components\Rotator.cpp">
       <Filter>Source Files\ecs\components</Filter>
     </ClCompile>
+    <ClCompile Include="source\render\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\AssetManager.h">
-      <Filter>Source Files\asset</Filter>
     </ClInclude>
     <ClInclude Include="source\asset\Asset.h">
       <Filter>Header Files\asset</Filter>

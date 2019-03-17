@@ -37,8 +37,8 @@ public:
 
 	//	MATERIAL METHODS
 	void AddMaterial(std::string _materialName);
-	void AddMaterial(std::string _materialName, Material _material);
-	void LoadMaterial(std::string _materialName, std::string _filePath);
+	void AddMaterial(Material _material);
+	void LoadMaterial(std::string _filePath);
 	Material * GetMaterial(std::string _materialName);
 
 	//	SCENE METHODS
@@ -64,6 +64,7 @@ private:
 
 	//	MATERIAL MAP
 	std::map<std::string, Material> m_materials;
+	int m_latestMaterialRevision = 1;
 
 	//	SCENE MAP
 

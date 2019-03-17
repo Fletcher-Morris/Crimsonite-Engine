@@ -13,6 +13,9 @@ class Material
 
 public:
 
+	Material();
+	Material(std::string _name);
+
 	std::map<std::string, bool> boolProperties;
 	std::map<std::string, int> intProperties;
 	std::map<std::string, float> floatProperties;
@@ -23,8 +26,12 @@ public:
 
 	void UpdateShaderProperties();
 
+	void SetName(std::string _name) { m_name = _name; }
 	std::string GetName() { return m_name; }
 	Shader * GetShader() { return m_shader; }
+	void SetShader(Shader * _shader) { m_shader = _shader; }
+	void SetShader(std::string _shader);
+	void SetColor(glm::vec3 _color);
 
 private:
 

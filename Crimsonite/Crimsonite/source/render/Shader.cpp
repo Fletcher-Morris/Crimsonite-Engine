@@ -106,16 +106,19 @@ void Shader::Compile(const std::string _comboPath)
 
 void Shader::Bind() const
 {
+	if (shaderId == 0) return;
 	glUseProgram(shaderId);
 }
 
 void Shader::Unbind() const
 {
+	if (shaderId == 0) return;
 	glUseProgram(0);
 }
 
 void Shader::SetMvpMatrix(const glm::mat4 _mvp)
 {
+	if (shaderId == 0) return;
 	glUniformMatrix4fv(GetUniformLocation("u_MVP"), 1, GL_FALSE, glm::value_ptr(_mvp));
 }
 

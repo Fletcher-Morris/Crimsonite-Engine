@@ -14,8 +14,6 @@ AssetManager::~AssetManager()
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 {
-
-
 	std::cout << "Attempting to load mesh : " << _filePath << std::endl;
 
 	//	Prepare the vertex vectors.
@@ -197,7 +195,93 @@ void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, 
 
 Shader * AssetManager::GetShader(std::string _shaderName)
 {
+	if (&m_shaders.at(_shaderName) == NULL)
+	{
+		m_shaders.at(_shaderName) = Shader();
+		std::cout << "Shader '" << _shaderName << "' does not exist yet, but a material is trying to access it." << std::endl;
+	}
 	return &m_shaders.at(_shaderName);
+}
+
+void AssetManager::AddMaterial(std::string _materialName)
+{
+	m_materials[_materialName] = Material(_materialName);
+}
+
+void AssetManager::AddMaterial(Material _material)
+{
+	m_materials[_material.GetName()] = _material;
+}
+
+void AssetManager::LoadMaterial(std::string _filePath)
+{
+	std::cout << "Attempting to load material from " << _filePath << std::endl;
+
+	Material newMat = Material();
+
+	struct stat statFile;
+	//	Check if a file allready exists.
+	if (stat((_filePath + ".material").c_str(), &statFile) == 0)
+	{
+
+//	Temporary error-suppressor.
+#pragma warning(push)
+#pragma warning(disable: 4996)
+		FILE * file = fopen((_filePath + ".material").c_str(), "r");
+
+		int res = 0;
+		//	Read though the mesh file.
+		while (res != EOF)
+		{
+			char lineHeader[128];
+			res = fscanf(file, "%s", lineHeader);
+			//	Check for revision header.
+			if (strcmp(lineHeader, "r") == 0)
+			{
+				int fileRevision;
+				fscanf(file, "%d", &fileRevision);
+				//	Check if the mesh file matches the latest format revision.
+				if (fileRevision != m_latestMaterialRevision)
+				{
+					std::cout << "Material : " + _filePath + " does not match the latest material format revision (" << m_latestMaterialRevision << ")!" << std::endl;
+				}
+
+			}
+			//	Get the material name.
+			else if (strcmp(lineHeader, "name") == 0)
+			{
+				std::string name;
+				fscanf(file, "%s", &lineHeader);
+				name = (std::string)lineHeader;
+				if (name != "") newMat.SetName(name);
+			}
+			//	Get the shader type.
+			else if (strcmp(lineHeader, "shader") == 0)
+			{
+				std::string shaderName;
+				fscanf(file, "%s", &lineHeader);
+				shaderName = (std::string)lineHeader;
+				if (shaderName != "") newMat.SetShader(GetShader(shaderName));
+			}
+			//	Get the shader type.
+			else if (strcmp(lineHeader, "color") == 0)
+			{
+				glm::vec3 colour;
+				fscanf(file, "%d,%d,%d", &colour.x, &colour.y, &colour.z);
+				newMat.SetColor(colour);
+			}
+		}
+
+		std::cout << "Loaded Material file from : " << _filePath << std::endl;
+		//	End error-suppressor.
+#pragma warning(pop)
+	}
+	AddMaterial(newMat);
+}
+
+Material * AssetManager::GetMaterial(std::string _materialName)
+{
+	return &m_materials.at(_materialName);
 }
 
 bool AssetManager::MeshExists(std::string _meshName)

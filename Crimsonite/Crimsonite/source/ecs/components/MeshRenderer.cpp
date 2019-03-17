@@ -3,6 +3,7 @@
 #include "../../mesh/Mesh.h"
 #include "../../render/Shader.h"
 #include "../../render/Renderer.h"
+#include "../../render/Material.h"
 
 void MeshRenderer::OnInit()
 {

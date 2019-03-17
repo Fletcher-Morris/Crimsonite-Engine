@@ -354,3 +354,28 @@ Mesh AssetManager::GetErrorMesh()
 	CreateErrorMesh();
 	return m_errorMesh;
 }
+
+void AssetManager::CreateDefaultShader()
+{
+}
+
+Shader * AssetManager::GetDefaultShader()
+{
+	CreateDefaultShader();
+	return &m_shaders.at("default");
+}
+
+void AssetManager::CreateDefaultMaterial()
+{
+	if (m_defaultMaterialCreated == true) return;
+	Material newMat = Material("default");
+	newMat.SetShader("default");
+	newMat.SetColor({ 0.5f,0.5f,0.5f });
+	m_materials.at("default") = newMat;
+}
+
+Material * AssetManager::GetDefaultMaterial()
+{
+	CreateDefaultMaterial();
+	return &m_materials.at("default");
+}

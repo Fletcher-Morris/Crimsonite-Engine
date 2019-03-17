@@ -61,10 +61,16 @@ private:
 
 	//	SHADER MAP
 	std::map<std::string, Shader> m_shaders;
+	void CreateDefaultShader();
+	bool m_defaultShaderCreated = false;
+	Shader * GetDefaultShader();
 
 	//	MATERIAL MAP
 	std::map<std::string, Material> m_materials;
 	int m_latestMaterialRevision = 1;
+	void CreateDefaultMaterial();
+	bool m_defaultMaterialCreated = false;
+	Material * GetDefaultMaterial();
 
 	//	SCENE MAP
 

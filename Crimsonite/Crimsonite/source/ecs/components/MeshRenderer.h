@@ -3,7 +3,7 @@
 #include "../ECS.h"
 
 class Mesh;
-class Shader;
+class Material;
 class Renderer;
 
 class MeshRenderer : public EcsComponent
@@ -12,7 +12,7 @@ class MeshRenderer : public EcsComponent
 private:
 
 	Mesh * m_mesh;
-	Shader * m_shader;
+	Material * m_material;
 	Renderer * m_renderer;
 
 	int m_renderMode = GL_TRIANGLES;
@@ -33,9 +33,9 @@ public:
 	void SetMesh(std::string _meshName);
 	Mesh * GetMesh() { return m_mesh; }
 
-	void SetShader(Shader * _newShader);
-	void SetShader(std::string _shaderName);
-	Shader * GetShader();
+	void SetMaterial(Material * _newMaterial);
+	void SetMaterial(std::string _materialName);
+	Material * GetMaterial();
 
 	void SetRenderer(Renderer * _renderer);
 	void SubmitToRenderer();

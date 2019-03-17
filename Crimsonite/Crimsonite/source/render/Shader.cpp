@@ -143,13 +143,13 @@ void Shader::SetFloat(const std::string & _name, float _value)
 void Shader::SetColor(const glm::vec3 & _color)
 {
 	if (shaderId == 0) return;
-	glUniform4f(GetUniformLocation("u_Color"), _color.x, _color.y, _color.z, 1.0f);
+	glUniform4f(GetUniformLocation("Color"), _color.x, _color.y, _color.z, 1.0f);
 }
 
 void Shader::SetColor(const glm::vec4 & _color)
 {
 	if (shaderId == 0) return;
-	glUniform4f(GetUniformLocation("u_Color"), _color.x, _color.y, _color.z, _color.w);
+	glUniform4f(GetUniformLocation("Color"), _color.x, _color.y, _color.z, _color.w);
 }
 
 void Shader::SetVector2(const std::string & _name, glm::vec2 _value)

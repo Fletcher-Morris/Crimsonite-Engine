@@ -32,10 +32,11 @@ public:
 	void SetShader(Shader * _shader) { m_shader = _shader; }
 	void SetShader(std::string _shader);
 	void SetColor(glm::vec3 _color);
+	void SetColor(glm::vec4 _color);
 
 private:
 
 	std::string m_name = "New Material";
 	Shader * m_shader;
-	glm::vec3 m_color;
+	glm::vec4 m_color;
 };

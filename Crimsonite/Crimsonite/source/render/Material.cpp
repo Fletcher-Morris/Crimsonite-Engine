@@ -48,5 +48,16 @@ void Material::SetShader(std::string _shader)
 
 void Material::SetColor(glm::vec3 _color)
 {
-	m_color = _color;
+	m_color.x = _color.x;
+	m_color.y = _color.y;
+	m_color.z = _color.z;
+	m_color.w = 1.0f;
+}
+
+void Material::SetColor(glm::vec4 _color)
+{
+	m_color.x = _color.x;
+	m_color.y = _color.y;
+	m_color.z = _color.z;
+	m_color.w = _color.w;
 }

@@ -73,12 +73,12 @@ void CrimsonCore::RunEngine()
 {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	Assets->LoadMesh("test", m_assetPath + "test");
-	Assets->LoadMesh("cube", m_assetPath + "cube");
+	Assets->CreateDefaultShader();
+	Assets->CreateDefaultMaterial();
+	Assets->LoadShader("color", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
+
 	Assets->LoadMesh("dragon", m_assetPath + "dragon");
-	Assets->WriteMeshFile(*Assets->GetMesh("cube"), m_assetPath + "cube2.mesh");
-	Assets->LoadMesh("spring", m_assetPath + "spring");
-	Assets->LoadShader("shader", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
+	Assets->LoadMaterial(m_assetPath + "blue");
 
 	m_ecs->NewEntity("Camera");
 	Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
@@ -87,7 +87,7 @@ void CrimsonCore::RunEngine()
 	MeshRenderer * mr = &m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
 	mr->SetRenderer(m_renderer);
 	mr->SetMesh("dragon");
-	mr->SetShader("shader");
+	mr->SetMaterial("blue");
 	mr->entity->transform.SetPosition(0, 0, -1.5);
 	m_ecs->NewestEntity()->AttachComponent<Rotator>();
 

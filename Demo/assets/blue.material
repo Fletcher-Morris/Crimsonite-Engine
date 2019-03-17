@@ -1,0 +1,4 @@
+r 1
+name blue
+shader color
+color 0,0,1

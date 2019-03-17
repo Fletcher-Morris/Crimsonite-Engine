@@ -1,7 +1,6 @@
 #include "MeshRenderer.h"
 
 #include "../../mesh/Mesh.h"
-#include "../../render/Shader.h"
 #include "../../render/Renderer.h"
 #include "../../render/Material.h"
 
@@ -19,6 +18,8 @@ void MeshRenderer::OnFixedUpdate()
 
 void MeshRenderer::OnRender()
 {
+	if (m_mesh == NULL) return;
+	if (m_material == NULL) SetMaterial("default");
 	SubmitToRenderer();
 }
 
@@ -33,7 +34,7 @@ void MeshRenderer::OnDisable()
 void MeshRenderer::SetMesh(Mesh * _newMesh)
 {
 	m_mesh = _newMesh;
-	std::cout << entity->GetName() << " : MeshRenderer : SetMesh() : " << m_mesh->IndexCount() << std::endl;
+	std::cout << "Changed mesh of '" << entity->GetName() << "' MeshRenderer." << std::endl;
 }
 
 void MeshRenderer::SetMesh(std::string _meshName)
@@ -41,19 +42,20 @@ void MeshRenderer::SetMesh(std::string _meshName)
 	SetMesh(AssetManager::Instance()->GetMesh(_meshName));
 }
 
-void MeshRenderer::SetShader(Shader * _newShader)
+void MeshRenderer::SetMaterial(Material * _newMaterial)
 {
-	m_shader = _newShader;
+	m_material = _newMaterial;
+	std::cout << "Set material of '" << entity->GetName() << "' MeshRenderer to '" << _newMaterial->GetName() << "'." << std::endl;
 }
 
-void MeshRenderer::SetShader(std::string _shaderName)
+void MeshRenderer::SetMaterial(std::string _materialName)
 {
-	m_shader = AssetManager::Instance()->GetShader(_shaderName);
+	SetMaterial(AssetManager::Instance()->GetMaterial(_materialName));
 }
 
-Shader * MeshRenderer::GetShader()
+Material * MeshRenderer::GetMaterial()
 {
-	return m_shader;
+	return m_material;
 }
 
 void MeshRenderer::SetRenderer(Renderer * _renderer)
@@ -100,5 +102,5 @@ void MeshRenderer::SetShaderMvp()
 	glm::mat4 x = glm::rotate(y, entity->transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 z = glm::rotate(x, entity->transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-	m_shader->SetMvpMatrix(z);
+	m_material->GetShader()->SetMvpMatrix(z);
 }

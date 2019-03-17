@@ -14,8 +14,6 @@ AssetManager::~AssetManager()
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 {
-	std::cout << "Attempting to load mesh : " << _filePath << std::endl;
-
 	//	Prepare the vertex vectors.
 	std::vector<glm::vec3>		input_positions;
 	std::vector<glm::vec3>		input_normals;
@@ -84,7 +82,7 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 		//	Add this mesh's name to the list of loaded mesh names.
 		if (std::find(m_loadedMeshNames.begin(), m_loadedMeshNames.end(), _meshName) == m_loadedMeshNames.end())
 		{
-			this->m_loadedMeshNames.push_back(_meshName);
+			m_loadedMeshNames.push_back(_meshName);
 		}
 
 		std::cout << "Loaded MESH file : " << _filePath << std::endl;
@@ -104,7 +102,6 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 	else
 	{
 		std::cout << "Could not locate mesh file at : " << _filePath << std::endl;
-		this->m_meshes[_meshName] = GetErrorMesh();
 	}
 }
 
@@ -174,14 +171,18 @@ void AssetManager::WriteMeshFile(Mesh _mesh, std::string _filePath)
 
 Mesh * AssetManager::GetMesh(std::string _meshName)
 {
-	if (!MeshExists(_meshName)) return &m_errorMesh;
-
+	if (!MeshExists(_meshName))
+	{
+		std::cout << "Mesh '" << _meshName << "' does not exist yet, but something is trying to access it." << std::endl;
+		return GetErrorMesh();
+	}
 	return &m_meshes.at(_meshName);
 }
 
 void AssetManager::AddShader(std::string _shaderName)
 {
 	m_shaders[_shaderName] = Shader();
+	LoadShaderName(_shaderName);
 }
 
 void AssetManager::LoadShader(std::string _shaderName, std::string _filePath)
@@ -191,14 +192,15 @@ void AssetManager::LoadShader(std::string _shaderName, std::string _filePath)
 void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath)
 {
 	m_shaders[_shaderName] = Shader(_vertexPath.c_str(), _fragmentPath.c_str());
+	LoadShaderName(_shaderName);
 }
 
 Shader * AssetManager::GetShader(std::string _shaderName)
 {
-	if (&m_shaders.at(_shaderName) == NULL)
+	if (!ShaderExists(_shaderName))
 	{
-		m_shaders.at(_shaderName) = Shader();
-		std::cout << "Shader '" << _shaderName << "' does not exist yet, but a material is trying to access it." << std::endl;
+		std::cout << "Shader '" << _shaderName << "' does not exist yet, but something is trying to access it." << std::endl;
+		return GetDefaultShader();
 	}
 	return &m_shaders.at(_shaderName);
 }
@@ -206,17 +208,17 @@ Shader * AssetManager::GetShader(std::string _shaderName)
 void AssetManager::AddMaterial(std::string _materialName)
 {
 	m_materials[_materialName] = Material(_materialName);
+	LoadMaterialName(_materialName);
 }
 
 void AssetManager::AddMaterial(Material _material)
 {
 	m_materials[_material.GetName()] = _material;
+	LoadMaterialName(_material.GetName());
 }
 
 void AssetManager::LoadMaterial(std::string _filePath)
 {
-	std::cout << "Attempting to load material from " << _filePath << std::endl;
-
 	Material newMat = Material();
 
 	struct stat statFile;
@@ -266,9 +268,9 @@ void AssetManager::LoadMaterial(std::string _filePath)
 			//	Get the shader type.
 			else if (strcmp(lineHeader, "color") == 0)
 			{
-				glm::vec3 colour;
-				fscanf(file, "%d,%d,%d", &colour.x, &colour.y, &colour.z);
-				newMat.SetColor(colour);
+				glm::vec3 color;
+				fscanf(file, "%f,%f,%f", &color.x, &color.y, &color.z);
+				newMat.SetColor(color);
 			}
 		}
 
@@ -281,6 +283,11 @@ void AssetManager::LoadMaterial(std::string _filePath)
 
 Material * AssetManager::GetMaterial(std::string _materialName)
 {
+	if (!MaterialExists(_materialName))
+	{
+		std::cout << "Material '" << _materialName << "' does not exist yet, but something is trying to access it." << std::endl;
+		return GetDefaultMaterial();
+	}
 	return &m_materials.at(_materialName);
 }
 
@@ -347,12 +354,30 @@ void AssetManager::CreateErrorMesh()
 	m_errorMesh.indices.push_back(3);//left
 	m_errorMesh.UploadToGpu();
 	m_errorMeshCreated = true;
+	std::cout << "Created Error Mesh." << std::endl;
 }
 
-Mesh AssetManager::GetErrorMesh()
+Mesh * AssetManager::GetErrorMesh()
 {
 	CreateErrorMesh();
-	return m_errorMesh;
+	return &m_errorMesh;
+}
+
+bool AssetManager::ShaderExists(std::string _shaderName)
+{
+	for (int i = 0; i < m_loadedShaderNames.size(); i++)
+	{
+		if (m_loadedShaderNames[i] == _shaderName) return true;
+	}
+	return false;
+}
+
+void AssetManager::LoadShaderName(std::string _shaderName)
+{
+	if (std::find(m_loadedShaderNames.begin(), m_loadedShaderNames.end(), _shaderName) == m_loadedShaderNames.end())
+	{
+		m_loadedShaderNames.push_back(_shaderName);
+	}
 }
 
 void AssetManager::CreateDefaultShader()
@@ -385,8 +410,10 @@ void AssetManager::CreateDefaultShader()
 
 	Shader shader = Shader();
 	shader.Compile(vertexString, fragmentString);
-	m_shaders.at("default") = shader;
+	m_shaders["default"] = shader;
 	m_defaultShaderCreated = true;
+	LoadShaderName("default");
+	std::cout << "Created Default Shader." << std::endl;
 }
 
 Shader * AssetManager::GetDefaultShader()
@@ -395,14 +422,32 @@ Shader * AssetManager::GetDefaultShader()
 	return &m_shaders.at("default");
 }
 
+bool AssetManager::MaterialExists(std::string _materialName)
+{
+	for (int i = 0; i < m_loadedMaterialNames.size(); i++)
+	{
+		if (m_loadedMaterialNames[i] == _materialName) return true;
+	}
+	return false;
+}
+
+void AssetManager::LoadMaterialName(std::string _materiaName)
+{
+	if (std::find(m_loadedMaterialNames.begin(), m_loadedMaterialNames.end(), _materiaName) == m_loadedMaterialNames.end())
+	{
+		m_loadedMaterialNames.push_back(_materiaName);
+	}
+}
+
 void AssetManager::CreateDefaultMaterial()
 {
 	if (m_defaultMaterialCreated == true) return;
 	Material newMat = Material("default");
 	newMat.SetShader("default");
 	newMat.SetColor({ 0.5f,0.5f,0.5f });
-	m_materials.at("default") = newMat;
+	m_materials["default"] = newMat;
 	m_defaultMaterialCreated = true;
+	std::cout << "Created Default Material." << std::endl;
 }
 
 Material * AssetManager::GetDefaultMaterial()

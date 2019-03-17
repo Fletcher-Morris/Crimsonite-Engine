@@ -53,7 +53,8 @@ void SimpleRenderer::Flush()
 	for (int i = 0; i < m_meshRenderers.size(); i++)
 	{
 		MeshRenderer * m = m_meshRenderers[i];
-		m->GetShader()->Bind();
+		m->GetMaterial()->GetShader()->Bind();
+		m->GetMaterial()->UpdateShaderProperties();
 		m->SetShaderMvp();
 
 		glBindVertexArray(m->GetMesh()->GetVao());

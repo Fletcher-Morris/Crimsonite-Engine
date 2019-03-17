@@ -34,12 +34,14 @@ public:
 	void LoadShader(std::string _shaderName, std::string _filePath);
 	void LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath);
 	Shader * GetShader(std::string _shaderName);
+	void CreateDefaultShader();
 
 	//	MATERIAL METHODS
 	void AddMaterial(std::string _materialName);
 	void AddMaterial(Material _material);
 	void LoadMaterial(std::string _filePath);
 	Material * GetMaterial(std::string _materialName);
+	void CreateDefaultMaterial();
 
 	//	SCENE METHODS
 
@@ -57,18 +59,22 @@ private:
 	Mesh m_errorMesh;
 	void CreateErrorMesh();
 	bool m_errorMeshCreated = false;
-	Mesh GetErrorMesh();
+	Mesh * GetErrorMesh();
 
 	//	SHADER MAP
 	std::map<std::string, Shader> m_shaders;
-	void CreateDefaultShader();
+	std::vector<std::string> m_loadedShaderNames;
+	bool ShaderExists(std::string _shaderName);
+	void LoadShaderName(std::string _shaderName);
 	bool m_defaultShaderCreated = false;
 	Shader * GetDefaultShader();
 
 	//	MATERIAL MAP
 	std::map<std::string, Material> m_materials;
+	std::vector<std::string> m_loadedMaterialNames;
+	bool MaterialExists(std::string _materialName);
+	void LoadMaterialName(std::string _materiaName);
 	int m_latestMaterialRevision = 1;
-	void CreateDefaultMaterial();
 	bool m_defaultMaterialCreated = false;
 	Material * GetDefaultMaterial();
 

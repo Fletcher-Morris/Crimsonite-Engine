@@ -170,6 +170,12 @@ void Shader::SetVector4(const std::string & _name, glm::vec4 _value)
 	glUniform4f(GetUniformLocation(_name), _value.x, _value.y, _value.z, _value.w);
 }
 
+void Shader::SetTexture(const std::string & _name, Texture * _texture)
+{
+	if (ShaderId == 0) return;
+	glUniform1i(GetUniformLocation(_name), _texture->TextureId);
+}
+
 unsigned int Shader::GetUniformLocation(const std::string & _uniformName)
 {
 	if (m_locations.find(_uniformName) != m_locations.end())

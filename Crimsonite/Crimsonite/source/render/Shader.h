@@ -12,6 +12,8 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
+#include "Texture.h"
+
 class Shader
 {
 	
@@ -39,6 +41,7 @@ public:
 	void SetVector2(const std::string& _name, glm::vec2 _value);
 	void SetVector3(const std::string& _name, glm::vec3 _value);
 	void SetVector4(const std::string& _name, glm::vec4 _value);
+	void SetTexture(const std::string& _name, Texture * _texture);
 
 private:
 

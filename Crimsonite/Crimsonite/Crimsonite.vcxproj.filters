@@ -90,11 +90,11 @@
     <ClCompile Include="source\ecs\components\Rotator.cpp">
       <Filter>Source Files\ecs\components</Filter>
     </ClCompile>
-    <ClCompile Include="source\render\Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\render\Texture.cpp">
-      <Filter>Header Files\render</Filter>
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\render\Material.cpp">
+      <Filter>Source Files\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

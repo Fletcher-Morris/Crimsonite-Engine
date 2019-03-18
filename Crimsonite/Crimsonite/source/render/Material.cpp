@@ -38,7 +38,13 @@ void Material::UpdateShaderProperties()
 	{
 		m_shader->SetVector4(key, value);
 	}
+	for (auto const&[key, value] : textureProperties)
+	{
+		m_shader->SetTexture(key, value);
+	}
+
 	m_shader->SetColor(m_color);
+
 }
 
 void Material::SetShader(std::string _shader)
@@ -60,4 +66,24 @@ void Material::SetColor(glm::vec4 _color)
 	m_color.y = _color.y;
 	m_color.z = _color.z;
 	m_color.w = _color.w;
+}
+
+void Material::SetTextureProperty(std::string _propertyName, Texture * _texture)
+{
+	textureProperties[_propertyName] = _texture;
+}
+
+void Material::SetTextureProperty(std::string _propertyName, std::string _textureName)
+{
+	SetTextureProperty(_propertyName, AssetManager::Instance()->GetTexture(_textureName));
+}
+
+void Material::SetMainTex(std::string _textureName)
+{
+	SetMainTex(AssetManager::Instance()->GetTexture(_textureName));
+}
+
+void Material::SetMainTex(Texture * _texture)
+{
+	SetTextureProperty("main", _texture);
 }

@@ -28,6 +28,11 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->GetWidth(), tex->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->ImageData);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
+		if (!TextureExists(_textureName))
+		{
+			m_loadedTextureNames.push_back(_textureName);
+		}
+
 		std::cout << "Loaded Texture '" << _textureName << "' from : " << _filePath << std::endl;
 	}
 	else
@@ -38,6 +43,16 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 	glActiveTexture(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	SOIL_free_image_data(data);
+}
+
+Texture * AssetManager::GetTexture(std::string _textureName)
+{
+	if (!TextureExists(_textureName))
+	{
+		std::cout << "Texture '" << _textureName << "' does not exist yet, but something is trying to access it." << std::endl;
+		return GetErrorTexture();
+	}
+	return &m_textures.at(_textureName);
 }
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
@@ -300,6 +315,14 @@ void AssetManager::LoadMaterial(std::string _filePath)
 				fscanf(file, "%f,%f,%f", &color.x, &color.y, &color.z);
 				newMat.SetColor(color);
 			}
+			//	Get a Textyre.
+			else if (strcmp(lineHeader, "texture") == 0)
+			{
+				std::string propertyName;
+				std::string textureName;
+				fscanf(file, "%32s,%32s", &propertyName, &textureName);
+				newMat.SetTextureProperty(propertyName, textureName);
+			}
 		}
 
 		std::cout << "Loaded Material file from : " << _filePath << std::endl;
@@ -476,6 +499,24 @@ void AssetManager::CreateDefaultMaterial()
 	m_materials["default"] = newMat;
 	m_defaultMaterialCreated = true;
 	std::cout << "Created Default Material." << std::endl;
+}
+
+bool AssetManager::TextureExists(std::string _textureName)
+{
+	for (int i = 0; i < m_loadedTextureNames.size(); i++)
+	{
+		if (m_loadedTextureNames[i] == _textureName) return true;
+	}
+	return false;
+}
+
+void AssetManager::CreateErrorTexture()
+{
+}
+
+Texture * AssetManager::GetErrorTexture()
+{
+	return nullptr;
 }
 
 Material * AssetManager::GetDefaultMaterial()

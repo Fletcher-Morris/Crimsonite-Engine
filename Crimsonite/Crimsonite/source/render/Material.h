@@ -22,7 +22,7 @@ public:
 	std::map<std::string, glm::vec2> vec2Properties;
 	std::map<std::string, glm::vec3> vec3Properties;
 	std::map<std::string, glm::vec4> vec4Properties;
-	std::map<std::string, std::string> textureProperties;
+	std::map<std::string, Texture*> textureProperties;
 
 	void UpdateShaderProperties();
 
@@ -33,6 +33,10 @@ public:
 	void SetShader(std::string _shader);
 	void SetColor(glm::vec3 _color);
 	void SetColor(glm::vec4 _color);
+	void SetTextureProperty(std::string _propertyName, Texture * _texture);
+	void SetTextureProperty(std::string _propertyName, std::string _textureName);
+	void SetMainTex(std::string _textureName);
+	void SetMainTex(Texture * _texture);
 
 private:
 

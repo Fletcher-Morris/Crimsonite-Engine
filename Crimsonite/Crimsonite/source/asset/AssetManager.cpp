@@ -1,4 +1,5 @@
 #include "AssetManager.h"
+#include <SOIL2/SOIL2.h>
 
 AssetManager * AssetManager::m_instance(0);
 AssetManager * AssetManager::Instance()
@@ -10,6 +11,33 @@ AssetManager * AssetManager::Instance()
 AssetManager::~AssetManager()
 {
 	m_instance = 0;
+}
+
+void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
+{
+	int width;
+	int height;
+	unsigned char* data = SOIL_load_image(_filePath.c_str(), &width, &height, NULL, SOIL_LOAD_RGBA);
+
+	if (data)
+	{
+		m_textures[_textureName] = Texture(width, height, data);
+		Texture * tex = &m_textures.at(_textureName);
+
+		glGenTextures(1, &tex->TextureId);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->GetWidth(), tex->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->ImageData);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		std::cout << "Loaded Texture '" << _textureName << "' from : " << _filePath << std::endl;
+	}
+	else
+	{
+		std::cout << "Failed To Load Texture '" << _textureName << "' from : " << _filePath << "!" << std::endl;
+	}
+
+	glActiveTexture(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	SOIL_free_image_data(data);
 }
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)

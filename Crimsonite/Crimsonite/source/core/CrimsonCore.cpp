@@ -73,6 +73,8 @@ void CrimsonCore::RunEngine()
 {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
+	Assets->LoadTexture("tex", m_assetPath + "crimsontex.png");
+
 	Assets->CreateDefaultShader();
 	Assets->CreateDefaultMaterial();
 	Assets->LoadShader("color", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");

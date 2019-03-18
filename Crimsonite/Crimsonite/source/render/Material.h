@@ -5,6 +5,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+#include <vector>
 
 #include "Shader.h"
 
@@ -38,9 +39,15 @@ public:
 	void SetMainTex(std::string _textureName);
 	void SetMainTex(Texture * _texture);
 
+	void ReservePropertyName(std::string _propertyName);
+	int GetReservedPropertyIndex(std::string _propertyName);
+	std::string GetReservedPropertyName(int _index);
+
 private:
 
 	std::string m_name = "New Material";
 	Shader * m_shader;
 	glm::vec4 m_color;
+
+	std::vector<std::string> m_reservedPropertyNames;
 };

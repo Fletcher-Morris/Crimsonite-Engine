@@ -276,6 +276,9 @@ void AssetManager::LoadMaterial(std::string _filePath)
 
 		int res = 0;
 		//	Read though the mesh file.
+
+		int propertyRefCount = 0;
+
 		while (res != EOF)
 		{
 			char lineHeader[128];
@@ -315,13 +318,32 @@ void AssetManager::LoadMaterial(std::string _filePath)
 				fscanf(file, "%f,%f,%f", &color.x, &color.y, &color.z);
 				newMat.SetColor(color);
 			}
-			//	Get a Textyre.
-			else if (strcmp(lineHeader, "texture") == 0)
+			//	Get a Texture reference.
+			else if (strcmp(lineHeader, "texture-main") == 0)
+			{
+				std::string textureName;
+				fscanf(file, "%s", &lineHeader);
+				textureName = (std::string)lineHeader;
+				newMat.ReservePropertyName("MainTex");
+				newMat.SetTextureProperty("MainTex", textureName);
+				propertyRefCount++;
+			}
+			//	Get a Texture property.
+			else if (strcmp(lineHeader, "texture-property") == 0)
 			{
 				std::string propertyName;
+				fscanf(file, "%s", &lineHeader);
+				propertyName = (std::string)lineHeader;
+				newMat.ReservePropertyName(propertyName);
+			}
+			//	Get a Texture reference.
+			else if (strcmp(lineHeader, "texture-reference") == 0)
+			{
 				std::string textureName;
-				fscanf(file, "%32s,%32s", &propertyName, &textureName);
-				newMat.SetTextureProperty(propertyName, textureName);
+				fscanf(file, "%s", &lineHeader);
+				textureName = (std::string)lineHeader;
+				newMat.SetTextureProperty(newMat.GetReservedPropertyName(propertyRefCount), textureName);
+				propertyRefCount++;
 			}
 		}
 

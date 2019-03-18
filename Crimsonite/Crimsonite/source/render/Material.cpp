@@ -71,6 +71,7 @@ void Material::SetColor(glm::vec4 _color)
 void Material::SetTextureProperty(std::string _propertyName, Texture * _texture)
 {
 	textureProperties[_propertyName] = _texture;
+	std::cout << "Set tex property '" << _propertyName << "' to '" << _texture << "'." << std::endl;
 }
 
 void Material::SetTextureProperty(std::string _propertyName, std::string _textureName)
@@ -85,5 +86,37 @@ void Material::SetMainTex(std::string _textureName)
 
 void Material::SetMainTex(Texture * _texture)
 {
-	SetTextureProperty("main", _texture);
+	SetTextureProperty("MainTex", _texture);
+}
+
+void Material::ReservePropertyName(std::string _propertyName)
+{
+	if (_propertyName == "") return;
+	if (GetReservedPropertyIndex(_propertyName) == -1)
+		m_reservedPropertyNames.push_back(_propertyName);
+	else
+		std::cout << "Material '" << GetName() << "' already contains property '" << _propertyName << "'!" << std::endl;
+}
+
+int Material::GetReservedPropertyIndex(std::string _propertyName)
+{
+	if (_propertyName == "") return -1;
+	for (int i = 0; i < m_reservedPropertyNames.size(); i++)
+	{
+		if (m_reservedPropertyNames[i] == _propertyName)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+std::string Material::GetReservedPropertyName(int _index)
+{
+	if (m_reservedPropertyNames.size() > _index)
+	{
+		return m_reservedPropertyNames[_index];
+	}
+	return "";
 }

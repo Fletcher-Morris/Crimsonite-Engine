@@ -82,18 +82,18 @@ void Shader::Compile(std::string _vertexCode, std::string _fragmentCode)
 		std::cout << "Failed to compile fragment shader :\n" << info << std::endl;
 	}
 
-	shaderId = glCreateProgram();
-	glAttachShader(shaderId, vertexShader);
-	glAttachShader(shaderId, fragmentShader);
-	glLinkProgram(shaderId);
+	ShaderId = glCreateProgram();
+	glAttachShader(ShaderId, vertexShader);
+	glAttachShader(ShaderId, fragmentShader);
+	glLinkProgram(ShaderId);
 
-	glGetProgramiv(shaderId, GL_LINK_STATUS, &success);
+	glGetProgramiv(ShaderId, GL_LINK_STATUS, &success);
 	if (!success)
 	{
-		glGetProgramInfoLog(shaderId, 512, NULL, info);
+		glGetProgramInfoLog(ShaderId, 512, NULL, info);
 		std::cout << "Failed to link shader :\n" << info << std::endl;
 	}
-	std::cout << "Linked shader : " << shaderId << std::endl;
+	std::cout << "Linked shader : " << ShaderId << std::endl;
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
@@ -106,67 +106,67 @@ void Shader::Compile(const std::string _comboPath)
 
 void Shader::Bind() const
 {
-	if (shaderId == 0) return;
-	glUseProgram(shaderId);
+	if (ShaderId == 0) return;
+	glUseProgram(ShaderId);
 }
 
 void Shader::Unbind() const
 {
-	if (shaderId == 0) return;
+	if (ShaderId == 0) return;
 	glUseProgram(0);
 }
 
 void Shader::SetMvpMatrix(const glm::mat4 _mvp)
 {
-	if (shaderId == 0) return;
+	if (ShaderId == 0) return;
 	glUniformMatrix4fv(GetUniformLocation("u_MVP"), 1, GL_FALSE, glm::value_ptr(_mvp));
 }
 
 void Shader::SetBool(const std::string & _name, bool _value)
 {
-	if (shaderId == 0) return;
-	glUniform1i(glGetUniformLocation(shaderId, _name.c_str()), (int)_value);
+	if (ShaderId == 0) return;
+	glUniform1i(glGetUniformLocation(ShaderId, _name.c_str()), (int)_value);
 }
 
 void Shader::SetInt(const std::string & _name, int _value)
 {
-	if (shaderId == 0) return;
-	glUniform1i(glGetUniformLocation(shaderId, _name.c_str()), (int)_value);
+	if (ShaderId == 0) return;
+	glUniform1i(glGetUniformLocation(ShaderId, _name.c_str()), (int)_value);
 }
 
 void Shader::SetFloat(const std::string & _name, float _value)
 {
-	if (shaderId == 0) return;
-	glUniform1i(glGetUniformLocation(shaderId, _name.c_str()), _value);
+	if (ShaderId == 0) return;
+	glUniform1i(glGetUniformLocation(ShaderId, _name.c_str()), _value);
 }
 
 void Shader::SetColor(const glm::vec3 & _color)
 {
-	if (shaderId == 0) return;
+	if (ShaderId == 0) return;
 	glUniform4f(GetUniformLocation("Color"), _color.x, _color.y, _color.z, 1.0f);
 }
 
 void Shader::SetColor(const glm::vec4 & _color)
 {
-	if (shaderId == 0) return;
+	if (ShaderId == 0) return;
 	glUniform4f(GetUniformLocation("Color"), _color.x, _color.y, _color.z, _color.w);
 }
 
 void Shader::SetVector2(const std::string & _name, glm::vec2 _value)
 {
-	if (shaderId == 0) return;
+	if (ShaderId == 0) return;
 	glUniform2f(GetUniformLocation(_name), _value.x, _value.y);
 }
 
 void Shader::SetVector3(const std::string & _name, glm::vec3 _value)
 {
-	if (shaderId == 0) return;
+	if (ShaderId == 0) return;
 	glUniform3f(GetUniformLocation(_name), _value.x, _value.y, _value.z);
 }
 
 void Shader::SetVector4(const std::string & _name, glm::vec4 _value)
 {
-	if (shaderId == 0) return;
+	if (ShaderId == 0) return;
 	glUniform4f(GetUniformLocation(_name), _value.x, _value.y, _value.z, _value.w);
 }
 
@@ -176,7 +176,7 @@ unsigned int Shader::GetUniformLocation(const std::string & _uniformName)
 	{
 		return m_locations[_uniformName];
 	}
-	int location = glGetUniformLocation(shaderId, _uniformName.c_str());
+	int location = glGetUniformLocation(ShaderId, _uniformName.c_str());
 	if (location == -1)
 	{
 		std::cout << "Uniform '" << _uniformName << "' does not exist!" << std::endl;

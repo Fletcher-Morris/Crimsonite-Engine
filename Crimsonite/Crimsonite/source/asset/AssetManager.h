@@ -7,6 +7,7 @@
 #include <chrono>
 
 #include "Asset.h"
+#include "../render/Texture.h"
 #include "../mesh/Mesh.h"
 #include "../render/Shader.h"
 #include "../render/Material.h"
@@ -23,6 +24,8 @@ public:
 
 
 	//	TEXTURE METHODS
+	void LoadTexture(std::string _textureName, std::string _filePath);
+	Texture * GetTexture(std::string _textureName);
 
 	//	MESH METHODS
 	void LoadMesh(std::string _meshName, std::string _filePath);
@@ -50,6 +53,12 @@ private:
 	std::map<std::string, Asset> m_assets;
 
 	//	TEXTURE MAP
+	std::map<std::string, Texture> m_textures;
+	std::vector<std::string> m_loadedTextureNames;
+	bool TextureExists(std::string _textureName);
+	void CreateErrorTexture();
+	bool m_errorTextureCreated = false;
+	Texture * GetErrorTexture();
 
 	//	MESH MAP
 	std::map<std::string, Mesh> m_meshes;

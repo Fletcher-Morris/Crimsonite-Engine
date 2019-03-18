@@ -25,6 +25,7 @@
     <ClCompile Include="source\render\Renderer.cpp" />
     <ClCompile Include="source\render\Shader.cpp" />
     <ClCompile Include="source\render\SimpleRenderer.cpp" />
+    <ClCompile Include="source\render\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\asset\Asset.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="source\render\Renderer.h" />
     <ClInclude Include="source\render\Shader.h" />
     <ClInclude Include="source\render\SimpleRenderer.h" />
+    <ClInclude Include="source\render\Texture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

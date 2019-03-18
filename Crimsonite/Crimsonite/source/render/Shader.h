@@ -17,7 +17,7 @@ class Shader
 	
 public:
 
-	unsigned int shaderId;
+	unsigned int ShaderId;
 	
 	Shader();
 	Shader(const char* _vertexPath, const char* _fragmentPath);

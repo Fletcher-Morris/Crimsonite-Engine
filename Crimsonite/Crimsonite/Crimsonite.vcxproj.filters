@@ -93,6 +93,9 @@
     <ClCompile Include="source\render\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\render\Texture.cpp">
+      <Filter>Header Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
@@ -150,6 +153,9 @@
       <Filter>Header Files\ecs\components</Filter>
     </ClInclude>
     <ClInclude Include="source\render\Material.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\render\Texture.h">
       <Filter>Header Files\render</Filter>
     </ClInclude>
   </ItemGroup>

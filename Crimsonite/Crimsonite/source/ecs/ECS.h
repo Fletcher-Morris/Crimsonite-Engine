@@ -6,6 +6,11 @@
 #include <bitset>
 #include <algorithm>
 #include <iostream>
+#include <typeinfo>
+
+#include "../asset/AssetManager.h"
+#include "Transform.h"
+#include "../core/Time.h"
 
 //	Forward-declare ECS classes for compiler.
 class EcsEntity;
@@ -42,6 +47,9 @@ private:
 public:
 
 	//	Entity reference
+	EcsEntity * entity;
+
+	//	Component destructor
 	virtual ~EcsComponent() {}
 
 	//	Called when the component is first initialised.
@@ -90,6 +98,8 @@ private:
 	std::array<EcsComponent*, MAX_ENT_COMPONENTS> m_componentsArray;
 	std::bitset<MAX_ENT_COMPONENTS> m_componentsBitset;
 
+	int m_componentsCount = 0;
+
 public:
 
 	EcsEntity(EcsSystem * _system) { m_system = _system; };
@@ -108,13 +118,40 @@ public:
 	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; /*m_system->AlertEntityDestruction();*/ m_doDestroy = true; }
 	//	Return the unique identity assigned to this entity.
 	int GetEcsEntityId() { return m_ecsEntityId; }
+	//	Return the EcsSystem this entity is part of.
+	EcsSystem * GetEcsSystem() { return m_system; }
+
+	//	The Transform of the entity.
+	Transform transform;
+	//	Return a reference to the entity's Transform.
+	Transform * GetTransformRef() { return &transform; }
 
 	//	Called every frame.
-	void Update();
+	void Update()
+	{
+		for (int i = 0; i < m_componentsCount; i++)
+		{
+			m_componentsVector[i]->OnUpdate();
+		}
+	}
+
 	//	Called at fixed intervals.
-	void FixedUpdate();
+	void FixedUpdate()
+	{
+		for (int i = 0; i < m_componentsCount; i++)
+		{
+			m_componentsVector[i]->OnFixedUpdate();
+		}
+	}
+
 	//	Called by the renderer.
-	void Render();
+	void Render()
+	{
+		for (int i = 0; i < m_componentsCount; i++)
+		{
+			m_componentsVector[i]->OnRender();
+		}
+	}
 
 
 	//	Check if this entity has a specific component attached.
@@ -133,6 +170,8 @@ public:
 		m_componentsVector.emplace_back(std::move(uniquePtr));
 		m_componentsArray[GetComponentId<T>()] = newComponent;
 		m_componentsBitset[GetComponentId<T>()] = true;
+		m_componentsCount++;
+		std::cout << "Attached Component : " << typeid(T).name() << " : To Entity : " << m_name << std::endl;
 		newComponent->OnInit();
 		return *newComponent;
 	}
@@ -166,6 +205,8 @@ public:
 
 	//	A vector of all created entities.
 	std::vector<std::unique_ptr<EcsEntity>> entities;
+
+	EcsEntity * NewestEntity() { return m_newestEntity; }
 
 	//	Create a new entity with a given name.
 	EcsEntity& NewEntity(std::string _entityName)

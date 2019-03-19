@@ -71,9 +71,11 @@ private:
 	std::map<std::string, Texture> m_textures;
 	//	A vector of the names of all loaded vectors.
 	std::vector<std::string> m_loadedTextureNames;
-	//	Does a TExture with a given name exist?
+	//	Does a Texture with a given name exist?
 	bool TextureExists(std::string _textureName);
-	//	Create the error TExture.
+	//	Check if a unique vertex already exists.
+	int FindExistingVertex(std::vector<Vertex> _inputVector, glm::vec3 _position, glm::vec2 _uv, glm::vec3 _normal);
+	//	Create the error Texture.
 	void CreateErrorTexture();
 	//	Has the error Texture been created?
 	bool m_errorTextureCreated = false;
@@ -85,7 +87,9 @@ private:
 	std::map<std::string, Mesh> m_meshes;
 	//	A vector of the names of all loaded meshes.
 	std::vector<std::string> m_loadedMeshNames;
-	//	Does a MEsh with a given name exist?
+	//	Add a Mesh to the list of loaded meshes.
+	void LoadMeshName(std::string _meshName);
+	//	Does a Mesh with a given name exist?
 	bool MeshExists(std::string _meshName);
 	//	The latest revision of the MESH file format.
 	int m_latestMeshRevision = 1;

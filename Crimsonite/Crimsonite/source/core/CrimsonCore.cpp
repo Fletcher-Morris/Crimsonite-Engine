@@ -81,6 +81,7 @@ void CrimsonCore::RunEngine()
 
 	Assets->LoadMesh("dragon", m_assetPath + "dragon");
 	Assets->LoadMesh("cube", m_assetPath + "cube");
+	//Assets->WriteMeshFile(*Assets->GetMesh("cube"), m_assetPath + "cube.mesh");
 	Assets->LoadMesh("spring", m_assetPath + "spring");
 	Assets->LoadShader("color", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
 	Assets->LoadMaterial(m_assetPath + "crimsontex");

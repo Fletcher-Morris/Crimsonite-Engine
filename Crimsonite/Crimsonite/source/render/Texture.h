@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 class Texture
 {
 
@@ -7,15 +9,19 @@ public:
 
 	//	The ID of this Texture on the GPU.
 	unsigned int TextureId;
+	//	The ID of this Texture on the GPU.
+	unsigned int ActiveSlot;
 
 	//	The raw image data of the Texture.
 	unsigned char* ImageData;
 
 	Texture();
-	Texture(int _width, int _height, unsigned char* _data);
-	
+	Texture(std::string _name, int _width, int _height, unsigned char* _data);
+	~Texture();
+
 	//	Bind this Texture to the GPU.
 	void Bind();
+	void Bind(unsigned int _textureSlot);
 	//	Unbind this Texture from the GPU.
 	void Unbind();
 
@@ -28,12 +34,16 @@ public:
 	//	Set the raw image data of the Texture.
 	void SetData(unsigned char* _data);
 
+	std::string GetName() { return m_name; }
 	//	Return the width of the Texture.
 	int GetWidth() { return m_width; }
 	//	Return the height of the Texture.
 	int GetHeight() { return m_height; }
 
 private:
+
+	//	The name of this Texture.
+	std::string m_name;
 
 	//	The width of this Texture in pixels.
 	int m_width;

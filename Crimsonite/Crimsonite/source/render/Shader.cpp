@@ -193,10 +193,11 @@ void Shader::SetTexture(const std::string & _name, Texture * _texture)
 	if (ShaderId == 0) return;
 	int location = GetUniformLocation(_name);
 	if (location == -1) return;
-	glUniform1i(location, _texture->TextureId);
+	_texture->Bind();
+	glUniform1i(location, _texture->ActiveSlot);
 }
 
-unsigned int Shader::GetUniformLocation(const std::string & _uniformName)
+int Shader::GetUniformLocation(const std::string & _uniformName)
 {
 	if (m_locations.find(_uniformName) != m_locations.end())
 	{

@@ -1,0 +1,5 @@
+r 1
+name crimsontex
+shader color
+color 1,1,1
+texture-main crimsontex

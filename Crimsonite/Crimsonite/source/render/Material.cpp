@@ -71,7 +71,7 @@ void Material::SetColor(glm::vec4 _color)
 void Material::SetTextureProperty(std::string _propertyName, Texture * _texture)
 {
 	textureProperties[_propertyName] = _texture;
-	std::cout << "Set tex property '" << _propertyName << "' to '" << _texture << "'." << std::endl;
+	std::cout << "Material '" << GetName() << "' set texture property '"  << _propertyName << "' to '" << _texture->GetName() << "'." << std::endl;
 }
 
 void Material::SetTextureProperty(std::string _propertyName, std::string _textureName)
@@ -93,9 +93,14 @@ void Material::ReservePropertyName(std::string _propertyName)
 {
 	if (_propertyName == "") return;
 	if (GetReservedPropertyIndex(_propertyName) == -1)
+	{
 		m_reservedPropertyNames.push_back(_propertyName);
+		std::cout << "Material '" << GetName() << "' reserved property '" << _propertyName << "'." << std::endl;
+	}
 	else
+	{
 		std::cout << "Material '" << GetName() << "' already contains property '" << _propertyName << "'!" << std::endl;
+	}
 }
 
 int Material::GetReservedPropertyIndex(std::string _propertyName)

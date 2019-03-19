@@ -21,11 +21,19 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 
 	if (data)
 	{
-		m_textures[_textureName] = Texture(width, height, data);
+		m_textures[_textureName] = Texture(_textureName, width, height, data);
 		Texture * tex = &m_textures.at(_textureName);
 
 		glGenTextures(1, &tex->TextureId);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->GetWidth(), tex->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->ImageData);
+		glBindTexture(GL_TEXTURE_2D, tex->TextureId);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex->GetWidth(), tex->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->ImageData);
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		if (!TextureExists(_textureName))
@@ -34,15 +42,13 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 		}
 
 		std::cout << "Loaded Texture '" << _textureName << "' from : " << _filePath << std::endl;
+
+		SOIL_free_image_data(data);
 	}
 	else
 	{
 		std::cout << "Failed To Load Texture '" << _textureName << "' from : " << _filePath << "!" << std::endl;
 	}
-
-	glActiveTexture(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	SOIL_free_image_data(data);
 }
 
 Texture * AssetManager::GetTexture(std::string _textureName)

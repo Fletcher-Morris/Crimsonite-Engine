@@ -73,24 +73,44 @@ void CrimsonCore::RunEngine()
 {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	Assets->LoadTexture("tex", m_assetPath + "crimsontex.png");
+	Assets->LoadTexture("noise", m_assetPath + "noise.png");
+	Assets->LoadTexture("crimsontex", m_assetPath + "crimsontex.png");
 
 	Assets->CreateDefaultShader();
 	Assets->CreateDefaultMaterial();
-	Assets->LoadShader("color", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
 
 	Assets->LoadMesh("dragon", m_assetPath + "dragon");
-	Assets->LoadMaterial(m_assetPath + "blue");
+	Assets->LoadMesh("cube", m_assetPath + "cube");
+	Assets->LoadMesh("spring", m_assetPath + "spring");
+	Assets->LoadShader("color", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
+	Assets->LoadMaterial(m_assetPath + "crimsontex");
+	Assets->LoadMaterial(m_assetPath + "noise");
 
 	m_ecs->NewEntity("Camera");
 	Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
 
 	m_ecs->NewEntity("DRAGON");
-	MeshRenderer * mr = &m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-	mr->SetRenderer(m_renderer);
-	mr->SetMesh("dragon");
-	mr->SetMaterial("blue");
-	mr->entity->transform.SetPosition(0, 0, -1.5);
+	m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("dragon");
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("noise");
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0, 0, -2.5);
+	m_ecs->NewestEntity()->AttachComponent<Rotator>();
+
+	m_ecs->NewEntity("CUBE");
+	m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("cube");
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("crimsontex");
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(1, 0, -1.0);
+	m_ecs->NewestEntity()->AttachComponent<Rotator>();
+
+	m_ecs->NewEntity("ERROR");
+	m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("error");
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("noise");
+	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-1, 0, -1.0);
 	m_ecs->NewestEntity()->AttachComponent<Rotator>();
 
 	while (!glfwWindowShouldClose(m_window))

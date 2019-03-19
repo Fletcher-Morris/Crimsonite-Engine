@@ -63,6 +63,7 @@ void SimpleRenderer::Flush()
 
 	m_meshes.clear();
 	m_meshRenderers.clear();
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void SimpleRenderer::SetClearColor(float _clearColor[3])

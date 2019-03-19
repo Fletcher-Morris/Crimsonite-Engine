@@ -19,7 +19,7 @@ class Shader
 	
 public:
 
-	unsigned int ShaderId;
+	int ShaderId;
 	
 	Shader();
 	Shader(const char* _vertexPath, const char* _fragmentPath);
@@ -45,7 +45,7 @@ public:
 
 private:
 
-	unsigned int GetUniformLocation(const std::string & _uniformName);
+	int GetUniformLocation(const std::string & _uniformName);
 	std::unordered_map<std::string, int> m_locations;
 
 };

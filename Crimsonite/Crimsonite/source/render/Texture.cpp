@@ -6,14 +6,27 @@ Texture::Texture()
 {
 }
 
-Texture::Texture(int _width, int _height, unsigned char * _data)
+Texture::Texture(std::string _name, int _width, int _height, unsigned char * _data)
 {
+	m_name = _name;
 	SetSize(_width, _height);
 	SetData(_data);
 }
 
+Texture::~Texture()
+{
+	glDeleteTextures(1, &TextureId);
+}
+
 void Texture::Bind()
 {
+	Bind(0);
+}
+
+void Texture::Bind(unsigned int _textureSlot)
+{
+	ActiveSlot = (GL_TEXTURE0 + _textureSlot);
+	glActiveTexture(ActiveSlot);
 	glBindTexture(GL_TEXTURE_2D, TextureId);
 }
 

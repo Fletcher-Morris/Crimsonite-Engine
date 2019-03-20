@@ -1,6 +1,0 @@
-r 1
-name noise
-shader color
-color 1,1,1
-texture-property MainTex
-texture-reference noise

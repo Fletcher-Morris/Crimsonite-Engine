@@ -5,6 +5,7 @@ layout(location = 1) in vec3 normal;
 layout(location = 2) in vec2 texCoord;
 
 out vec2 TexCoord;
+out vec3 Normal;
 
 uniform mat4 u_MVP;
 
@@ -12,4 +13,5 @@ void main()
 {
 	gl_Position = u_MVP * vec4(position.x, position.y, position.z, 1.0);
 	TexCoord = texCoord;
+	Normal = normal;
 }

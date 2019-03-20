@@ -34,7 +34,6 @@ void MeshRenderer::OnDisable()
 void MeshRenderer::SetMesh(Mesh * _newMesh)
 {
 	m_mesh = _newMesh;
-	std::cout << "Changed mesh of '" << entity->GetName() << "' MeshRenderer." << std::endl;
 }
 
 void MeshRenderer::SetMesh(std::string _meshName)
@@ -45,7 +44,6 @@ void MeshRenderer::SetMesh(std::string _meshName)
 void MeshRenderer::SetMaterial(Material * _newMaterial)
 {
 	m_material = _newMaterial;
-	std::cout << "Set material of '" << entity->GetName() << "' MeshRenderer to '" << _newMaterial->GetName() << "'." << std::endl;
 }
 
 void MeshRenderer::SetMaterial(std::string _materialName)

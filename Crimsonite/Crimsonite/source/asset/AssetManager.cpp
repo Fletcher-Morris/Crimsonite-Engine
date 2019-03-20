@@ -41,7 +41,7 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 			m_loadedTextureNames.push_back(_textureName);
 		}
 
-		std::cout << "Loaded Texture '" << _textureName << "' from : " << _filePath << std::endl;
+		std::cout << "Loaded Texture '" << _textureName << "'."<< std::endl;
 
 		SOIL_free_image_data(data);
 	}
@@ -80,15 +80,13 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 	//	Check if a MESH version of the file allready exists.
 	if (stat((_filePath + ".mesh").c_str(), &statFile) == 0)
 	{
-		std::cout << "Loading MESH file : " << _filePath << std::endl;
-		//	Proccess the mesh file.
 		FILE * file = fopen((_filePath + ".mesh").c_str(), "r");
 
 		int res = 0;
 		//	Read though the mesh file.
 		while (res != EOF)
 		{
-			char lineHeader[128];
+			char lineHeader[32];
 			res = fscanf(file, "%s", lineHeader);
 			//	Check for revision header.
 			if (strcmp(lineHeader, "r") == 0)
@@ -137,17 +135,15 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 	else if (stat((_filePath + ".obj").c_str(), &statFile) == 0)
 	{
 		//	Load the basic OBJ version.
-		std::cout << "Loading OBJ file : " << _filePath << std::endl;
 
-
-		FILE * file = fopen(_filePath.c_str(), "r");
+		FILE * file = fopen((_filePath + ".obj").c_str(), "r");
 		if (file == NULL) {}
 		else
 		{
 			int res = 0;
 			while (res != EOF)
 			{
-				char lineHeader[128];
+				char lineHeader[32];
 				res = fscanf(file, "%s", lineHeader);
 				Vertex temp_vertex;
 				if (strcmp(lineHeader, "v") == 0)
@@ -170,54 +166,61 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				}
 				else if (strcmp(lineHeader, "f") == 0)
 				{
+					bool match = false;
 					IndexTriplet trip[3];
 					int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &trip[0].position, &trip[0].uv, &trip[0].normal,
 						&trip[1].position, &trip[1].uv, &trip[1].normal, &trip[2].position, &trip[2].uv, &trip[2].normal);
 					if (matches != 9)
 					{
+						matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d", &trip[0].position, &trip[0].uv, &trip[0].normal,
+							&trip[1].position, &trip[1].uv, &trip[1].normal, &trip[2].position, &trip[2].uv, &trip[2].normal);
+						if (matches != 9) {}
+						else { match = true; }
+					}
+					else { match = true; }
+					if (match == true)
+					{
+						for (int i = 0; i < 3; i++)
+						{
+							trip[i].position--;
+							trip[i].uv--;
+							trip[i].normal--;
+							input_triplets.push_back(trip[i]);
+						}
+					}
+					else
+					{
 						std::cout << "Error parsing obj file: " << _filePath << std::endl;
-						return;
-					}
-					for (int i = 0; i < 3; i++)
-					{
-						trip[i].position--;
-						trip[i].uv--;
-						trip[i].normal--;
-						input_triplets.push_back(trip[i]);
 					}
 				}
-				for (int i = 0; i < input_triplets.size(); i++)
-				{
-					glm::vec3 tempPos = input_positions[input_triplets[i].position];
-					glm::vec2 tempUv = input_uvs[input_triplets[i].uv];
-					glm::vec3 tempNorm = input_normals[input_triplets[i].normal];
-					int ind = FindExistingVertex(output_vertices, tempPos, tempUv, tempNorm);
-					if (ind == -1)
-					{
-						Vertex newVert;
-						newVert.position = tempPos;
-						newVert.uv = tempUv;
-						newVert.normal = tempNorm;
-
-						output_vertices.push_back(newVert);
-						ind = output_vertices.size() - 1;
-					}
-					output_indices.push_back(ind);
-				}
-				m_meshes[_meshName] = Mesh(output_vertices, output_indices);
-				WriteMeshFile(m_meshes[_meshName], _filePath);
-				LoadMeshName(_meshName);
 			}
+			for (int i = 0; i < input_triplets.size(); i++)
+			{
+				glm::vec3 tempPos = input_positions[input_triplets[i].position];
+				glm::vec2 tempUv = input_uvs[input_triplets[i].uv];
+				glm::vec3 tempNorm = input_normals[input_triplets[i].normal];
+				int ind = FindExistingVertex(output_vertices, tempPos, tempUv, tempNorm);
+				if (ind == -1)
+				{
+					Vertex newVert;
+					newVert.position = tempPos;
+					newVert.uv = tempUv;
+					newVert.normal = tempNorm;
+
+					output_vertices.push_back(newVert);
+					ind = output_vertices.size() - 1;
+				}
+				output_indices.push_back(ind);
+			}
+			m_meshes[_meshName] = Mesh(output_vertices, output_indices);
+			WriteMeshFile(m_meshes[_meshName], _filePath + ".mesh");
+			LoadMeshName(_meshName);
+			std::cout << "Loaded OBJ file : " << _filePath << std::endl;
 		}
-	}
-	else if (stat((_filePath).c_str(), &statFile) == 0)
-	{
-		//	Load the basic OBJ version.
-		std::cout << "Loading MISC file : " << _filePath << std::endl;
 	}
 	else
 	{
-		std::cout << "Could not locate mesh file at : " << _filePath << std::endl;
+		std::cout << "Could not locate 3D model file at : " << _filePath << std::endl;
 	}
 
 	//	End error-suppressor.
@@ -377,7 +380,7 @@ void AssetManager::LoadMaterial(std::string _filePath)
 				//	Check if the mesh file matches the latest format revision.
 				if (fileRevision != m_latestMaterialRevision)
 				{
-					std::cout << "Material : " + _filePath + " does not match the latest material format revision (" << m_latestMaterialRevision << ")!" << std::endl;
+					std::cout << "Material is out of date (" << _filePath << ")" << std::endl;
 				}
 
 			}
@@ -433,7 +436,7 @@ void AssetManager::LoadMaterial(std::string _filePath)
 			}
 		}
 
-		std::cout << "Loaded Material file from : " << _filePath << std::endl;
+		std::cout << "Loaded Material '" << newMat.GetName() << "'." << std::endl;
 		//	End error-suppressor.
 #pragma warning(pop)
 	}

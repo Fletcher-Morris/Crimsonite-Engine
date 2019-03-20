@@ -171,7 +171,7 @@ public:
 		m_componentsArray[GetComponentId<T>()] = newComponent;
 		m_componentsBitset[GetComponentId<T>()] = true;
 		m_componentsCount++;
-		std::cout << "Attached Component : " << typeid(T).name() << " : To Entity : " << m_name << std::endl;
+		std::cout << "Attached Component '" << typeid(T).name() << "' to Entity '" << m_name << "'." << std::endl;
 		newComponent->OnInit();
 		return *newComponent;
 	}

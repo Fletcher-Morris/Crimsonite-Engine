@@ -14,6 +14,9 @@ Shader::Shader(const char * _vertexPath, const char * _fragmentPath)
 
 	vertexFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	fragmentFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+	bool fail = false;
+
 	try
 	{
 		vertexFile.open(_vertexPath);
@@ -38,9 +41,10 @@ Shader::Shader(const char * _vertexPath, const char * _fragmentPath)
 	{
 		std::cout << "Failed to load shader file : " + (std::string)_vertexPath << std::endl;
 		std::cout << "Failed to load shader file : " + (std::string)_fragmentPath << std::endl;
+		fail = true;
 	}
 
-	Compile(vertexCode, fragmentCode);
+	if (fail == false) Compile(vertexCode, fragmentCode);
 }
 
 Shader::Shader(const char * _comboPath)
@@ -93,7 +97,6 @@ void Shader::Compile(std::string _vertexCode, std::string _fragmentCode)
 		glGetProgramInfoLog(ShaderId, 512, NULL, info);
 		std::cout << "Failed to link shader :\n" << info << std::endl;
 	}
-	std::cout << "Linked shader : " << ShaderId << std::endl;
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);

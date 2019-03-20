@@ -7,6 +7,18 @@
 class Editor
 {
 
+public:
+
 	Editor();
+
+	void Draw();
+
+
+	void Save();
+
+
+	void Play();
+	void Pause();
+	void Stop();
 
 };

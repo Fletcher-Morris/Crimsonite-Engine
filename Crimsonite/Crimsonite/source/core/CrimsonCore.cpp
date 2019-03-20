@@ -5,8 +5,22 @@
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
 EcsSystem * ecsSystem;
 
+void EditorCheck()
+{
+	std::cout << std::endl;
+	std::cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
+	std::cout << "XX THIS IS THE EDITOR VERSION XX" << std::endl;
+	std::cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
+	std::cout << std::endl;
+}
+
 CrimsonCore::CrimsonCore()
 {
+#if _DEBUG
+	EditorCheck();
+#endif // DEBUG
+
+
 	CrimsonCore("Crimsonite Engine");
 }
 

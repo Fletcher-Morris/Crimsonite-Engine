@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Source Files\asset">
       <UniqueIdentifier>{c76814d1-250b-466c-ac54-4fc91a6b8fea}</UniqueIdentifier>
     </Filter>
@@ -48,6 +44,12 @@
     </Filter>
     <Filter Include="Header Files\core">
       <UniqueIdentifier>{0ac7661e-5bf1-4f35-be25-df21b7c2070b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editor">
+      <UniqueIdentifier>{fb7c797b-bc5e-46ba-ae64-1cf13c248df5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editor">
+      <UniqueIdentifier>{35f02f0e-5576-44b9-b670-2ef98015a856}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="source\render\Material.cpp">
       <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\editor\Editor.cpp">
+      <Filter>Source Files\editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +162,12 @@
     </ClInclude>
     <ClInclude Include="source\render\Texture.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\editor\Editor.h">
+      <Filter>Header Files\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

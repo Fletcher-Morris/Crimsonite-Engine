@@ -19,6 +19,7 @@
     <ClCompile Include="source\ecs\components\Camera.cpp" />
     <ClCompile Include="source\ecs\components\MeshRenderer.cpp" />
     <ClCompile Include="source\ecs\components\Rotator.cpp" />
+    <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\mesh\Mesh.cpp" />
     <ClCompile Include="source\render\Material.cpp" />
     <ClCompile Include="source\render\MatrixMaths.cpp" />
@@ -28,6 +29,7 @@
     <ClCompile Include="source\render\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="source\asset\Asset.h" />
     <ClInclude Include="source\asset\AssetManager.h" />
     <ClInclude Include="source\core.h" />
@@ -39,6 +41,7 @@
     <ClInclude Include="source\ecs\components\Rotator.h" />
     <ClInclude Include="source\ecs\ECS.h" />
     <ClInclude Include="source\ecs\Transform.h" />
+    <ClInclude Include="source\editor\Editor.h" />
     <ClInclude Include="source\mesh\Mesh.h" />
     <ClInclude Include="source\mesh\Vertex.h" />
     <ClInclude Include="source\render\CameraSettings.h" />

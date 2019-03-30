@@ -27,6 +27,8 @@ public:
 	void LoadTexture(std::string _textureName, std::string _filePath);
 	//	Return a reference to a Texture with a given name.
 	Texture * GetTexture(std::string _textureName);
+	Texture * GetTexture(int _textureId) { return &m_textures.at(m_loadedTextureNames[_textureId]); }
+	int TextureCount() { return m_loadedTextureNames.size(); }
 
 
 	//	Load a Mesh from a file with an assigned name.
@@ -35,6 +37,9 @@ public:
 	void WriteMeshFile(Mesh _mesh, std::string _filePath);
 	//	Return a reference to a Mesh with a given name.
 	Mesh * GetMesh(std::string _meshName);
+	Mesh * GetMesh(int _meshId) { return &m_meshes.at(m_loadedMeshNames[_meshId]); }
+	std::string GetMeshName(int _meshId) { return m_loadedMeshNames[_meshId]; }
+	int MeshCount() { return m_loadedMeshNames.size(); }
 
 
 	//	Add a Shader with a given name.

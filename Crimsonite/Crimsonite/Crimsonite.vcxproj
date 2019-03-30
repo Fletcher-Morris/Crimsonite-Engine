@@ -20,6 +20,12 @@
     <ClCompile Include="source\ecs\components\MeshRenderer.cpp" />
     <ClCompile Include="source\ecs\components\Rotator.cpp" />
     <ClCompile Include="source\editor\Editor.cpp" />
+    <ClCompile Include="source\external\imgui\imgui.cpp" />
+    <ClCompile Include="source\external\imgui\imgui_demo.cpp" />
+    <ClCompile Include="source\external\imgui\imgui_draw.cpp" />
+    <ClCompile Include="source\external\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="source\external\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="source\external\imgui\imgui_widgets.cpp" />
     <ClCompile Include="source\mesh\Mesh.cpp" />
     <ClCompile Include="source\render\Material.cpp" />
     <ClCompile Include="source\render\MatrixMaths.cpp" />
@@ -42,6 +48,14 @@
     <ClInclude Include="source\ecs\ECS.h" />
     <ClInclude Include="source\ecs\Transform.h" />
     <ClInclude Include="source\editor\Editor.h" />
+    <ClInclude Include="source\external\imgui\imconfig.h" />
+    <ClInclude Include="source\external\imgui\imgui.h" />
+    <ClInclude Include="source\external\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="source\external\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="source\external\imgui\imgui_internal.h" />
+    <ClInclude Include="source\external\imgui\imstb_rectpack.h" />
+    <ClInclude Include="source\external\imgui\imstb_textedit.h" />
+    <ClInclude Include="source\external\imgui\imstb_truetype.h" />
     <ClInclude Include="source\mesh\Mesh.h" />
     <ClInclude Include="source\mesh\Vertex.h" />
     <ClInclude Include="source\render\CameraSettings.h" />

@@ -2,6 +2,8 @@
 
 #include "CrimsonCore.h"
 
+#include "../editor/Editor.h"
+
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
 EcsSystem * ecsSystem;
 
@@ -130,7 +132,11 @@ void CrimsonCore::RunEngine()
 	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-0.8, 0, -1.2);
 	m_ecs->NewestEntity()->AttachComponent<Rotator>();
 
+
+	Editor ed = Editor(m_window);
+
 	while (!glfwWindowShouldClose(m_window))
+
 	{
 		Time::SetFrameTime(glfwGetTime());
 
@@ -139,6 +145,8 @@ void CrimsonCore::RunEngine()
 
 		m_renderer->Proccess();
 		m_renderer->Flush();
+
+		ed.DrawGui();
 
 		glfwSwapBuffers(m_window);
 

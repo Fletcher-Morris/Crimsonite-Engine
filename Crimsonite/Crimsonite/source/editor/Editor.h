@@ -9,9 +9,9 @@ class Editor
 
 public:
 
-	Editor();
+	Editor(GLFWwindow * _window);
 
-	void Draw();
+	void DrawGui();
 
 
 	void Save();

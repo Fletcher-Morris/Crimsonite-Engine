@@ -23,6 +23,8 @@ public:
 	void InitializeGlfw(std::string _appName);
 	void InitializeGlew();
 
+	GLFWwindow * GetWindow() { return m_window; }
+
 	void RunEngine();
 
 private:

@@ -133,8 +133,7 @@ void CrimsonCore::RunEngine()
 	m_ecs->NewestEntity()->AttachComponent<Rotator>();
 
 
-	Editor ed = Editor(m_window);
-
+	Editor ed = Editor(this);
 	while (!glfwWindowShouldClose(m_window))
 
 	{

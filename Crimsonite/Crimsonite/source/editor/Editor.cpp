@@ -5,25 +5,20 @@
 #include "../external/imgui/imgui.h"
 #include "../external/imgui/imgui_impl_glfw.h"
 
+#include "../core/CrimsonCore.h"
 
-Editor::Editor(GLFWwindow * _window)
+
+CrimsonCore * m_crimsonite;
+
+Editor::Editor(CrimsonCore * _core)
 {
-	// Setup Dear ImGui context
+	m_crimsonite = _core;
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-
-	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
-
-	// Setup Platform/Renderer bindings
-	ImGui_ImplGlfw_InitForOpenGL(_window, true);
+	ImGui_ImplGlfw_InitForOpenGL(m_crimsonite->GetWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 130");
-
-
 	std::cout << "Initialized Editor" << std::endl;
 }
 
@@ -36,6 +31,26 @@ void Editor::DrawGui()
 
 	if (ImGui::BeginMainMenuBar())
 	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::Button("New Scene"))
+			{
+
+			}
+			if (ImGui::Button("Open Scene"))
+			{
+
+			}
+			if (ImGui::Button("Save Scene"))
+			{
+				SaveScene();
+			}
+			if (ImGui::Button("Quit"))
+			{
+				Quit();
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Assets"))
 		{
 			if (ImGui::BeginMenu("Textures"))
@@ -69,18 +84,23 @@ void Editor::DrawGui()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Editor::Save()
+void Editor::SaveScene()
 {
 }
 
-void Editor::Play()
+void Editor::PlayGame()
 {
 }
 
-void Editor::Pause()
+void Editor::PauseGame()
 {
 }
 
-void Editor::Stop()
+void Editor::StopGame()
 {
+}
+
+void Editor::Quit()
+{
+	glfwDestroyWindow(m_crimsonite->GetWindow());
 }

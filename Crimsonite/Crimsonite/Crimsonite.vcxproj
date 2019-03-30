@@ -21,7 +21,6 @@
     <ClCompile Include="source\ecs\components\Rotator.cpp" />
     <ClCompile Include="source\editor\Editor.cpp" />
     <ClCompile Include="source\external\imgui\imgui.cpp" />
-    <ClCompile Include="source\external\imgui\imgui_demo.cpp" />
     <ClCompile Include="source\external\imgui\imgui_draw.cpp" />
     <ClCompile Include="source\external\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="source\external\imgui\imgui_impl_opengl3.cpp" />

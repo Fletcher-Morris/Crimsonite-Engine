@@ -4,21 +4,26 @@
 #include "../external/imgui/imgui_impl_glfw.h"
 #include "../external/imgui/imgui_impl_opengl3.h"
 
+class CrimsonCore;
+
 class Editor
 {
 
 public:
 
-	Editor(GLFWwindow * _window);
+	Editor(CrimsonCore * _core);
 
 	void DrawGui();
 
 
-	void Save();
+	void SaveScene();
 
 
-	void Play();
-	void Pause();
-	void Stop();
+	void PlayGame();
+	void PauseGame();
+	void StopGame();
+
+
+	void Quit();
 
 };

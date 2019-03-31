@@ -24,8 +24,11 @@ public:
 	void InitializeGlew();
 
 	GLFWwindow * GetWindow() { return m_window; }
+	GLFWmonitor * GetMonitor() { return m_monitor; }
+	const GLFWvidmode * GetVdeoMdoe() { return m_videoMode; }
 
 	void RunEngine();
+	void QuitEngine();
 
 private:
 
@@ -33,8 +36,11 @@ private:
 	//	Application Settings
 	std::string m_appName = "Crimsonite Engine";
 
+	bool m_quit = false;
 
 	GLFWwindow * m_window;
+	GLFWmonitor * m_monitor;
+	const GLFWvidmode * m_videoMode;
 
 	Renderer * m_renderer;
 	AssetManager * Assets;

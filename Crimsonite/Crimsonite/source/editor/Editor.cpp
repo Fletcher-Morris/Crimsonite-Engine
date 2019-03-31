@@ -8,16 +8,16 @@
 #include "../core/CrimsonCore.h"
 
 
-CrimsonCore * m_crimsonite;
+CrimsonCore * m_engine;
 
 Editor::Editor(CrimsonCore * _core)
 {
-	m_crimsonite = _core;
+	m_engine = _core;
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(m_crimsonite->GetWindow(), true);
+	ImGui_ImplGlfw_InitForOpenGL(m_engine->GetWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 130");
 	std::cout << "Initialized Editor" << std::endl;
 }
@@ -102,5 +102,5 @@ void Editor::StopGame()
 
 void Editor::Quit()
 {
-	glfwDestroyWindow(m_crimsonite->GetWindow());
+	m_engine->QuitEngine();
 }

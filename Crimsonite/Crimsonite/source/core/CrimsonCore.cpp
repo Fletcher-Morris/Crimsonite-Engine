@@ -60,7 +60,9 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 	std::cout << "Initialised GLFW (" << glfwGetVersionString() << ")" << std::endl;
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	m_window = glfwCreateWindow(1280, 720, _appName.c_str(), NULL, NULL);
+	m_monitor = glfwGetPrimaryMonitor();
+	m_videoMode = glfwGetVideoMode(m_monitor);
+	m_window = glfwCreateWindow(m_videoMode->width, m_videoMode->height, _appName.c_str(), m_monitor, NULL);
 	if (!m_window)
 	{
 		std::cout << "Failed to create GLFW window!" << std::endl; return;
@@ -134,8 +136,7 @@ void CrimsonCore::RunEngine()
 
 
 	Editor ed = Editor(this);
-	while (!glfwWindowShouldClose(m_window))
-
+	while (!glfwWindowShouldClose(m_window) && m_quit == false)
 	{
 		Time::SetFrameTime(glfwGetTime());
 
@@ -151,6 +152,13 @@ void CrimsonCore::RunEngine()
 
 		glfwPollEvents();
 	}
+
+	glfwDestroyWindow(m_window);
+}
+
+void CrimsonCore::QuitEngine()
+{
+	m_quit = true;
 }
 
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)

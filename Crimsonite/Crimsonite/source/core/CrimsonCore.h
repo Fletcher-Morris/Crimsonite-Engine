@@ -11,6 +11,8 @@
 #include "../asset/AssetManager.h"
 #include "../render/SimpleRenderer.h"
 
+class Editor;
+
 class CrimsonCore
 {
 
@@ -36,12 +38,14 @@ private:
 	//	Application Settings
 	std::string m_appName = "Crimsonite Engine";
 
+
 	bool m_quit = false;
 
 	GLFWwindow * m_window;
 	GLFWmonitor * m_monitor;
 	const GLFWvidmode * m_videoMode;
 
+	Editor * m_editor;
 	Renderer * m_renderer;
 	AssetManager * Assets;
 	EcsSystem * m_ecs;

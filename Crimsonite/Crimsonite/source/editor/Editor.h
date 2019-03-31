@@ -12,6 +12,7 @@ class Editor
 public:
 
 	Editor(CrimsonCore * _core);
+	void Init();
 
 	void DrawGui();
 

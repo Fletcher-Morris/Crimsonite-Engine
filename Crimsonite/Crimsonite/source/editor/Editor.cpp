@@ -13,6 +13,10 @@ CrimsonCore * m_engine;
 Editor::Editor(CrimsonCore * _core)
 {
 	m_engine = _core;
+}
+
+void Editor::Init()
+{
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;

@@ -7,27 +7,17 @@
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
 EcsSystem * ecsSystem;
 
-void EditorCheck()
-{
-	std::cout << std::endl;
-	std::cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
-	std::cout << "XX THIS IS THE EDITOR VERSION XX" << std::endl;
-	std::cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
-	std::cout << std::endl;
-}
-
 CrimsonCore::CrimsonCore()
 {
-#if _DEBUG
-	EditorCheck();
-#endif // DEBUG
-
-
 	CrimsonCore("Crimsonite Engine");
 }
 
 CrimsonCore::CrimsonCore(std::string _appName)
 {
+#if _DEBUG
+	m_editor = new Editor(this);
+#endif // DEBUG
+
 	std::cout << "==========" << std::endl;
 	printf("CRIMSONITE\n");
 	std::cout << "==========" << std::endl;
@@ -135,7 +125,12 @@ void CrimsonCore::RunEngine()
 	m_ecs->NewestEntity()->AttachComponent<Rotator>();
 
 
-	Editor ed = Editor(this);
+	if (m_editor != NULL)
+	{
+		m_editor->Init();
+	}
+
+
 	while (!glfwWindowShouldClose(m_window) && m_quit == false)
 	{
 		Time::SetFrameTime(glfwGetTime());
@@ -146,7 +141,7 @@ void CrimsonCore::RunEngine()
 		m_renderer->Proccess();
 		m_renderer->Flush();
 
-		ed.DrawGui();
+		if (m_editor != NULL) m_editor->DrawGui();
 
 		glfwSwapBuffers(m_window);
 

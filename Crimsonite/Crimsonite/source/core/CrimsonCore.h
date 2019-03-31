@@ -32,6 +32,9 @@ public:
 	void RunEngine();
 	void QuitEngine();
 
+
+	EcsSystem * ECS() { return m_ecs; }
+
 private:
 
 

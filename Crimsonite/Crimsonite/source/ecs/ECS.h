@@ -206,6 +206,8 @@ public:
 	//	A vector of all created entities.
 	std::vector<std::unique_ptr<EcsEntity>> entities;
 
+	int EntityCount() { return m_totalEntityCount; }
+
 	EcsEntity * NewestEntity() { return m_newestEntity; }
 
 	//	Create a new entity with a given name.

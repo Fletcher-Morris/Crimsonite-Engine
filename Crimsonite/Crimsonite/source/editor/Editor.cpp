@@ -91,6 +91,23 @@ void Editor::DrawGui()
 	}
 	ImGui::End();
 
+	ImGui::Begin("ENTITIES");
+	{
+		for (int i = 0; i < m_engine->ECS()->EntityCount(); i++)
+		{
+			EcsEntity * entity = &*m_engine->ECS()->entities[i];
+
+			if (entity->IsDestroyed() == false)
+			{
+				if (ImGui::Button(entity->GetName().c_str()))
+				{
+					entity->Destroy();
+				}
+			}
+		}
+	}
+	ImGui::End();
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

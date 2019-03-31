@@ -83,6 +83,11 @@ void Editor::DrawGui()
 		ImGui::EndMainMenuBar();
 	}
 
+	ImGui::Begin("VIEWPORT");
+	{
+		ImGui::Image((GLuint*)2, ImVec2(1280, 720));
+	}
+	ImGui::End();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

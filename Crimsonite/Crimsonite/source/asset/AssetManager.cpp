@@ -53,7 +53,19 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 
 void AssetManager::CreateTexture(std::string _textureName)
 {
-	CreateTexture(_textureName, 1024, 1024);
+	CreateTexture(_textureName, 512, 512);
+}
+
+void AssetManager::CreateTexture(std::string _textureName, int _width, int _height, int _glId)
+{
+	m_textures[_textureName] = Texture(_textureName, _width, _height);
+	Texture * tex = &m_textures.at(_textureName);
+	tex->TextureId = _glId;
+	if (!TextureExists(_textureName))
+	{
+		m_loadedTextureNames.push_back(_textureName);
+	}
+	std::cout << "Created Texture '" << _textureName << "'." << std::endl;
 }
 
 void AssetManager::CreateTexture(std::string _textureName, int _width, int _height)
@@ -98,13 +110,17 @@ void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _h
 
 	glGenFramebuffers(1, &buffer->FrameBufferId);
 	glBindFramebuffer(GL_FRAMEBUFFER, buffer->FrameBufferId);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	CreateTexture(_bufferName, _width, _height);
 	buffer->SetTexture(GetTexture(_bufferName));
-	//CreateTexture(_bufferName + "_depth", _width, _height);
-
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textures.at(_bufferName).TextureId, 0);
+
+	glGenRenderbuffers(1, &buffer->DepthBufferId);
+	glBindRenderbuffer(GL_RENDERBUFFER, buffer->DepthBufferId);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, buffer->DepthBufferId);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -688,7 +704,7 @@ void AssetManager::CreatePassthroughShader()
 		"uniform sampler2D MainTex;\n"
 		"void main()\n"
 		"{\n"
-		"\tcolor = texture(MainTex, TexCoord);\n"
+		"color = texture(MainTex, TexCoord);\n"
 		"}";
 
 	Shader shader = Shader();

@@ -20,8 +20,6 @@ public:
 
 	//	The ID of the linked depth buffer.
 	unsigned int DepthBufferId;
-	//	Set the depth buffer ID.
-	void SetDepthBuffer(unsigned int _id) { DepthBufferId = _id; };
 
 	void Bind();
 	void Unbind() {};

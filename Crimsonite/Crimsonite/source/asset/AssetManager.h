@@ -29,6 +29,7 @@ public:
 	//	Create a blank Texture.
 	void CreateTexture(std::string _textureName, int _width, int _height);
 	void CreateTexture(std::string _textureName);
+	void CreateTexture(std::string _textureName, int _width, int _height, int _glId);
 	//	Return a reference to a Texture with a given name.
 	Texture * GetTexture(std::string _textureName);
 	Texture * GetTexture(int _textureId) { return &m_textures.at(m_loadedTextureNames[_textureId]); }
@@ -65,6 +66,8 @@ public:
 	Shader * GetShader(std::string _shaderName);
 	//	Forcibly create the defaut Shader.
 	void CreateDefaultShader();
+	//	Create the passthrough Shader.
+	void CreatePassthroughShader();
 	//	Return a reference to the passthrough Shader.
 	Shader * GetPassthroughShader();
 
@@ -142,8 +145,6 @@ private:
 	bool m_defaultShaderCreated = false;
 	//	Return a reference to the default Shader.
 	Shader * GetDefaultShader();
-	//	Create the passthrough Shader.
-	void CreatePassthroughShader();
 	//	Has the passthrough Shader been created?
 	bool m_passthroughShaderCreated = false;
 

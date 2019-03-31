@@ -51,6 +51,7 @@ void SimpleRenderer::Flush()
 	{
 		m_cameras[c]->Bind();
 
+		glEnable(GL_DEPTH_TEST);
 		glClearColor(p_r, p_g, p_b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -79,6 +80,7 @@ void SimpleRenderer::Flush()
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDisable(GL_DEPTH_TEST);
 	glClearColor(p_r, p_g, p_b, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	AssetManager::Instance()->GetPassthroughShader()->Bind();

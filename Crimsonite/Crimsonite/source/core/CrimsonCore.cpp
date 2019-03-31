@@ -93,6 +93,7 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMesh("knot", m_assetPath + "knot");
 
 	Assets->LoadShader("color", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
+	Assets->CreatePassthroughShader();
 
 	Assets->LoadMaterial(m_assetPath + "crimsontex");
 	Assets->LoadMaterial(m_assetPath + "room");

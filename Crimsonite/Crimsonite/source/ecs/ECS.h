@@ -231,7 +231,6 @@ public:
 			{
 				if (entities[i]->GetName() == _entityName)
 				{
-					std::cout << "Found entity : " << _entityName << std::endl;
 					return &*entities[i];
 				}
 			}

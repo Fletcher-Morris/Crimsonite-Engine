@@ -26,6 +26,7 @@
     <ClCompile Include="source\external\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="source\external\imgui\imgui_widgets.cpp" />
     <ClCompile Include="source\mesh\Mesh.cpp" />
+    <ClCompile Include="source\render\FrameBuffer.cpp" />
     <ClCompile Include="source\render\Material.cpp" />
     <ClCompile Include="source\render\MatrixMaths.cpp" />
     <ClCompile Include="source\render\Renderer.cpp" />

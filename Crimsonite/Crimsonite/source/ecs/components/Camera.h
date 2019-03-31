@@ -7,6 +7,8 @@
 #include <glm\gtc\type_ptr.hpp>
 #include "../../render/CameraSettings.h"
 
+class Renderer;
+
 class Camera : public EcsComponent
 {
 
@@ -30,6 +32,12 @@ public:
 	//	Return the view settingsused for this camera.
 	CameraSettings GetCameraSettings() { return m_settings; }
 
+	//	Set the renderer reference.
+	void SetRenderer(Renderer * _renderer) { m_renderer = _renderer; }
+
+	//	Bind this Camera.
+	void Bind();
+
 	//	Initialize the camera using it's settings.
 	void ReInit();
 	//	Get the projection matrix for this camera.
@@ -38,6 +46,10 @@ public:
 	const glm::mat4 GetViewMatrix() { return m_viewMatrix; }
 	//	Get the view-projection matrix for this camera.
 	const glm::mat4 GetProjectionViewMatrix() { return m_projectionViewMatrix; }
+
+	void SetOutputFrameBuffer(FrameBuffer * _buffer) { m_frameBuffer = _buffer; }
+	void SetOutputFrameBuffer(std::string _bufferName) { SetOutputFrameBuffer(AssetManager::Instance()->GetFrameBuffer(_bufferName)); }
+	FrameBuffer * GetOutputFrameBuffer() { return m_frameBuffer; }
 
 
 private:
@@ -51,5 +63,9 @@ private:
 	glm::mat4 m_viewMatrix;
 	//	The view-projection matrix of the camera.
 	glm::mat4 m_projectionViewMatrix;
+
+	FrameBuffer * m_frameBuffer;
+
+	Renderer * m_renderer;
 
 };

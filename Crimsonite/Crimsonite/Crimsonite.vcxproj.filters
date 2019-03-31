@@ -128,6 +128,9 @@
     <ClCompile Include="source\external\imgui\imgui_widgets.cpp">
       <Filter>Source Files\external\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="source\render\FrameBuffer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">

@@ -36,12 +36,12 @@ public:
 
 
 	//	Create a new FrameBuffer.
-	void CreateFrameBuffer(std::string _name, int _width, int _height);
-	void CreateFrameBuffer(std::string _name, int _width, int _height, bool _useDepth);
+	void CreateFrameBuffer(std::string _bufferName, int _width, int _height);
+	void CreateFrameBuffer(std::string _bufferName, int _width, int _height, bool _useDepth);
 	//	Bind a specified FrameBuffer.
-	void BindFrameBuffer(int _id);
+	void BindFrameBuffer(std::string _bufferName);
 	//	Return a specific FrameBuffer.
-	unsigned int GetFrameBuffer(int _id);
+	FrameBuffer * GetFrameBuffer(std::string _bufferName);
 
 
 	//	Load a Mesh from a file with an assigned name.
@@ -65,6 +65,8 @@ public:
 	Shader * GetShader(std::string _shaderName);
 	//	Forcibly create the defaut Shader.
 	void CreateDefaultShader();
+	//	Return a reference to the passthrough Shader.
+	Shader * GetPassthroughShader();
 
 
 	//	Add a Material with a given name.
@@ -102,6 +104,10 @@ private:
 
 	//	The map of framebuffers.
 	std::map<std::string, FrameBuffer> m_frameBuffers;
+	//	A vector of the names of all loaded FrameBuffers.
+	std::vector<std::string> m_loadedFrameBufferNames;
+	//	Does a FrameBuffer with a given name exist?
+	bool FrameBufferExists(std::string _bufferName);
 
 
 	//	The map of loaded meshes.
@@ -136,6 +142,10 @@ private:
 	bool m_defaultShaderCreated = false;
 	//	Return a reference to the default Shader.
 	Shader * GetDefaultShader();
+	//	Create the passthrough Shader.
+	void CreatePassthroughShader();
+	//	Has the passthrough Shader been created?
+	bool m_passthroughShaderCreated = false;
 
 
 	//	The map of all loaded materials.

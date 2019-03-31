@@ -66,7 +66,14 @@ void AssetManager::CreateTexture(std::string _textureName, int _width, int _heig
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
+	if (!TextureExists(_textureName))
+	{
+		m_loadedTextureNames.push_back(_textureName);
+	}
+
 	std::cout << "Created Texture '" << _textureName << "'." << std::endl;
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Texture * AssetManager::GetTexture(std::string _textureName)
@@ -89,23 +96,15 @@ void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _h
 	m_frameBuffers[_bufferName] = FrameBuffer();
 	FrameBuffer * buffer = &m_frameBuffers.at(_bufferName);
 
-	glGenFramebuffers(1, &buffer->BufferId);
-	glBindFramebuffer(GL_FRAMEBUFFER, buffer->BufferId);
+	glGenFramebuffers(1, &buffer->FrameBufferId);
+	glBindFramebuffer(GL_FRAMEBUFFER, buffer->FrameBufferId);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	CreateTexture(_bufferName, _width, _height);
 	buffer->SetTexture(GetTexture(_bufferName));
+	//CreateTexture(_bufferName + "_depth", _width, _height);
 
-	if (_useDepth)
-	{
-		glGenRenderbuffers(1, &buffer->DepthBufferId);
-		glBindRenderbuffer(GL_RENDERBUFFER, buffer->DepthBufferId);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _width, _height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffer->DepthBufferId);
-	}
-
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, buffer->DepthBufferId, 0);
-	GLenum buffers[1] = { GL_COLOR_ATTACHMENT0 };
-	glDrawBuffers(1, buffers);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textures.at(_bufferName).TextureId, 0);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -113,8 +112,31 @@ void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _h
 	}
 	else
 	{
+
+		if (!FrameBufferExists(_bufferName))
+		{
+			m_loadedFrameBufferNames.push_back(_bufferName);
+		}
+
 		std::cout << "Created Frame Buffer '" << _bufferName << "'." << std::endl;
 	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void AssetManager::BindFrameBuffer(std::string _bufferName)
+{
+	if (FrameBufferExists(_bufferName))
+	GetFrameBuffer(_bufferName)->Bind();
+}
+
+FrameBuffer * AssetManager::GetFrameBuffer(std::string _bufferName)
+{
+	if (!FrameBufferExists(_bufferName))
+	{
+		std::cout << "FrameBuffer '" << _bufferName << "' does not exist yet, but something is trying to access it." << std::endl;
+	}
+	return &m_frameBuffers.at(_bufferName);
 }
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
@@ -642,10 +664,51 @@ void AssetManager::CreateDefaultShader()
 	std::cout << "Created Default Shader." << std::endl;
 }
 
+void AssetManager::CreatePassthroughShader()
+{
+	if (m_passthroughShaderCreated == true) return;
+	std::string vertexString =
+		"#version 330 core\n"
+		"\n"
+		"layout(location = 0) in vec4 position;\n"
+		"layout(location = 1) in vec3 normal;\n"
+		"layout(location = 2) in vec2 texCoord;\n"
+		"\n"
+		"out vec2 TexCoord;\n"
+		"\n"
+		"void main()\n"
+		"{\n"
+		"    gl_Position = vec4(position.x, position.y, 0.0, 1.0); \n"
+		"    TexCoord = texCoord;\n"
+		"} ";
+	std::string fragmentString =
+		"#version 330 core\n"
+		"layout(location = 0) out vec4 color;\n"
+		"in vec2 TexCoord;\n"
+		"uniform sampler2D MainTex;\n"
+		"void main()\n"
+		"{\n"
+		"\tcolor = texture(MainTex, TexCoord);\n"
+		"}";
+
+	Shader shader = Shader();
+	shader.Compile(vertexString, fragmentString);
+	m_shaders["passthrough"] = shader;
+	m_passthroughShaderCreated = true;
+	LoadShaderName("passthrough");
+	std::cout << "Created Passthrough Shader." << std::endl;
+}
+
 Shader * AssetManager::GetDefaultShader()
 {
 	CreateDefaultShader();
 	return &m_shaders.at("default");
+}
+
+Shader * AssetManager::GetPassthroughShader()
+{
+	CreatePassthroughShader();
+	return &m_shaders.at("passthrough");
 }
 
 bool AssetManager::MaterialExists(std::string _materialName)
@@ -692,6 +755,15 @@ void AssetManager::CreateErrorTexture()
 Texture * AssetManager::GetErrorTexture()
 {
 	return nullptr;
+}
+
+bool AssetManager::FrameBufferExists(std::string _bufferName)
+{
+	for (int i = 0; i < m_loadedFrameBufferNames.size(); i++)
+	{
+		if (m_loadedFrameBufferNames[i] == _bufferName) return true;
+	}
+	return false;
 }
 
 Material * AssetManager::GetDefaultMaterial()

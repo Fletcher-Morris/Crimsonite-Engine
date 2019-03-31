@@ -2,6 +2,8 @@
 
 #include "../../render/MatrixMaths.h"
 
+#include "../../render/Renderer.h"
+
 void Camera::OnInit()
 {
 	ReInit();
@@ -17,6 +19,8 @@ void Camera::OnFixedUpdate()
 
 void Camera::OnRender()
 {
+	if (!m_renderer) return;
+	m_renderer->Submit(this);
 }
 
 void Camera::OnEnable()
@@ -54,6 +58,15 @@ void Camera::SetCameraSettings(int _width, int _height)
 	newSettings.height = _height;
 	std::cout << _width << ", " << _height << std::endl;
 	SetCameraSettings(newSettings);
+}
+
+void Camera::Bind()
+{
+	if (m_frameBuffer == 0)	{}
+	else
+	{
+		m_frameBuffer->Bind();
+	}
 }
 
 void Camera::ReInit()

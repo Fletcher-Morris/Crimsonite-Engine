@@ -86,6 +86,7 @@ void CrimsonCore::RunEngine()
 	Assets->LoadTexture("room", m_assetPath + "room.png");
 	Assets->LoadTexture("flat", m_assetPath + "flat.png");
 
+	Assets->LoadMesh("quad", m_assetPath + "quad");
 	Assets->LoadMesh("dragon", m_assetPath + "dragon");
 	Assets->LoadMesh("cube", m_assetPath + "cube");
 	Assets->LoadMesh("spring", m_assetPath + "spring");
@@ -99,6 +100,7 @@ void CrimsonCore::RunEngine()
 
 	m_ecs->NewEntity("Camera");
 	Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+	mainCamera->SetRenderer(m_renderer);
 
 	m_ecs->NewEntity("DRAGON");
 	m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
@@ -128,6 +130,7 @@ void CrimsonCore::RunEngine()
 	if (m_editor != NULL)
 	{
 		m_editor->Init();
+		mainCamera->SetOutputFrameBuffer("viewport");
 	}
 
 

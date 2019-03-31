@@ -2,6 +2,7 @@
 
 #include <vector>
 
+class Camera;
 class Mesh;
 class MeshRenderer;
 class Shader;
@@ -19,6 +20,7 @@ public:
 
 	virtual void Init() {}
 
+	virtual void Submit(Camera * _cam) {}
 	virtual void Submit(Mesh * _mesh) {}
 	virtual void Submit(Mesh * _mesh, Shader * _shader) {}
 	virtual void Submit(MeshRenderer * _meshRenderer) {}

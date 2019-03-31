@@ -25,7 +25,7 @@ void Editor::Init()
 	ImGui_ImplOpenGL3_Init("#version 130");
 	std::cout << "Initialized Editor" << std::endl;
 
-	AssetManager::Instance()->CreateFrameBuffer("Screen Render", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
+	AssetManager::Instance()->CreateFrameBuffer("viewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 }
 
 void Editor::DrawGui()
@@ -63,8 +63,8 @@ void Editor::DrawGui()
 			{
 				for (int i = 0; i < AssetManager::Instance()->TextureCount(); i++)
 				{
-					AssetManager::Instance()->GetTexture(i)->Bind();
-					if (ImGui::ImageButton((GLuint*)i, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
+					ImGui::LabelText(AssetManager::Instance()->GetTexture(i)->GetName().c_str(),"");
+					if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture(i)->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
 				}
 				ImGui::EndMenu();
 			}
@@ -87,7 +87,7 @@ void Editor::DrawGui()
 
 	ImGui::Begin("VIEWPORT");
 	{
-		ImGui::Image((GLuint*)2, ImVec2(1280, 720));
+		ImGui::Image((GLuint*)AssetManager::Instance()->GetTexture("viewport")->TextureId, ImVec2(1280, 720));
 	}
 	ImGui::End();
 

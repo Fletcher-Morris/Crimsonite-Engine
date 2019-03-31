@@ -1,6 +1,7 @@
 #include "SimpleRenderer.h"
 #include "../mesh/Mesh.h"
 #include "../ecs/components/MeshRenderer.h"
+#include "../ecs/components/Camera.h"
 #include "Shader.h"
 
 void SimpleRenderer::Init()
@@ -8,12 +9,15 @@ void SimpleRenderer::Init()
 	SetClearColor(0.2f, 0.2f, 0.2f);
 
 	glEnable(GL_MULTISAMPLE);
-
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+}
+
+void SimpleRenderer::Submit(Camera * _cam)
+{
+	m_cameras.push_back(_cam);
 }
 
 void SimpleRenderer::Submit(Mesh * _mesh)
@@ -42,25 +46,50 @@ void SimpleRenderer::Proccess()
 
 void SimpleRenderer::Flush()
 {
-	glClearColor(p_r, p_g, p_g, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (int i = 0; i < m_meshes.size(); i++)
+	for (int c = 0; c < m_cameras.size(); c++)
 	{
-		glBindVertexArray(m_meshes[i]->GetVao());
-		glDrawElements(GL_TRIANGLES, m_meshes[i]->IndexCount(), GL_UNSIGNED_INT, 0);
-	}
-	for (int i = 0; i < m_meshRenderers.size(); i++)
-	{
-		MeshRenderer * m = m_meshRenderers[i];
-		m->GetMaterial()->GetShader()->Bind();
-		m->GetMaterial()->UpdateShaderProperties();
-		m->SetShaderMvp();
+		m_cameras[c]->Bind();
 
-		glBindVertexArray(m->GetMesh()->GetVao());
-		glDrawElements(m->GetRenderMode(), m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+		glClearColor(p_r, p_g, p_g, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
+
+
+		if (!m_cameras[c]->GetOutputFrameBuffer())
+		{
+			glViewport(0, 0, m_cameras[c]->GetOutputFrameBuffer()->GetLinkedTexture()->GetWidth(), m_cameras[c]->GetOutputFrameBuffer()->GetLinkedTexture()->GetHeight());
+		}
+
+		for (int i = 0; i < m_meshes.size(); i++)
+		{
+			glBindVertexArray(m_meshes[i]->GetVao());
+			glDrawElements(GL_TRIANGLES, m_meshes[i]->IndexCount(), GL_UNSIGNED_INT, 0);
+		}
+		for (int i = 0; i < m_meshRenderers.size(); i++)
+		{
+			MeshRenderer * m = m_meshRenderers[i];
+			m->GetMaterial()->GetShader()->Bind();
+			m->GetMaterial()->UpdateShaderProperties();
+			m->SetShaderMvp();
+
+			glBindVertexArray(m->GetMesh()->GetVao());
+			glDrawElements(m->GetRenderMode(), m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+		}
+
 	}
 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	AssetManager::Instance()->GetPassthroughShader()->Bind();
+	glBindVertexArray(AssetManager::Instance()->GetMesh("quad")->GetVao());
+	glDisable(GL_DEPTH_TEST);
+	AssetManager::Instance()->GetTexture("viewport")->Bind();
+	glDrawElements(GL_TRIANGLES, AssetManager::Instance()->GetMesh("quad")->IndexCount(), GL_UNSIGNED_INT, 0);
+
+	m_cameras.clear();
 	m_meshes.clear();
 	m_meshRenderers.clear();
 	glBindTexture(GL_TEXTURE_2D, 0);

@@ -220,5 +220,8 @@
     <ClInclude Include="source\external\imgui\imstb_textedit.h">
       <Filter>Header Files\extenal\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="source\render\FrameBuffer.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

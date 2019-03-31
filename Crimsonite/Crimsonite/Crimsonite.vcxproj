@@ -58,6 +58,7 @@
     <ClInclude Include="source\mesh\Mesh.h" />
     <ClInclude Include="source\mesh\Vertex.h" />
     <ClInclude Include="source\render\CameraSettings.h" />
+    <ClInclude Include="source\render\FrameBuffer.h" />
     <ClInclude Include="source\render\Material.h" />
     <ClInclude Include="source\render\MatrixMaths.h" />
     <ClInclude Include="source\render\Renderer.h" />

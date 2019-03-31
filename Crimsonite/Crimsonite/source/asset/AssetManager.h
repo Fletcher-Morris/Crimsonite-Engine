@@ -8,6 +8,7 @@
 
 #include "Asset.h"
 #include "../render/Texture.h"
+#include "../render/FrameBuffer.h"
 #include "../mesh/Mesh.h"
 #include "../render/Shader.h"
 #include "../render/Material.h"
@@ -25,10 +26,22 @@ public:
 
 	//	Load a Texture from a file with an assigned name.
 	void LoadTexture(std::string _textureName, std::string _filePath);
+	//	Create a blank Texture.
+	void CreateTexture(std::string _textureName, int _width, int _height);
+	void CreateTexture(std::string _textureName);
 	//	Return a reference to a Texture with a given name.
 	Texture * GetTexture(std::string _textureName);
 	Texture * GetTexture(int _textureId) { return &m_textures.at(m_loadedTextureNames[_textureId]); }
 	int TextureCount() { return m_loadedTextureNames.size(); }
+
+
+	//	Create a new FrameBuffer.
+	void CreateFrameBuffer(std::string _name, int _width, int _height);
+	void CreateFrameBuffer(std::string _name, int _width, int _height, bool _useDepth);
+	//	Bind a specified FrameBuffer.
+	void BindFrameBuffer(int _id);
+	//	Return a specific FrameBuffer.
+	unsigned int GetFrameBuffer(int _id);
 
 
 	//	Load a Mesh from a file with an assigned name.
@@ -86,6 +99,9 @@ private:
 	bool m_errorTextureCreated = false;
 	//	Return a reference to the error Texture.
 	Texture * GetErrorTexture();
+
+	//	The map of framebuffers.
+	std::map<std::string, FrameBuffer> m_frameBuffers;
 
 
 	//	The map of loaded meshes.

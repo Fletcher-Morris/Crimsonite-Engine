@@ -27,7 +27,7 @@ public:
 
 	GLFWwindow * GetWindow() { return m_window; }
 	GLFWmonitor * GetMonitor() { return m_monitor; }
-	const GLFWvidmode * GetVdeoMdoe() { return m_videoMode; }
+	const GLFWvidmode * GetVideoMode() { return m_videoMode; }
 
 	void RunEngine();
 	void QuitEngine();

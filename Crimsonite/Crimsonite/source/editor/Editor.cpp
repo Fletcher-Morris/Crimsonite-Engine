@@ -24,6 +24,8 @@ void Editor::Init()
 	ImGui_ImplGlfw_InitForOpenGL(m_engine->GetWindow(), true);
 	ImGui_ImplOpenGL3_Init("#version 130");
 	std::cout << "Initialized Editor" << std::endl;
+
+	AssetManager::Instance()->CreateFrameBuffer("Screen Render", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 }
 
 void Editor::DrawGui()

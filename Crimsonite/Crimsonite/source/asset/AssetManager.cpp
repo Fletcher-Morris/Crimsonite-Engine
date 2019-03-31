@@ -51,6 +51,24 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 	}
 }
 
+void AssetManager::CreateTexture(std::string _textureName)
+{
+	CreateTexture(_textureName, 1024, 1024);
+}
+
+void AssetManager::CreateTexture(std::string _textureName, int _width, int _height)
+{
+	m_textures[_textureName] = Texture(_textureName, _width, _height);
+	Texture * tex = &m_textures.at(_textureName);
+	glGenTextures(1, &tex->TextureId);
+	glBindTexture(GL_TEXTURE_2D, tex->TextureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	std::cout << "Created Texture '" << _textureName << "'." << std::endl;
+}
+
 Texture * AssetManager::GetTexture(std::string _textureName)
 {
 	if (!TextureExists(_textureName))
@@ -59,6 +77,44 @@ Texture * AssetManager::GetTexture(std::string _textureName)
 		return GetErrorTexture();
 	}
 	return &m_textures.at(_textureName);
+}
+
+void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _height)
+{
+	CreateFrameBuffer(_bufferName, _width, _height, true);
+}
+
+void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _height, bool _useDepth)
+{
+	m_frameBuffers[_bufferName] = FrameBuffer();
+	FrameBuffer * buffer = &m_frameBuffers.at(_bufferName);
+
+	glGenFramebuffers(1, &buffer->BufferId);
+	glBindFramebuffer(GL_FRAMEBUFFER, buffer->BufferId);
+
+	CreateTexture(_bufferName, _width, _height);
+	buffer->SetTexture(GetTexture(_bufferName));
+
+	if (_useDepth)
+	{
+		glGenRenderbuffers(1, &buffer->DepthBufferId);
+		glBindRenderbuffer(GL_RENDERBUFFER, buffer->DepthBufferId);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, _width, _height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffer->DepthBufferId);
+	}
+
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, buffer->DepthBufferId, 0);
+	GLenum buffers[1] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(1, buffers);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cout << "ERROR CREATEING FRAME BUFFER" << std::endl;
+	}
+	else
+	{
+		std::cout << "Created Frame Buffer '" << _bufferName << "'." << std::endl;
+	}
 }
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)

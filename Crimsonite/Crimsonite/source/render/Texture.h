@@ -17,6 +17,7 @@ public:
 
 	Texture();
 	Texture(std::string _name, int _width, int _height, unsigned char* _data);
+	Texture(std::string _name, int _width, int _height);
 	~Texture();
 
 	//	Bind this Texture to the GPU.

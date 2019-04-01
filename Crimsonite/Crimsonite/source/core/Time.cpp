@@ -1,7 +1,5 @@
 #include "Time.h"
 
-#include <iostream>
-
 Time * Time::m_instance(0);
 Time * Time::Instance()
 {

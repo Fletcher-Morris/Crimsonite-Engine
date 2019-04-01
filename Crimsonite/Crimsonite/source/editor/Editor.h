@@ -14,6 +14,8 @@ public:
 	Editor(CrimsonCore * _core);
 	void Init();
 
+	void LoadIcons();
+
 	void DrawGui();
 
 

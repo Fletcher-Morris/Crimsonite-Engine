@@ -25,7 +25,16 @@ void Editor::Init()
 	ImGui_ImplOpenGL3_Init("#version 130");
 	std::cout << "Initialized Editor" << std::endl;
 
+	LoadIcons();
+
 	AssetManager::Instance()->CreateFrameBuffer("viewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
+}
+
+void Editor::LoadIcons()
+{
+	AssetManager::Instance()->LoadTexture("editor_tool_move", m_engine->AssetsPath() + "editor/tool_move.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_rotate", m_engine->AssetsPath() + "editor/tool_rotate.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_scale", m_engine->AssetsPath() + "editor/tool_scale.png");
 }
 
 void Editor::DrawGui()
@@ -82,6 +91,18 @@ void Editor::DrawGui()
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Tools"))
+		{
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_move")->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_rotate")->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_scale")->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
+			ImGui::EndMenu();
+		}
+
+		ImGui::Separator();
+		ImGui::SameLine(ImGui::GetWindowWidth() - (80));
+		ImGui::Text("%i FPS",Time::GetFps());
+
 		ImGui::EndMainMenuBar();
 	}
 

@@ -35,6 +35,8 @@ public:
 
 	EcsSystem * ECS() { return m_ecs; }
 
+	std::string AssetsPath() { return m_assetPath; }
+
 private:
 
 
@@ -53,6 +55,6 @@ private:
 	AssetManager * Assets;
 	EcsSystem * m_ecs;
 
-	std::string m_assetPath = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
+	std::string m_assetPath = "";
 
 };

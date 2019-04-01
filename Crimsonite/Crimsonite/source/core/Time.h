@@ -20,6 +20,8 @@ public:
 	//	Set the frame time to calculate DeltaTime.
 	static void SetFrameTime(double _frameTime);
 
+	static int GetFps() { return Instance()->m_averageFps; }
+
 private:
 
 	//	The time since the last frame as a float.
@@ -35,6 +37,11 @@ private:
 	double m_currentFrameTime;
 	//	The time the previous frame started.
 	double m_lastFrameTime;
+
+	//	A frame counter for measuring FPS.
+	int m_frameCounter = 0;
+	double m_lastFpsCheckTime;
+	int m_averageFps = 0;
 
 protected:
 

@@ -102,6 +102,7 @@ void CrimsonCore::RunEngine()
 
 	m_ecs->NewEntity("Camera");
 	Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+	mainCamera->entity->MakeImmortal(true);
 	mainCamera->SetRenderer(m_renderer);
 
 	m_ecs->NewEntity("DRAGON");

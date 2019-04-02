@@ -4,6 +4,8 @@
 #include "../external/imgui/imgui_impl_glfw.h"
 #include "../external/imgui/imgui_impl_opengl3.h"
 
+#include "../ecs/ECS.h"
+
 class CrimsonCore;
 
 #define TOOL_MOVE 1
@@ -37,5 +39,10 @@ public:
 
 	int m_selectedTool = 0;
 	void SelectEditorTool(int _tool);
+
+
+	EcsEntity * m_selectedEntity;
+	/*void SelectEntity(int _id);
+	void DeselectEntity();*/
 
 };

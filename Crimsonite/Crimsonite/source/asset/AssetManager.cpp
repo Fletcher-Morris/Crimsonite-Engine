@@ -417,7 +417,7 @@ void AssetManager::LoadShader(std::string _shaderName, std::string _filePath)
 
 void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath)
 {
-	m_shaders[_shaderName] = Shader(_vertexPath.c_str(), _fragmentPath.c_str());
+	m_shaders[_shaderName] = Shader(_shaderName, _vertexPath.c_str(), _fragmentPath.c_str());
 	LoadShaderName(_shaderName);
 }
 
@@ -679,7 +679,7 @@ void AssetManager::CreateDefaultShader()
 		"\tcolor = texColor * Color;\n"
 		"}";
 
-	Shader shader = Shader();
+	Shader shader = Shader("default");
 	shader.Compile(vertexString, fragmentString);
 	m_shaders["default"] = shader;
 	m_defaultShaderCreated = true;

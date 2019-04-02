@@ -12,12 +12,15 @@ public:
 	{
 		position = glm::vec3();
 		rotation = glm::vec3();
+		scale = glm::vec3();
 	}
 
 	//	The position of this transform in world-space.
 	glm::vec3 position;
 	//	The rotation of this transform.
 	glm::vec3 rotation;
+	//	The scale of this transform.
+	glm::vec3 scale;
 
 	void SetPosition(glm::vec3 _newPos) { position = _newPos; }
 	void SetPosition(float _x, float _y, float _z) { position = { _x,_y,_z }; }

@@ -4,7 +4,12 @@ Shader::Shader()
 {
 }
 
-Shader::Shader(const char * _vertexPath, const char * _fragmentPath)
+Shader::Shader(std::string _shaderName)
+{
+	m_name = _shaderName;
+}
+
+Shader::Shader(std::string _shaderName, const char * _vertexPath, const char * _fragmentPath)
 {
 	std::string vertexCode;
 	std::string fragmentCode;
@@ -45,13 +50,15 @@ Shader::Shader(const char * _vertexPath, const char * _fragmentPath)
 	}
 
 	if (fail == false) Compile(vertexCode, fragmentCode);
+
+	m_name = _shaderName;
 }
 
-Shader::Shader(const char * _comboPath)
+Shader::Shader(std::string _shaderName, const char * _comboPath)
 {
 }
 
-Shader::Shader(const std::string _comboPath)
+Shader::Shader(std::string _shaderName, const std::string _comboPath)
 {
 }
 

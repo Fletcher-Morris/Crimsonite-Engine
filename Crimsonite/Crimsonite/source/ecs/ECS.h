@@ -9,8 +9,9 @@
 #include <typeinfo>
 
 #include "../asset/AssetManager.h"
-#include "Transform.h"
+#include "../external/imgui/imgui.h"
 #include "../core/Time.h"
+#include "Transform.h"
 
 //	Forward-declare ECS classes for compiler.
 class EcsEntity;
@@ -39,6 +40,8 @@ private:
 
 	//	The unique id assigned to this component.
 	int m_ecsComponentId = 0;
+	//	The name of the component.
+	std::string m_componentName;
 	//	Should the component be used?
 	bool m_enabled = true;
 	//	Can there be more than one of this component on a sngle entity?
@@ -65,6 +68,9 @@ public:
 	//	Called when the component becomes disabled.
 	virtual void OnDisable() {}
 
+	//	Draw the ImGui Editor properties.
+	virtual void DrawEditorProperties() {};
+
 	//	Returns true if the component is enabled.
 	bool IsEnabled() { return m_enabled; }
 	//	Enables the component and calls the OnEnable() method.
@@ -75,6 +81,16 @@ public:
 	bool IsUnique() { return m_uniquePerEntity; }
 	//	Returns the unique identity assigned to this component.
 	int GetEcsComponentId() { return m_ecsComponentId; }
+	//	Return the name of this component.
+	std::string GetComponentName()
+	{
+		if (m_componentName == "")
+		{
+			return typeid(this).name();
+		}
+		return m_componentName;
+	}
+	void SetComponentName(std::string _name) { m_componentName = _name; }
 
 };
 
@@ -90,9 +106,19 @@ private:
 	//	The name of this entity.
 	std::string m_name;
 	//	The enabled state of this entity.
-	bool m_enabled;
+	bool m_enabled = true;
+	bool m_enabledPrev = true;
+	void EnabledChangedCheck()
+	{
+		if (m_enabled != m_enabledPrev)
+		{
+			SetEnabled(m_enabledPrev);
+		}
+	}
 	//	Should this entity be destroyed upon ECS refresh?
 	bool m_doDestroy;
+	//	Is this entity immortal?
+	bool m_immortal = false;
 
 	std::vector<std::unique_ptr<EcsComponent>> m_componentsVector;
 	std::array<EcsComponent*, MAX_ENT_COMPONENTS> m_componentsArray;
@@ -115,7 +141,19 @@ public:
 	//	Return true if this entity is marked as destroyed.
 	bool IsDestroyed() { return m_doDestroy; }
 	//	Mark this entity for destruction.
-	void Destroy() { std::cout << "Destroyed entity : " << m_name << std::endl; /*m_system->AlertEntityDestruction();*/ m_doDestroy = true; }
+	void Destroy()
+	{
+		if (m_immortal)
+		{
+			std::cout << "Cannot destroy immortal entity '" << m_name << "'!" << std::endl;
+			return;
+		}
+		std::cout << "Destroyed entity : " << m_name << std::endl;
+		/*m_system->AlertEntityDestruction();*/
+		m_doDestroy = true;
+	}
+	//	Make this entity immortal.
+	void MakeImmortal(bool _immortal) { m_immortal = _immortal; }
 	//	Return the unique identity assigned to this entity.
 	int GetEcsEntityId() { return m_ecsEntityId; }
 	//	Return the EcsSystem this entity is part of.
@@ -126,10 +164,15 @@ public:
 	//	Return a reference to the entity's Transform.
 	Transform * GetTransformRef() { return &transform; }
 
+	//	Return the number of components on this entity.
+	int ComponentCount() { return m_componentsArray.size(); }
+
 	//	Called every frame.
 	void Update()
 	{
 		if (m_doDestroy) return;
+		EnabledChangedCheck();
+		if (m_enabled == false) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			m_componentsVector[i]->OnUpdate();
@@ -140,6 +183,8 @@ public:
 	void FixedUpdate()
 	{
 		if (m_doDestroy) return;
+		EnabledChangedCheck();
+		if (m_enabled == false) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			m_componentsVector[i]->OnFixedUpdate();
@@ -150,12 +195,72 @@ public:
 	void Render()
 	{
 		if (m_doDestroy) return;
+		EnabledChangedCheck();
+		if (m_enabled == false) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			m_componentsVector[i]->OnRender();
 		}
 	}
 
+
+	//	Called by the editor.
+	void DrawEditorProperties()
+	{
+		std::string enableString = "ENABLED";
+		if(m_enabled) enableString = "DISABLE";
+		if (ImGui::Button(enableString.c_str()))
+		{
+			SetEnabled(!m_enabled);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("DESTROY"))
+		{
+			Destroy();
+		}
+		ImGui::Separator();
+		ImGui::NewLine();
+		ImGui::Text("Transform Properties");
+		ImGui::NewLine();
+		ImGui::Text("Position : ");
+		float pos[3];
+		pos[0] = transform.position.x;
+		pos[1] = transform.position.y;
+		pos[2] = transform.position.z;
+		ImGui::InputFloat3("", pos, 3);
+		ImGui::Text("Rotation : ");
+		float rot[3];
+		rot[0] = transform.rotation.x;
+		rot[1] = transform.rotation.y;
+		rot[2] = transform.rotation.z;
+		ImGui::InputFloat3("", rot, 3);
+		ImGui::Text("Scale : ");
+		float scale[3];
+		scale[0] = transform.scale.x;
+		scale[1] = transform.scale.y;
+		scale[2] = transform.scale.z;
+		ImGui::InputFloat3("", scale, 3);
+		for (int i = 0; i < m_componentsCount; i++)
+		{
+			ImGui::NewLine();
+			ImGui::Separator();
+			ImGui::NewLine();
+			ImGui::Text("%s", m_componentsVector[i]->GetComponentName().c_str());
+			m_componentsVector[i]->DrawEditorProperties();
+		}
+	}
+
+	void SetEnabled(bool _enable)
+	{
+		m_enabled = _enable;
+		m_enabledPrev = _enable;
+		std::cout << m_name << " : " << _enable << std::endl;
+		for (int i = 0; i < m_componentsCount; i++)
+		{
+			if(_enable == true) m_componentsVector[i]->OnEnable();
+			else m_componentsVector[i]->OnDisable();
+		}
+	}
 
 	//	Check if this entity has a specific component attached.
 	template<typename T> bool HasComponent()
@@ -175,6 +280,9 @@ public:
 		m_componentsBitset[GetComponentId<T>()] = true;
 		m_componentsCount++;
 		std::cout << "Attached Component '" << typeid(T).name() << "' to Entity '" << m_name << "'." << std::endl;
+		std::string nameStr = typeid(T).name();
+		nameStr.erase(0, 6);
+		newComponent->SetComponentName(nameStr);
 		newComponent->OnInit();
 		return *newComponent;
 	}
@@ -183,6 +291,13 @@ public:
 	template<typename T> T& GetComponent()
 	{
 		auto ptr(m_componentsArray[GetComponentId<T>()]);
+		return *static_cast<T*>(ptr);
+	}
+
+	//	Return a reference to a component on this entity with a given ID.
+	template<typename T> T& GetComponentWithId(int _id)
+	{
+		auto ptr(m_componentsVector.at(_id));
 		return *static_cast<T*>(ptr);
 	}
 
@@ -243,6 +358,11 @@ public:
 
 		std::cout << "Could not find entity : " << _entityName << std::endl;
 		return NULL;
+	}
+
+	EcsEntity * GetEntityById(int _id)
+	{
+		return &*entities[_id];
 	}
 
 	//	Destroy a given entity.

@@ -34,6 +34,7 @@ public:
 	void SetShader(std::string _shader);
 	void SetColor(glm::vec3 _color);
 	void SetColor(glm::vec4 _color);
+	glm::vec4 GetColor() { return m_color; }
 	void SetTextureProperty(std::string _propertyName, Texture * _texture);
 	void SetTextureProperty(std::string _propertyName, std::string _textureName);
 	void SetMainTex(std::string _textureName);

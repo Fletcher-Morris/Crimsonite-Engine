@@ -204,20 +204,30 @@ void Editor::DrawGui()
 	}
 	ImGui::End();
 
-	ImGui::Begin("ENTITIES");
+	ImGui::Begin("Entities");
 	{
 		for (int i = 0; i < m_engine->ECS()->EntityCount(); i++)
-					{
-						EcsEntity * entity = &*m_engine->ECS()->entities[i];
+		{
+			EcsEntity * entity = &*m_engine->ECS()->entities[i];
 
-						if (entity->IsDestroyed() == false)
-						{
-							if (ImGui::Button(entity->GetName().c_str()))
-							{
-								entity->Destroy();
-							}
-						}
-					}
+			if (entity->IsDestroyed() == false)
+			{
+				if (ImGui::Button(entity->GetName().c_str()))
+				{
+					m_selectedEntity = entity;
+				}
+			}
+		}
+	}
+	ImGui::End();
+
+	ImGui::Begin("Properties");
+	{
+		if (m_selectedEntity == NULL)
+		{
+			m_selectedEntity = m_engine->ECS()->GetEntityById(1);
+		}
+		m_selectedEntity->DrawEditorProperties();
 	}
 	ImGui::End();
 

@@ -28,6 +28,7 @@ public:
 	virtual void OnEnable() override;
 	virtual void OnDisable() override;
 
+	virtual void DrawEditorProperties() override;
 
 	void SetMesh(Mesh * _newMesh);
 	void SetMesh(std::string _meshName);

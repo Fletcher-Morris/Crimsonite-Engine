@@ -33,18 +33,14 @@ void MeshRenderer::OnDisable()
 
 void MeshRenderer::DrawEditorProperties()
 {
-	ImGui::NewLine();
 	ImGui::Text("Name : '%s'", m_material->GetName().c_str());
-
 	ImGui::Text("Shader : '%s'", m_material->GetShader()->GetName().c_str());
-
 	float col [4];
 	col[0] = m_material->GetColor().r;
 	col[1] = m_material->GetColor().g;
 	col[2] = m_material->GetColor().b;
 	col[3] = m_material->GetColor().a;
-	ImGui::Text("Main Color");
-	ImGui::ColorEdit4("", col);
+	ImGui::ColorEdit4("Main Color", col);
 	m_material->SetColor(glm::vec4{ col[0], col[1], col[2], col[3] });
 }
 

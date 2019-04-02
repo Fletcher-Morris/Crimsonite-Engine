@@ -207,7 +207,7 @@ public:
 	//	Called by the editor.
 	void DrawEditorProperties()
 	{
-		std::string enableString = "ENABLED";
+		std::string enableString = "ENABLE";
 		if(m_enabled) enableString = "DISABLE";
 		if (ImGui::Button(enableString.c_str()))
 		{
@@ -222,30 +222,31 @@ public:
 		ImGui::NewLine();
 		ImGui::Text("Transform Properties");
 		ImGui::NewLine();
-		ImGui::Text("Position : ");
 		float pos[3];
-		pos[0] = transform.position.x;
-		pos[1] = transform.position.y;
-		pos[2] = transform.position.z;
-		ImGui::InputFloat3("", pos, 3);
-		ImGui::Text("Rotation : ");
+		pos[0] = transform.GetPosition().x;
+		pos[1] = transform.GetPosition().y;
+		pos[2] = transform.GetPosition().z;
+		ImGui::DragFloat3("Position", pos, 0.25f);
+		transform.SetPosition(glm::vec3{ pos[0],pos[1],pos[2] });
 		float rot[3];
-		rot[0] = transform.rotation.x;
-		rot[1] = transform.rotation.y;
-		rot[2] = transform.rotation.z;
-		ImGui::InputFloat3("", rot, 3);
-		ImGui::Text("Scale : ");
+		rot[0] = transform.GetRotation().x;
+		rot[1] = transform.GetRotation().y;
+		rot[2] = transform.GetRotation().z;
+		ImGui::DragFloat3("Rotation", rot, 0.25f);
+		transform.SetRotation(glm::vec3{ rot[0],rot[1],rot[2] });
 		float scale[3];
-		scale[0] = transform.scale.x;
-		scale[1] = transform.scale.y;
-		scale[2] = transform.scale.z;
-		ImGui::InputFloat3("", scale, 3);
+		scale[0] = transform.GetScale().x;
+		scale[1] = transform.GetScale().y;
+		scale[2] = transform.GetScale().z;
+		ImGui::DragFloat3("Scale", scale, 0.25f);
+		transform.SetScale(glm::vec3{ scale[0],scale[1],scale[2] });
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			ImGui::NewLine();
 			ImGui::Separator();
 			ImGui::NewLine();
 			ImGui::Text("%s", m_componentsVector[i]->GetComponentName().c_str());
+			ImGui::NewLine();
 			m_componentsVector[i]->DrawEditorProperties();
 		}
 	}

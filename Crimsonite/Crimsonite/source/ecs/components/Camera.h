@@ -20,6 +20,7 @@ public:
 	virtual void OnRender() override;
 	virtual void OnEnable() override;
 	virtual void OnDisable() override;
+	virtual void DrawEditorProperties() override;
 
 	//	Set the view settings for this camera.
 	void SetCameraSettings(CameraSettings _newSettings);

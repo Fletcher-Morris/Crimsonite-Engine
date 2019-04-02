@@ -31,9 +31,25 @@ void Camera::OnDisable()
 {
 }
 
+void Camera::DrawEditorProperties()
+{
+	CameraSettings newSettings = GetCameraSettings();
+	float newFov = m_settings.fov;
+	ImGui::DragFloat("FOV", &newFov, 1.0f, 179.0f);
+	SetCameraSettings(newFov);
+	ImGui::DragFloat("Near Clip", &newSettings.nearClip, 0.01f, 1000.0f);
+	ImGui::DragFloat("Far Clip", &newSettings.farClip, 0.01f, 1000.0f);
+}
+
 void Camera::SetCameraSettings(CameraSettings _newSettings)
 {
-	m_settings = _newSettings;
+	_newSettings.UpdateValue();
+	if (_newSettings.value != m_settings.value)
+	{
+		m_settings = _newSettings;
+		m_settings.UpdateValue();
+		ReInit();
+	}
 }
 
 void Camera::SetCameraSettings(float _fov)
@@ -56,7 +72,6 @@ void Camera::SetCameraSettings(int _width, int _height)
 	CameraSettings newSettings;
 	newSettings.width = _width;
 	newSettings.height = _height;
-	std::cout << _width << ", " << _height << std::endl;
 	SetCameraSettings(newSettings);
 }
 
@@ -74,4 +89,5 @@ void Camera::ReInit()
 	m_projectionMatrix = CreateProjectionMatrix(m_settings);
 	m_viewMatrix = CreateViewMatrix(*this);
 	m_projectionViewMatrix = m_projectionMatrix * m_viewMatrix;
+	std::cout << "Initialised Camera '" << entity->GetName() << "'." << std::endl;
 }

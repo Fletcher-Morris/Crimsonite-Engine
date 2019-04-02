@@ -423,6 +423,10 @@ void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, 
 
 Shader * AssetManager::GetShader(std::string _shaderName)
 {
+	if (_shaderName == "default")
+	{
+		return GetDefaultShader();
+	}
 	if (!ShaderExists(_shaderName))
 	{
 		std::cout << "Shader '" << _shaderName << "' does not exist yet, but something is trying to access it." << std::endl;
@@ -539,6 +543,10 @@ void AssetManager::LoadMaterial(std::string _filePath)
 
 Material * AssetManager::GetMaterial(std::string _materialName)
 {
+	if (_materialName == "default")
+	{
+		return GetDefaultMaterial();
+	}
 	if (!MaterialExists(_materialName))
 	{
 		std::cout << "Material '" << _materialName << "' does not exist yet, but something is trying to access it." << std::endl;
@@ -652,24 +660,23 @@ void AssetManager::CreateDefaultShader()
 		"layout(location = 0) in vec4 position;\n"
 		"layout(location = 1) in vec3 normal;\n"
 		"layout(location = 2) in vec2 texCoord;\n"
-		"out vec2 v_TexCoord;\n"
+		"out vec2 TexCoord;\n"
 		"uniform mat4 u_MVP;\n"
 		"void main()\n"
 		"{\n"
 		"\tgl_Position = u_MVP * vec4(position.x, position.y, position.z, 1.0);\n"
-		"\tv_TexCoord = texCoord;\n"
+		"\tTexCoord = texCoord;\n"
 		"}";
 	std::string fragmentString =
 		"#version 330 core\n"
 		"layout(location = 0) out vec4 color;\n"
-		"in vec2 v_TexCoord;\n"
-		"uniform vec4 u_Color;\n"
-		"uniform sampler2D u_Texture;\n"
-		"vec3 colour;\n"
+		"in vec2 TexCoord;\n"
+		"uniform vec4 Color;\n"
+		"uniform sampler2D MainTex;\n"
 		"void main()\n"
 		"{\n"
-		"\tvec4 texColor = texture(u_Texture, v_TexCoord);\n"
-		"\tcolor = texColor * u_Color;\n"
+		"\tvec4 texColor = texture(MainTex, TexCoord);\n"
+		"\tcolor = texColor * Color;\n"
 		"}";
 
 	Shader shader = Shader();
@@ -749,7 +756,7 @@ void AssetManager::CreateDefaultMaterial()
 	if (m_defaultMaterialCreated == true) return;
 	Material newMat = Material("default");
 	newMat.SetShader("default");
-	newMat.SetColor({ 0.5f,0.5f,0.5f });
+	newMat.SetColor({ 1.0f,1.0f,1.0f });
 	m_materials["default"] = newMat;
 	m_defaultMaterialCreated = true;
 	std::cout << "Created Default Material." << std::endl;

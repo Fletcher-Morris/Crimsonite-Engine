@@ -81,23 +81,24 @@ void CrimsonCore::RunEngine()
 {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	Assets->LoadTexture("noise", m_assetPath + "noise.png");
-	Assets->LoadTexture("crimsontex", m_assetPath + "crimsontex.png");
-	Assets->LoadTexture("room", m_assetPath + "room.png");
-	Assets->LoadTexture("flat", m_assetPath + "flat.png");
+	Assets->LoadTexture("noise", m_assetPath + "textures/noise.png");
+	Assets->LoadTexture("crimsontex", m_assetPath + "textures/crimsontex.png");
+	Assets->LoadTexture("room", m_assetPath + "textures/room.png");
+	Assets->LoadTexture("flat", m_assetPath + "textures/flat.png");
 
-	Assets->LoadMesh("quad", m_assetPath + "quad");
-	Assets->LoadMesh("dragon", m_assetPath + "dragon");
-	Assets->LoadMesh("cube", m_assetPath + "cube");
-	Assets->LoadMesh("spring", m_assetPath + "spring");
-	Assets->LoadMesh("knot", m_assetPath + "knot");
+	Assets->LoadMesh("quad", m_assetPath + "meshes/quad");
+	Assets->LoadMesh("cube", m_assetPath + "meshes/cube");
+	Assets->LoadMesh("sphere", m_assetPath + "meshes/sphere");
+	Assets->LoadMesh("dragon", m_assetPath + "meshes/dragon");
+	Assets->LoadMesh("spring", m_assetPath + "meshes/spring");
+	Assets->LoadMesh("knot", m_assetPath + "meshes/knot");
 
-	Assets->LoadShader("color", m_assetPath + "vertex.vert", m_assetPath + "fragment.frag");
+	Assets->LoadShader("color", m_assetPath + "shaders/vertex.vert", m_assetPath + "shaders/fragment.frag");
 	Assets->CreatePassthroughShader();
 
-	Assets->LoadMaterial(m_assetPath + "crimsontex");
-	Assets->LoadMaterial(m_assetPath + "room");
-	Assets->LoadMaterial(m_assetPath + "flat");
+	Assets->LoadMaterial(m_assetPath + "materials/crimsontex");
+	Assets->LoadMaterial(m_assetPath + "materials/room");
+	Assets->LoadMaterial(m_assetPath + "materials/flat");
 
 	m_ecs->NewEntity("Camera");
 	Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();

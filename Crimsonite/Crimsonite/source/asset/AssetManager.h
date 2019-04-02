@@ -82,6 +82,8 @@ public:
 	Material * GetMaterial(std::string _materialName);
 	//	Forcibly create the default Material.
 	void CreateDefaultMaterial();
+	//	Return a reference to the default Material.
+	Material * GetDefaultMaterial();
 
 
 	//	SCENE METHODS
@@ -161,8 +163,6 @@ private:
 	int m_latestMaterialRevision = 1;
 	//	Has the default Material been created?
 	bool m_defaultMaterialCreated = false;
-	//	Return a reference to the default Material.
-	Material * GetDefaultMaterial();
 
 
 	//	SCENE MAP

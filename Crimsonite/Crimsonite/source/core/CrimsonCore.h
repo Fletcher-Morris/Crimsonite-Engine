@@ -36,6 +36,7 @@ public:
 	EcsSystem * ECS() { return m_ecs; }
 
 	std::string AssetsPath() { return m_assetPath; }
+	Renderer * m_renderer;
 
 private:
 
@@ -51,7 +52,6 @@ private:
 	const GLFWvidmode * m_videoMode;
 
 	Editor * m_editor;
-	Renderer * m_renderer;
 	AssetManager * Assets;
 	EcsSystem * m_ecs;
 

@@ -44,6 +44,17 @@ void Editor::LoadIcons()
 	AssetManager::Instance()->LoadTexture("editor_tool_scale_selected", m_engine->AssetsPath() + "editor/tool_scale_selected.png");
 }
 
+void CreateObject(std::string _meshName)
+{
+	m_engine->ECS()->NewEntity("new entity");
+	MeshRenderer * mesh = &m_engine->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
+	mesh->SetMesh(_meshName);
+	mesh->SetRenderer(m_engine->m_renderer);
+	mesh->SetMaterial("default");
+	mesh->entity->transform.SetPosition(0, 0, -2);
+	mesh->entity->AttachComponent<Rotator>();
+}
+
 void Editor::DrawGui()
 {
 
@@ -95,6 +106,30 @@ void Editor::DrawGui()
 				}
 
 				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Create"))
+		{
+			if (ImGui::Button("Cube"))
+			{
+				CreateObject("cube");
+			}
+			if (ImGui::Button("Sphere"))
+			{
+				CreateObject("sphere");
+			}
+			if (ImGui::Button("Quad"))
+			{
+				CreateObject("quad");
+			}
+			if (ImGui::Button("Knot"))
+			{
+				CreateObject("knot");
+			}
+			if (ImGui::Button("Dragon"))
+			{
+				CreateObject("dragon");
 			}
 			ImGui::EndMenu();
 		}

@@ -129,6 +129,7 @@ public:
 	//	Called every frame.
 	void Update()
 	{
+		if (m_doDestroy) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			m_componentsVector[i]->OnUpdate();
@@ -138,6 +139,7 @@ public:
 	//	Called at fixed intervals.
 	void FixedUpdate()
 	{
+		if (m_doDestroy) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			m_componentsVector[i]->OnFixedUpdate();
@@ -147,6 +149,7 @@ public:
 	//	Called by the renderer.
 	void Render()
 	{
+		if (m_doDestroy) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			m_componentsVector[i]->OnRender();

@@ -28,13 +28,20 @@ void Editor::Init()
 	LoadIcons();
 
 	AssetManager::Instance()->CreateFrameBuffer("viewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
+
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigDockingWithShift = false;
+	io.ConfigWindowsResizeFromEdges = true;
 }
 
 void Editor::LoadIcons()
 {
 	AssetManager::Instance()->LoadTexture("editor_tool_move", m_engine->AssetsPath() + "editor/tool_move.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_move_selected", m_engine->AssetsPath() + "editor/tool_move_selected.png");
 	AssetManager::Instance()->LoadTexture("editor_tool_rotate", m_engine->AssetsPath() + "editor/tool_rotate.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_rotate_selected", m_engine->AssetsPath() + "editor/tool_rotate_selected.png");
 	AssetManager::Instance()->LoadTexture("editor_tool_scale", m_engine->AssetsPath() + "editor/tool_scale.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_scale_selected", m_engine->AssetsPath() + "editor/tool_scale_selected.png");
 }
 
 void Editor::DrawGui()
@@ -91,11 +98,20 @@ void Editor::DrawGui()
 			}
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Tools"))
+		if (ImGui::BeginMenu("Window"))
 		{
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_move")->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_rotate")->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_scale")->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
+			if (ImGui::Button("Toolbar"))
+			{
+			}
+			if (ImGui::Button("Viewport"))
+			{
+			}
+			if (ImGui::Button("Entities"))
+			{
+			}
+			if (ImGui::Button("Properties"))
+			{
+			}
 			ImGui::EndMenu();
 		}
 
@@ -105,8 +121,49 @@ void Editor::DrawGui()
 
 		ImGui::EndMainMenuBar();
 	}
+	
+	ImGui::Begin("Toolbar");
+	{
+		ImGui::SameLine();
+		if (m_selectedTool == TOOL_MOVE)
+		{
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_move_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+		}
+		else
+		{
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_move")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			{
+				SelectEditorTool(TOOL_MOVE);
+			}
+		}
 
-	ImGui::Begin("VIEWPORT");
+		ImGui::SameLine();
+		if (m_selectedTool == TOOL_ROTATE)
+		{
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_rotate_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+		}
+		else
+		{
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_rotate")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			{
+				SelectEditorTool(TOOL_ROTATE);
+			}
+		}
+		
+		ImGui::SameLine();
+		if (m_selectedTool == TOOL_SCALE)
+		{
+		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_scale_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+		}
+		else
+		{
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_scale")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			{ SelectEditorTool(TOOL_SCALE); }
+		}
+	}
+	ImGui::End();
+
+	ImGui::Begin("Viewport");
 	{
 		ImGui::Image((GLuint*)AssetManager::Instance()->GetTexture("viewport")->TextureId, ImVec2(1280, 720));
 	}
@@ -115,17 +172,17 @@ void Editor::DrawGui()
 	ImGui::Begin("ENTITIES");
 	{
 		for (int i = 0; i < m_engine->ECS()->EntityCount(); i++)
-		{
-			EcsEntity * entity = &*m_engine->ECS()->entities[i];
+					{
+						EcsEntity * entity = &*m_engine->ECS()->entities[i];
 
-			if (entity->IsDestroyed() == false)
-			{
-				if (ImGui::Button(entity->GetName().c_str()))
-				{
-					entity->Destroy();
-				}
-			}
-		}
+						if (entity->IsDestroyed() == false)
+						{
+							if (ImGui::Button(entity->GetName().c_str()))
+							{
+								entity->Destroy();
+							}
+						}
+					}
 	}
 	ImGui::End();
 
@@ -152,4 +209,10 @@ void Editor::StopGame()
 void Editor::Quit()
 {
 	m_engine->QuitEngine();
+}
+
+void Editor::SelectEditorTool(int _tool)
+{
+	m_selectedTool = _tool;
+	std::cout << "Selected editor tool '" << m_selectedTool << "'." << std::endl;
 }

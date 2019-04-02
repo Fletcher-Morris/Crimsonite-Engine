@@ -6,6 +6,10 @@
 
 class CrimsonCore;
 
+#define TOOL_MOVE 1
+#define TOOL_ROTATE 2
+#define TOOL_SCALE 3
+
 class Editor
 {
 
@@ -28,5 +32,10 @@ public:
 
 
 	void Quit();
+
+
+
+	int m_selectedTool = 0;
+	void SelectEditorTool(int _tool);
 
 };

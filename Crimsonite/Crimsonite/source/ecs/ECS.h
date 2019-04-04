@@ -77,6 +77,12 @@ public:
 	void Enable() { if (!m_enabled) { m_enabled = true; OnEnable(); } }
 	//	Disables the component and calls the OnDisable() method.
 	void Disable() { if (m_enabled) { m_enabled = false; OnDisable(); } }
+	//	Set the enabled state of this component.
+	void SetEnabled(bool _enable)
+	{
+		if (_enable) Enable();
+		else Disable();
+	}
 	//	Returns true if the component is entity-unique.
 	bool IsUnique() { return m_uniquePerEntity; }
 	//	Returns the unique identity assigned to this component.
@@ -175,6 +181,7 @@ public:
 		if (m_enabled == false) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
+			if(m_componentsVector[i]->IsEnabled())
 			m_componentsVector[i]->OnUpdate();
 		}
 	}
@@ -187,6 +194,7 @@ public:
 		if (m_enabled == false) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
+			if (m_componentsVector[i]->IsEnabled())
 			m_componentsVector[i]->OnFixedUpdate();
 		}
 	}
@@ -199,6 +207,7 @@ public:
 		if (m_enabled == false) return;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
+			if (m_componentsVector[i]->IsEnabled())
 			m_componentsVector[i]->OnRender();
 		}
 	}
@@ -246,6 +255,9 @@ public:
 			ImGui::Separator();
 			ImGui::NewLine();
 			ImGui::Text("%s", m_componentsVector[i]->GetComponentName().c_str());
+			bool componentEnabled = m_componentsVector[i]->IsEnabled();
+			ImGui::Checkbox("Enabled", &componentEnabled);
+			m_componentsVector[i]->SetEnabled(componentEnabled);
 			ImGui::NewLine();
 			m_componentsVector[i]->DrawEditorProperties();
 		}
@@ -359,6 +371,34 @@ public:
 
 		std::cout << "Could not find entity : " << _entityName << std::endl;
 		return NULL;
+	}
+
+	template<typename T>
+	std::vector<EcsEntity*> FindEntitiesWithComponent()
+	{
+		std::vector<EcsEntity*> foundEntities;
+		for (int i = 0; i < m_totalEntityCount; i++)
+		{
+			if (entities[i]->HasComponent<T>())
+			{
+				foundEntities.push_back(&*entities[i]);
+			}
+		}
+		return foundEntities;
+	}
+
+	template<typename T> std::vector<T*> GetAllComponentsOfType()
+	{
+		std::vector<T*> foundComponents;
+		for (int i = 0; i < m_totalEntityCount; i++)
+		{
+			T* component = &entities[i]->GetComponent<T>();
+			if (component)
+			{
+				foundComponents.push_back(component);
+			}
+		}
+		return foundComponents;
 	}
 
 	EcsEntity * GetEntityById(int _id)

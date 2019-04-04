@@ -2,6 +2,8 @@
 
 #include <glm/common.hpp>
 #include <glm/vec3.hpp>
+#include <iostream>
+
 
 class Transform
 {
@@ -12,7 +14,7 @@ public:
 	{
 		position = glm::vec3();
 		rotation = glm::vec3();
-		scale = glm::vec3();
+		scale = glm::vec3(1.0f,1.0f,1.0f);
 	}
 
 	//	The position of this transform in world-space.

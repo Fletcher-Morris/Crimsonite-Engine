@@ -51,6 +51,8 @@ void SimpleRenderer::Flush()
 	{
 		m_cameras[c]->Bind();
 
+		m_cameras[c]->CreateCameraViewMatrix();
+
 		glEnable(GL_DEPTH_TEST);
 		glClearColor(p_r, p_g, p_b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -71,7 +73,7 @@ void SimpleRenderer::Flush()
 			MeshRenderer * m = m_meshRenderers[i];
 			m->GetMaterial()->GetShader()->Bind();
 			m->GetMaterial()->UpdateShaderProperties();
-			m->SetShaderMvp();
+			m->SetShaderMvp(m_cameras[c]);
 
 			glBindVertexArray(m->GetMesh()->GetVao());
 			glDrawElements(m->GetRenderMode(), m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);

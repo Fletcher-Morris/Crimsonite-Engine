@@ -45,11 +45,13 @@ public:
 	const glm::mat4 GetProjectionMatrix() { return m_projectionMatrix; }
 	//	Get the view matrix for this camera.
 	const glm::mat4 GetViewMatrix() { return m_viewMatrix; }
+	void CreateCameraViewMatrix();
 	//	Get the view-projection matrix for this camera.
 	const glm::mat4 GetProjectionViewMatrix() { return m_projectionViewMatrix; }
 
 	void SetOutputFrameBuffer(FrameBuffer * _buffer) { m_frameBuffer = _buffer; }
 	void SetOutputFrameBuffer(std::string _bufferName) { SetOutputFrameBuffer(AssetManager::Instance()->GetFrameBuffer(_bufferName)); }
+	void UpdateOutputBufferSize();
 	FrameBuffer * GetOutputFrameBuffer() { return m_frameBuffer; }
 
 

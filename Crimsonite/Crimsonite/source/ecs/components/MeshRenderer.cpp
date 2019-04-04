@@ -3,6 +3,8 @@
 #include "../../mesh/Mesh.h"
 #include "../../render/Renderer.h"
 #include "../../render/Material.h"
+#include "Camera.h"
+#include "../../render/MatrixMaths.h"
 
 void MeshRenderer::OnInit()
 {
@@ -107,11 +109,21 @@ void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
 
 void MeshRenderer::SetShaderMvp()
 {
-	glm::mat4 p = glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.1f, 1000.0f);
-	glm::mat4 t = glm::translate(p, entity->transform.position);
-	glm::mat4 y = glm::rotate(t, entity->transform.rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 x = glm::rotate(y, entity->transform.rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::mat4 z = glm::rotate(x, entity->transform.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	m_projMatrix = CreateProjectionMatrix(60.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
+	UpdateShaderMvp();
+}
 
-	m_material->GetShader()->SetMvpMatrix(z);
+void MeshRenderer::SetShaderMvp(Camera * _camera)
+{
+	m_viewMatrix = _camera->GetViewMatrix();
+	m_projMatrix = _camera->GetProjectionMatrix();
+	UpdateShaderMvp();
+}
+
+void MeshRenderer::UpdateShaderMvp()
+{
+	m_modelMatrix = CreateModelMatrix(entity->transform);
+	m_mvpMatrix = m_projMatrix * m_viewMatrix *  m_modelMatrix;
+
+	m_material->GetShader()->SetMvpMatrix(m_mvpMatrix);
 }

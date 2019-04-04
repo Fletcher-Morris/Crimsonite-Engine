@@ -52,6 +52,7 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	m_monitor = glfwGetPrimaryMonitor();
 	m_videoMode = glfwGetVideoMode(m_monitor);
+	//m_window = glfwCreateWindow(1600, 900, _appName.c_str(), NULL, NULL);
 	m_window = glfwCreateWindow(m_videoMode->width, m_videoMode->height, _appName.c_str(), m_monitor, NULL);
 	if (!m_window)
 	{
@@ -166,8 +167,10 @@ void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
 	glViewport(0, 0, _width, _height);
 
-	if (ecsSystem->FindEntity("Camera"))
+	std::vector<Camera*> cameras = ecsSystem->GetAllComponentsOfType<Camera>();
+	std::cout << "Found " << cameras.size() << " Cameras" << std::endl;
+	for (int i = 0; i < cameras.size(); i++)
 	{
-		ecsSystem->FindEntity("Camera")->GetComponent<Camera>().SetCameraSettings(_width, _height);
+		cameras[i]->SetCameraSettings(_width, _height);
 	}
 }

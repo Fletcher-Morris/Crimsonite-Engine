@@ -50,7 +50,7 @@ void Editor::LoadIcons()
 
 void CreateObject(std::string _meshName)
 {
-	m_engine->ECS()->NewEntity("new entity");
+	m_engine->ECS()->NewEntity(_meshName);
 	MeshRenderer * mesh = &m_engine->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
 	mesh->SetMesh(_meshName);
 	mesh->SetRenderer(m_engine->m_renderer);
@@ -137,6 +137,10 @@ void Editor::DrawGui()
 			{
 				CreateObject("dragon");
 			}
+			if (ImGui::Button("Teapot"))
+			{
+				CreateObject("teapot");
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Window"))
@@ -205,7 +209,7 @@ void Editor::DrawGui()
 		ImGui::SameLine();
 		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
 		ImGui::SameLine();
-		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_stop")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("error")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
 
 	}
 	ImGui::End();

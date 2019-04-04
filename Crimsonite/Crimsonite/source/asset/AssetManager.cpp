@@ -790,27 +790,83 @@ bool AssetManager::TextureExists(std::string _textureName)
 
 void AssetManager::CreateErrorTexture()
 {
-	const int width = 16;
-	const int height = 16;
-	const int size = height * width * 4;
-	unsigned char data[size];
+	unsigned char data[64];
 
-	for (int i = 0; i < size; i+=4)
 	{
-		data[i+0] = 255;
-		data[i+1] = 0;
-		data[i+2] = 255;
-		data[i+3] = 255;
+		data[0] = 255;
+		data[1] = 0;
+		data[2] = 255;
+		data[3] = 255;
+		data[4] = 0;
+		data[5] = 0;
+		data[6] = 0;
+		data[7] = 255;
+		data[8] = 255;
+		data[9] = 0;
+		data[10] = 255;
+		data[11] = 255;
+		data[12] = 0;
+		data[13] = 0;
+		data[14] = 0;
+		data[15] = 255;
+		data[16] = 0;
+		data[17] = 0;
+		data[18] = 0;
+		data[19] = 255;
+		data[20] = 255;
+		data[21] = 0;
+		data[22] = 255;
+		data[23] = 255;
+		data[24] = 0;
+		data[25] = 0;
+		data[26] = 0;
+		data[27] = 255;
+		data[28] = 255;
+		data[29] = 0;
+		data[30] = 255;
+		data[31] = 255;
+		data[32] = 255;
+		data[33] = 0;
+		data[34] = 255;
+		data[35] = 255;
+		data[36] = 0;
+		data[37] = 0;
+		data[38] = 0;
+		data[39] = 255;
+		data[40] = 255;
+		data[41] = 0;
+		data[42] = 255;
+		data[43] = 255;
+		data[44] = 0;
+		data[45] = 0;
+		data[46] = 0;
+		data[47] = 255;
+		data[48] = 0;
+		data[49] = 0;
+		data[50] = 0;
+		data[51] = 255;
+		data[52] = 255;
+		data[53] = 0;
+		data[54] = 255;
+		data[55] = 255;
+		data[56] = 0;
+		data[57] = 0;
+		data[58] = 0;
+		data[59] = 255;
+		data[60] = 255;
+		data[61] = 0;
+		data[62] = 255;
+		data[63] = 255;
 	}
 
-	m_textures["error"] = Texture("error", width, height, data);
+	m_textures["error"] = Texture("error", 4, 4, data);
 	Texture * tex = &m_textures.at("error");
 
 	glGenTextures(1, &tex->TextureId);
 	glBindTexture(GL_TEXTURE_2D, tex->TextureId);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 

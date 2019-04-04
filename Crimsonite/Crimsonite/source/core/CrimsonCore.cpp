@@ -93,6 +93,7 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMesh("dragon", m_assetPath + "meshes/dragon");
 	Assets->LoadMesh("spring", m_assetPath + "meshes/spring");
 	Assets->LoadMesh("knot", m_assetPath + "meshes/knot");
+	Assets->LoadMesh("teapot", m_assetPath + "meshes/teapot");
 
 	Assets->LoadShader("color", m_assetPath + "shaders/vertex.vert", m_assetPath + "shaders/fragment.frag");
 	Assets->CreatePassthroughShader();

@@ -216,6 +216,7 @@ public:
 	//	Called by the editor.
 	void DrawEditorProperties()
 	{
+		ImGui::Text("%s", m_name.c_str());
 		std::string enableString = "ENABLE";
 		if(m_enabled) enableString = "DISABLE";
 		if (ImGui::Button(enableString.c_str()))
@@ -344,6 +345,7 @@ public:
 	//	Create a new entity with a given name.
 	EcsEntity& NewEntity(std::string _entityName)
 	{
+		if (FindEntity(_entityName)) _entityName = _entityName + "1";
 		EcsEntity * newEntity = new EcsEntity(this, _entityName);
 		std::unique_ptr<EcsEntity>entPtr{ newEntity };
 		entities.emplace_back(std::move(entPtr));

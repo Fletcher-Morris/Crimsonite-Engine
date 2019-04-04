@@ -123,6 +123,15 @@ std::string Material::GetReservedPropertyName(int _index)
 
 void Material::DrawEditorProperties()
 {
+	ImGui::Text("Name : '%s'", GetName().c_str());
+	ImGui::Text("Shader : '%s'", GetShader()->GetName().c_str());
+	float col[4];
+	col[0] = GetColor().r;
+	col[1] = GetColor().g;
+	col[2] = GetColor().b;
+	col[3] = GetColor().a;
+	ImGui::ColorEdit4("Main Color", col);
+	SetColor(glm::vec4{ col[0], col[1], col[2], col[3] });
 	std::vector<std::string> texturePropertyNames = GetReservedTextureNames();
 	for (int t = 0; t < texturePropertyNames.size(); t++)
 	{

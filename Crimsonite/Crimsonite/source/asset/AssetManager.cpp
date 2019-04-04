@@ -216,7 +216,7 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 			}			
 		}
 		//	Create the new mesh.
-		Mesh newMesh(output_vertices, output_indices);
+		Mesh newMesh(output_vertices, output_indices, _meshName);
 		//	Upload the new mesh to the GPU.
 		newMesh.UploadToGpu();
 		//	Store the new mesh in the asset manager.
@@ -306,7 +306,7 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				}
 				output_indices.push_back(ind);
 			}
-			m_meshes[_meshName] = Mesh(output_vertices, output_indices);
+			m_meshes[_meshName] = Mesh(output_vertices, output_indices, _meshName);
 			WriteMeshFile(m_meshes[_meshName], _filePath + ".mesh");
 			LoadMeshName(_meshName);
 			std::cout << "Loaded OBJ file : " << _filePath << std::endl;
@@ -625,6 +625,7 @@ void AssetManager::CreateErrorMesh()
 	m_errorMesh.indices.push_back(5);//back
 	m_errorMesh.indices.push_back(3);//left
 	m_errorMesh.UploadToGpu();
+	m_errorMesh.SetName("error");
 	m_errorMeshCreated = true;
 	std::cout << "Created Error Mesh." << std::endl;
 }

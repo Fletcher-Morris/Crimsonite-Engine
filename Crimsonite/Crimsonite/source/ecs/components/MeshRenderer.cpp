@@ -35,16 +35,29 @@ void MeshRenderer::OnDisable()
 
 void MeshRenderer::DrawEditorProperties()
 {
-	ImGui::Text("Name : '%s'", m_material->GetName().c_str());
-	ImGui::Text("Shader : '%s'", m_material->GetShader()->GetName().c_str());
-	float col [4];
-	col[0] = m_material->GetColor().r;
-	col[1] = m_material->GetColor().g;
-	col[2] = m_material->GetColor().b;
-	col[3] = m_material->GetColor().a;
-	ImGui::ColorEdit4("Main Color", col);
-	m_material->SetColor(glm::vec4{ col[0], col[1], col[2], col[3] });
-
+	std::string currentMeshName = m_mesh->GetName();
+	if (currentMeshName == "" || m_mesh == NULL)
+	{
+		currentMeshName == "error";
+	}
+	if (ImGui::BeginCombo("Mesh", currentMeshName.c_str()))
+	{
+		for (int i = 0; i < AssetManager::Instance()->MeshCount(); i++)
+		{
+			std::string foundMeshName = AssetManager::Instance()->GetMesh(i)->GetName();
+			bool isSelected = (currentMeshName == foundMeshName);
+			if (ImGui::Button(foundMeshName.c_str()))
+			{
+				SetMesh(foundMeshName);
+			}
+			if (isSelected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::NewLine();
 	m_material->DrawEditorProperties();
 }
 

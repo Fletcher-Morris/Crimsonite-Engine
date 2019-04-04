@@ -35,7 +35,7 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
-	void SetMvpMatrix(const glm::mat4 _mvp);
+	void SetMvpMatrix(const glm::mat4 _m, const glm::mat4 _v, const glm::mat4 _p);
 	void SetBool(const std::string& _name, bool _value);
 	void SetInt(const std::string& _name, int _value);
 	void SetFloat(const std::string& _name, float _value);

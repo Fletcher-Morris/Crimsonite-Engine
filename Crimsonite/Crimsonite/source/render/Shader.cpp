@@ -126,12 +126,18 @@ void Shader::Unbind() const
 	glUseProgram(0);
 }
 
-void Shader::SetMvpMatrix(const glm::mat4 _mvp)
+void Shader::SetMvpMatrix(const glm::mat4 _m, const glm::mat4 _v, const glm::mat4 _p)
 {
 	if (ShaderId == 0) return;
-	int location = GetUniformLocation("u_MVP");
+	int location = GetUniformLocation("Model");
 	if (location == -1) return;
-	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(_mvp));
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(_m));
+	location = GetUniformLocation("View");
+	if (location == -1) return;
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(_v));
+	location = GetUniformLocation("Projection");
+	if (location == -1) return;
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(_p));
 }
 
 void Shader::SetBool(const std::string & _name, bool _value)

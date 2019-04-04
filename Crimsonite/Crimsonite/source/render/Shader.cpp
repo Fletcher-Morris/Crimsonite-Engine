@@ -206,6 +206,7 @@ void Shader::SetVector4(const std::string & _name, glm::vec4 _value)
 
 void Shader::SetTexture(const std::string & _name, Texture * _texture)
 {
+	if (_texture == NULL) return;
 	if (ShaderId == 0) return;
 	int location = GetUniformLocation(_name);
 	if (location == -1) return;

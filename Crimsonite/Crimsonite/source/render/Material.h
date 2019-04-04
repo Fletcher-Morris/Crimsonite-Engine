@@ -40,9 +40,12 @@ public:
 	void SetMainTex(std::string _textureName);
 	void SetMainTex(Texture * _texture);
 
-	void ReservePropertyName(std::string _propertyName);
-	int GetReservedPropertyIndex(std::string _propertyName);
+	void ReserveTexturePropertyName(std::string _propertyName);
+	std::vector<std::string>  GetReservedTextureNames() { return m_reservedTexturePropertyNames; }
+	int GetReservedPropertyIndex(std::vector<std::string> * _reservedPopertyArray, std::string _propertyName);
 	std::string GetReservedPropertyName(int _index);
+
+	void DrawEditorProperties();
 
 private:
 
@@ -51,4 +54,5 @@ private:
 	glm::vec4 m_color;
 
 	std::vector<std::string> m_reservedPropertyNames;
+	std::vector<std::string> m_reservedTexturePropertyNames;
 };

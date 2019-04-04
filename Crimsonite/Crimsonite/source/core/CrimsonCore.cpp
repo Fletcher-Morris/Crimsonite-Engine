@@ -80,6 +80,8 @@ void CrimsonCore::InitializeGlew()
 
 void CrimsonCore::RunEngine()
 {
+	if (m_editor) m_editor->Init();
+
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	Assets->LoadTexture("noise", m_assetPath + "textures/noise.png");
@@ -102,10 +104,13 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMaterial(m_assetPath + "materials/room");
 	Assets->LoadMaterial(m_assetPath + "materials/flat");
 
-	m_ecs->NewEntity("Camera");
+	m_ecs->NewEntity("MainCamera");
 	Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
 	mainCamera->entity->MakeImmortal(true);
 	mainCamera->SetRenderer(m_renderer);
+	AssetManager::Instance()->CreateFrameBuffer("MainCamBuffer", GetVideoMode()->width, GetVideoMode()->height);
+
+	mainCamera->SetOutputFrameBuffer("MainCamBuffer");
 
 	m_ecs->NewEntity("DRAGON");
 	m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
@@ -130,13 +135,6 @@ void CrimsonCore::RunEngine()
 	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("flat");
 	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-0.8, 0, -1.2);
 	m_ecs->NewestEntity()->AttachComponent<Rotator>();
-
-
-	if (m_editor != NULL)
-	{
-		m_editor->Init();
-		mainCamera->SetOutputFrameBuffer("viewport");
-	}
 
 
 	while (!glfwWindowShouldClose(m_window) && m_quit == false)

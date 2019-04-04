@@ -7,6 +7,7 @@
 #include "../ecs/ECS.h"
 
 class CrimsonCore;
+class Camera;
 
 #define TOOL_MOVE 1
 #define TOOL_ROTATE 2
@@ -40,6 +41,7 @@ public:
 	int m_selectedTool = 0;
 	void SelectEditorTool(int _tool);
 
+	Camera * m_editorCam;
 
 	EcsEntity * m_selectedEntity;
 	/*void SelectEntity(int _id);

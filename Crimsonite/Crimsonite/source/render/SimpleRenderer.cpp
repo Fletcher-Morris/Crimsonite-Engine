@@ -87,7 +87,7 @@ void SimpleRenderer::Flush()
 	glClear(GL_COLOR_BUFFER_BIT);
 	AssetManager::Instance()->GetPassthroughShader()->Bind();
 	glBindVertexArray(AssetManager::Instance()->GetMesh("quad")->GetVao());
-	AssetManager::Instance()->GetTexture("viewport")->Bind();
+	AssetManager::Instance()->GetTexture("EditorViewport")->Bind();
 	glDrawElements(GL_TRIANGLES, AssetManager::Instance()->GetMesh("quad")->IndexCount(), GL_UNSIGNED_INT, 0);
 
 	m_cameras.clear();

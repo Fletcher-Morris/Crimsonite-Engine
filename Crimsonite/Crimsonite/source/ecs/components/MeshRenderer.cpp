@@ -44,6 +44,8 @@ void MeshRenderer::DrawEditorProperties()
 	col[3] = m_material->GetColor().a;
 	ImGui::ColorEdit4("Main Color", col);
 	m_material->SetColor(glm::vec4{ col[0], col[1], col[2], col[3] });
+
+	m_material->DrawEditorProperties();
 }
 
 void MeshRenderer::SetMesh(Mesh * _newMesh)

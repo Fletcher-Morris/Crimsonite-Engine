@@ -27,7 +27,13 @@ void Editor::Init()
 
 	LoadIcons();
 
-	AssetManager::Instance()->CreateFrameBuffer("viewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
+	AssetManager::Instance()->CreateFrameBuffer("EditorViewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
+
+	m_editorCam = &m_engine->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
+	m_editorCam->SetOutputFrameBuffer("EditorViewport");
+	m_editorCam->entity->MakeImmortal(true);
+	m_editorCam->SetRenderer(m_engine->m_renderer);
+
 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigDockingWithShift = false;
@@ -96,6 +102,7 @@ void Editor::DrawGui()
 				{
 					ImGui::Text("%s", AssetManager::Instance()->GetTexture(i)->GetName().c_str());
 					ImGui::Text("%i X %i", AssetManager::Instance()->GetTexture(i)->GetWidth(), AssetManager::Instance()->GetTexture(i)->GetHeight());
+					ImGui::Text("GL ID : %i", AssetManager::Instance()->GetTexture(i)->TextureId);
 					if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture(i)->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
 					ImGui::Separator();
 				}
@@ -216,7 +223,7 @@ void Editor::DrawGui()
 
 	ImGui::Begin("Viewport");
 	{
-		ImGui::Image((GLuint*)AssetManager::Instance()->GetTexture("viewport")->TextureId, ImVec2(1280, 720));
+		ImGui::Image((GLuint*)AssetManager::Instance()->GetTexture("EditorViewport")->TextureId, ImVec2(1280, 720));
 	}
 	ImGui::End();
 

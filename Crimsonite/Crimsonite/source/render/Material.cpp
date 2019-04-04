@@ -1,6 +1,7 @@
 #include "Material.h"
 
 #include "../asset/AssetManager.h"
+#include "../external/imgui/imgui.h"
 
 Material::Material()
 {
@@ -88,21 +89,21 @@ void Material::SetMainTex(Texture * _texture)
 	SetTextureProperty("MainTex", _texture);
 }
 
-void Material::ReservePropertyName(std::string _propertyName)
+void Material::ReserveTexturePropertyName(std::string _propertyName)
 {
 	if (_propertyName == "") return;
-	if (GetReservedPropertyIndex(_propertyName) == -1)
+	if (GetReservedPropertyIndex(&m_reservedTexturePropertyNames, _propertyName) == -1)
 	{
-		m_reservedPropertyNames.push_back(_propertyName);
+		m_reservedTexturePropertyNames.push_back(_propertyName);
 	}
 }
 
-int Material::GetReservedPropertyIndex(std::string _propertyName)
+int Material::GetReservedPropertyIndex(std::vector<std::string> * _reservedPopertyArray, std::string _propertyName)
 {
 	if (_propertyName == "") return -1;
 	for (int i = 0; i < m_reservedPropertyNames.size(); i++)
 	{
-		if (m_reservedPropertyNames[i] == _propertyName)
+		if (_reservedPopertyArray->at(i) == _propertyName)
 		{
 			return i;
 		}
@@ -118,4 +119,46 @@ std::string Material::GetReservedPropertyName(int _index)
 		return m_reservedPropertyNames[_index];
 	}
 	return "";
+}
+
+void Material::DrawEditorProperties()
+{
+	std::vector<std::string> texturePropertyNames = GetReservedTextureNames();
+	for (int t = 0; t < texturePropertyNames.size(); t++)
+	{
+		std::string reservedTexName = texturePropertyNames.at(t);
+		Texture * currentTex = textureProperties[reservedTexName];
+		if (currentTex == NULL)
+		{
+			currentTex = AssetManager::Instance()->GetTexture("error");
+		}
+		std::string currentTexName = currentTex->GetName();
+		if (ImGui::BeginCombo(reservedTexName.c_str(), currentTexName.c_str()))
+		{
+			int r = 0;
+			for (int i = 0; i < AssetManager::Instance()->TextureCount(); i++)
+			{
+				std::string foundTexName = AssetManager::Instance()->GetTexture(i)->GetName();
+				bool isSelected = (currentTexName == foundTexName);
+				if (r < 6)
+				{
+					ImGui::SameLine();
+					r++;
+				}
+				else
+				{
+					r = 0;
+				}
+				if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture(i)->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128)))
+				{
+					SetTextureProperty(reservedTexName, foundTexName);
+				}
+				if (isSelected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+	}
 }

@@ -511,7 +511,7 @@ void AssetManager::LoadMaterial(std::string _filePath)
 				std::string textureName;
 				fscanf(file, "%s", &lineHeader);
 				textureName = (std::string)lineHeader;
-				newMat.ReservePropertyName("MainTex");
+				newMat.ReserveTexturePropertyName("MainTex");
 				newMat.SetTextureProperty("MainTex", textureName);
 				propertyRefCount++;
 			}
@@ -521,7 +521,7 @@ void AssetManager::LoadMaterial(std::string _filePath)
 				std::string propertyName;
 				fscanf(file, "%s", &lineHeader);
 				propertyName = (std::string)lineHeader;
-				newMat.ReservePropertyName(propertyName);
+				newMat.ReserveTexturePropertyName(propertyName);
 			}
 			//	Get a Texture reference.
 			else if (strcmp(lineHeader, "texture-reference") == 0)
@@ -772,6 +772,7 @@ void AssetManager::CreateDefaultMaterial()
 {
 	if (m_defaultMaterialCreated == true) return;
 	Material newMat = Material("default");
+	newMat.ReserveTexturePropertyName("MainTex");
 	newMat.SetShader("default");
 	newMat.SetColor({ 1.0f,1.0f,1.0f });
 	m_materials["default"] = newMat;

@@ -19,7 +19,8 @@ dir.x = 1;
 dir.y = -1;
 dir.z = 1;
 dir = normalize(dir);
+float min = 0.2;
 float light = max(dot(norm, dir), 0.0);
-
+light = max(min, light);
 color = texColor * Color * light;
 }

@@ -18,8 +18,6 @@ private:
 
 	int m_renderMode = GL_TRIANGLES;
 
-	int i = 0;
-
 	glm::mat4 m_modelMatrix;
 	glm::mat4 m_viewMatrix;
 	glm::mat4 m_projMatrix;

@@ -773,11 +773,51 @@ bool AssetManager::TextureExists(std::string _textureName)
 
 void AssetManager::CreateErrorTexture()
 {
+	const int width = 16;
+	const int height = 16;
+	const int size = height * width * 4;
+	unsigned char data[size];
+
+	for (int i = 0; i < size; i+=4)
+	{
+		data[i+0] = 255;
+		data[i+1] = 0;
+		data[i+2] = 255;
+		data[i+3] = 255;
+	}
+
+	m_textures["error"] = Texture("error", width, height, data);
+	Texture * tex = &m_textures.at("error");
+
+	glGenTextures(1, &tex->TextureId);
+	glBindTexture(GL_TEXTURE_2D, tex->TextureId);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex->GetWidth(), tex->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->ImageData);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	if (!TextureExists("error"))
+	{
+		m_loadedTextureNames.push_back("error");
+	}
+
+	m_errorTextureCreated = true;
+
+	std::cout << "Created Error Texture." << std::endl;
 }
 
 Texture * AssetManager::GetErrorTexture()
 {
-	return nullptr;
+	if (m_errorTextureCreated == false)
+	{
+		CreateErrorTexture();
+	}
+	return GetTexture("error");
 }
 
 bool AssetManager::FrameBufferExists(std::string _bufferName)

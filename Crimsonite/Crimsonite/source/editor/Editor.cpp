@@ -42,6 +42,10 @@ void Editor::LoadIcons()
 	AssetManager::Instance()->LoadTexture("editor_tool_rotate_selected", m_engine->AssetsPath() + "editor/tool_rotate_selected.png");
 	AssetManager::Instance()->LoadTexture("editor_tool_scale", m_engine->AssetsPath() + "editor/tool_scale.png");
 	AssetManager::Instance()->LoadTexture("editor_tool_scale_selected", m_engine->AssetsPath() + "editor/tool_scale_selected.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_play", m_engine->AssetsPath() + "editor/tool_play.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_play_selected", m_engine->AssetsPath() + "editor/tool_play_selected.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_stop", m_engine->AssetsPath() + "editor/tool_stop.png");
+	AssetManager::Instance()->LoadTexture("editor_tool_stop_selected", m_engine->AssetsPath() + "editor/tool_stop_selected.png");
 }
 
 void CreateObject(std::string _meshName)
@@ -90,8 +94,10 @@ void Editor::DrawGui()
 			{
 				for (int i = 0; i < AssetManager::Instance()->TextureCount(); i++)
 				{
-					ImGui::LabelText(AssetManager::Instance()->GetTexture(i)->GetName().c_str(),"");
+					ImGui::Text("%s", AssetManager::Instance()->GetTexture(i)->GetName().c_str());
+					ImGui::Text("%i X %i", AssetManager::Instance()->GetTexture(i)->GetWidth(), AssetManager::Instance()->GetTexture(i)->GetHeight());
 					if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture(i)->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
+					ImGui::Separator();
 				}
 				ImGui::EndMenu();
 			}
@@ -195,6 +201,12 @@ void Editor::DrawGui()
 			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_scale")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{ SelectEditorTool(TOOL_SCALE); }
 		}
+
+		ImGui::SameLine();
+		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+		ImGui::SameLine();
+		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_stop")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+
 	}
 	ImGui::End();
 

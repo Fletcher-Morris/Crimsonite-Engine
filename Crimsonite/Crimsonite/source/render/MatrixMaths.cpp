@@ -20,7 +20,6 @@ glm::mat4 CreateViewMatrix(const Camera & _camera)
 	view = glm::rotate(view, glm::radians(_camera.entity->transform.rotation.y), { 0,1,0 });
 	view = glm::rotate(view, glm::radians(_camera.entity->transform.rotation.z), { 0,0,1 });
 	view = glm::translate(glm::mat4(1.0f), -_camera.entity->transform.position);
-	std::cout << "Created View Matrix" << std::endl;
 	return view;
 }
 

@@ -87,13 +87,25 @@ void SimpleRenderer::Flush()
 	glClear(GL_COLOR_BUFFER_BIT);
 	AssetManager::Instance()->GetPassthroughShader()->Bind();
 	glBindVertexArray(AssetManager::Instance()->GetMesh("quad")->GetVao());
+	AssetManager::Instance()->GetTexture("MainCamBuffer")->Bind();
+	glDrawElements(GL_TRIANGLES, AssetManager::Instance()->GetMesh("quad")->IndexCount(), GL_UNSIGNED_INT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+#if _DEBUG
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDisable(GL_DEPTH_TEST);
+	glClearColor(p_r, p_g, p_b, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	AssetManager::Instance()->GetPassthroughShader()->Bind();
+	glBindVertexArray(AssetManager::Instance()->GetMesh("quad")->GetVao());
 	AssetManager::Instance()->GetTexture("EditorViewport")->Bind();
 	glDrawElements(GL_TRIANGLES, AssetManager::Instance()->GetMesh("quad")->IndexCount(), GL_UNSIGNED_INT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+#endif
 
 	m_cameras.clear();
 	m_meshes.clear();
 	m_meshRenderers.clear();
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void SimpleRenderer::SetClearColor(float _clearColor[3])

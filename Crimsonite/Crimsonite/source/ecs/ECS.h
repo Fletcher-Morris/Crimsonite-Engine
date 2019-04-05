@@ -345,7 +345,23 @@ public:
 	//	Create a new entity with a given name.
 	EcsEntity& NewEntity(std::string _entityName)
 	{
-		if (FindEntity(_entityName)) _entityName = _entityName + "1";
+		bool nameFound = false;
+		int entityCounter = 1;
+		std::string tempName = _entityName;
+		while (nameFound == false)
+		{
+			if (FindEntity(tempName))
+			{
+				entityCounter++;
+				tempName = _entityName + " (" + std::to_string(entityCounter) + ")";
+
+			}
+			else
+			{
+				nameFound = true;
+			}
+		}
+		_entityName = tempName;
 		EcsEntity * newEntity = new EcsEntity(this, _entityName);
 		std::unique_ptr<EcsEntity>entPtr{ newEntity };
 		entities.emplace_back(std::move(entPtr));

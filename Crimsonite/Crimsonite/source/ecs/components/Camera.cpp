@@ -33,6 +33,10 @@ void Camera::OnDisable()
 
 void Camera::DrawEditorProperties()
 {
+	if (m_frameBuffer)
+	{
+		ImGui::Image((GLuint*)m_frameBuffer->GetLinkedTexture()->TextureId, ImVec2(267, 150));
+	}
 	float newFov = GetCameraSettings().fov;
 	ImGui::DragFloat("FOV", &newFov, 1.0f, 179.0f);
 	SetCameraSettings(newFov);

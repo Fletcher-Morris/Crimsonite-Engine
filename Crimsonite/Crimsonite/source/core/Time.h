@@ -16,6 +16,10 @@ public:
 	static double DeltaTimeDouble() { return Instance()->m_deltaTimeDouble; }
 	//	Return DeltaTime as a double.
 	static double FixedTimeDouble() { return Instance()->m_fixedTimeDouble; }
+	//	Return the current time as a float.
+	static float GetTime() { return (float) Instance()->m_currentFrameTime; }
+	//	Return the current time as a float.
+	static double GetTimeDouble() { return Instance()->m_currentFrameTime; }
 
 	//	Set the frame time to calculate DeltaTime.
 	static void SetFrameTime(double _frameTime);

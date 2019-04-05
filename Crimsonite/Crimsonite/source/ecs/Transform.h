@@ -24,6 +24,25 @@ public:
 	//	The scale of this transform.
 	glm::vec3 scale;
 
+	glm::vec3 Forward()
+	{
+		forward.x = sin(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
+		forward.y = sin(glm::radians(rotation.x));
+		forward.z = cos(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
+		forward = glm::normalize(forward);
+		return forward;
+	}
+	glm::vec3 Right()
+	{
+		right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), Forward()));
+		return right;
+	}
+	glm::vec3 Up()
+	{
+		up = glm::cross(Forward(), Right());
+		return up;
+	}
+
 	void SetPosition(glm::vec3 _newPos) { position = _newPos; }
 	void SetPosition(float _x, float _y, float _z) { position = { _x,_y,_z }; }
 	glm::vec3 GetPosition() { return position; }
@@ -68,6 +87,8 @@ public:
 
 private:
 
-
+	glm::vec3 forward;
+	glm::vec3 right;
+	glm::vec3 up;
 
 };

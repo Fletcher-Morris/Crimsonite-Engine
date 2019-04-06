@@ -31,6 +31,10 @@ void Camera::OnDisable()
 {
 }
 
+void Camera::Deserialize(std::vector<std::string> _data)
+{
+}
+
 void Camera::DrawEditorProperties()
 {
 	if (m_frameBuffer)
@@ -44,6 +48,7 @@ void Camera::DrawEditorProperties()
 	ImGui::Text("Height : %i", m_settings.height);
 	//ImGui::DragFloat("Near Clip", &newSettings.nearClip, 0.01f, 1000.0f);
 	//ImGui::DragFloat("Far Clip", &newSettings.farClip, 0.01f, 1000.0f);
+
 }
 
 void Camera::SetCameraSettings(CameraSettings _newSettings)

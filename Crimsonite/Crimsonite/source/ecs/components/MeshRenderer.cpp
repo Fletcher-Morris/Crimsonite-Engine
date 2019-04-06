@@ -33,6 +33,10 @@ void MeshRenderer::OnDisable()
 {
 }
 
+void MeshRenderer::Deserialize(std::vector<std::string> _data)
+{
+}
+
 void MeshRenderer::DrawEditorProperties()
 {
 	std::string currentMeshName = m_mesh->GetName();

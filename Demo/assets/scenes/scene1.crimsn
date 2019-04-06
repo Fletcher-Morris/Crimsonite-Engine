@@ -1,0 +1,7 @@
+SceneName TestScene
+BeginEntity
+EndEntity
+BeginComponent
+EndComponent
+BeginRenderer
+EndRenderer

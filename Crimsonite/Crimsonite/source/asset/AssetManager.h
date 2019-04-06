@@ -12,6 +12,7 @@
 #include "../mesh/Mesh.h"
 #include "../render/Shader.h"
 #include "../render/Material.h"
+#include "Scene.h"
 
 class AssetManager
 {

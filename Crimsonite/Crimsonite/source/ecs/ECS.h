@@ -68,6 +68,9 @@ public:
 	//	Called when the component becomes disabled.
 	virtual void OnDisable() {}
 
+	//	Called when loading the scene.
+	virtual void Deserialize(std::vector<std::string> _data) {};
+
 	//	Draw the ImGui Editor properties.
 	virtual void DrawEditorProperties() {};
 
@@ -172,6 +175,20 @@ public:
 
 	//	Return the number of components on this entity.
 	int ComponentCount() { return m_componentsArray.size(); }
+
+	//	Called when loading the scene.
+	void Deserialize(std::vector<std::string> _data)
+	{
+		std::string serializedName = _data[0];
+		std::string serializedEnabled = _data[1];
+		std::string serializedImmortal = _data[2];
+		std::string serializedPosX = _data[3];
+		std::string serializedPosY = _data[4];
+		std::string serializedPosZ = _data[5];
+		std::string serializedRotX = _data[6];
+		std::string serializedRotY = _data[7];
+		std::string serializedRotZ = _data[8];
+	}
 
 	//	Called every frame.
 	void Update()

@@ -462,7 +462,7 @@ void AssetManager::LoadMaterial(std::string _filePath)
 		FILE * file = fopen((_filePath + ".material").c_str(), "r");
 
 		int res = 0;
-		//	Read though the mesh file.
+		//	Read though the material file.
 
 		int propertyRefCount = 0;
 
@@ -475,7 +475,7 @@ void AssetManager::LoadMaterial(std::string _filePath)
 			{
 				int fileRevision;
 				fscanf(file, "%d", &fileRevision);
-				//	Check if the mesh file matches the latest format revision.
+				//	Check if the material file matches the latest format revision.
 				if (fileRevision != m_latestMaterialRevision)
 				{
 					std::cout << "Material is out of date (" << _filePath << ")" << std::endl;
@@ -908,4 +908,26 @@ Material * AssetManager::GetDefaultMaterial()
 {
 	CreateDefaultMaterial();
 	return &m_materials.at("default");
+}
+
+void AssetManager::LoadScene(std::string _scenePath)
+{
+	Scene loadedScene = Scene(_scenePath);
+	std::cout << "Loaded scene '" << loadedScene.GetName() << "'." << std::endl;
+}
+
+void AssetManager::SaveScene(Scene _scene)
+{
+}
+
+void AssetManager::SaveScene(std::string _sceneName)
+{
+}
+
+void AssetManager::OpenScene(Scene _scene)
+{
+}
+
+void AssetManager::OpenScene(std::string _sceneName)
+{
 }

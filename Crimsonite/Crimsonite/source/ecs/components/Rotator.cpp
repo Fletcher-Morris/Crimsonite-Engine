@@ -26,6 +26,10 @@ void Rotator::OnDisable()
 {
 }
 
+void Rotator::Deserialize(std::vector<std::string> _data)
+{
+}
+
 void Rotator::DrawEditorProperties()
 {
 	float newAxis[3];

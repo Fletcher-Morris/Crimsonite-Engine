@@ -32,15 +32,28 @@ public:
 		forward = glm::normalize(forward);
 		return forward;
 	}
+	glm::vec3 Back()
+	{
+		return -Forward();
+	}
 	glm::vec3 Right()
 	{
 		right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), Forward()));
 		return right;
 	}
+	glm::vec3 Left()
+	{
+		return -Right();
+	}
 	glm::vec3 Up()
 	{
 		up = glm::cross(Forward(), Right());
+		up = glm::normalize(up);
 		return up;
+	}
+	glm::vec3 Down()
+	{
+		return -Up();
 	}
 
 	void SetPosition(glm::vec3 _newPos) { position = _newPos; }

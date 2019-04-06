@@ -250,6 +250,14 @@ public:
 		scale[2] = transform.GetScale().z;
 		ImGui::DragFloat3("Scale", scale, 0.25f);
 		transform.SetScale(glm::vec3{ scale[0],scale[1],scale[2] });
+
+		ImGui::Text("Forward  : %f,%f,%f", transform.Forward().x, transform.Forward().y, transform.Forward().z);
+		ImGui::Text("Backward : %f,%f,%f", transform.Back().x, transform.Back().y, transform.Back().z);
+		ImGui::Text("Up       : %f,%f,%f", transform.Up().x, transform.Up().y, transform.Up().z);
+		ImGui::Text("Down     : %f,%f,%f", transform.Down().x, transform.Down().y, transform.Down().z);
+		ImGui::Text("Right    : %f,%f,%f", transform.Right().x, transform.Right().y, transform.Right().z);
+		ImGui::Text("Left     : %f,%f,%f", transform.Left().x, transform.Left().y, transform.Left().z);
+
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			ImGui::NewLine();

@@ -3,6 +3,8 @@
 #include <fstream>
 #include <vector>
 
+#include "../core/Window.h"
+
 #define DESCRIBING_NULL 0
 #define DESCRIBING_ENTITY 1
 #define DESCRIBING_COMPONENT 2
@@ -10,7 +12,39 @@
 
 Scene::Scene(std::string _scenePath)
 {
+	m_path = _scenePath;
 
+	{
+		m_renderer = new SimpleRenderer();
+		m_ecs = new EcsSystem();
+		m_ecs->NewEntity("MainCamera");
+		Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+		mainCamera->entity->MakeImmortal(true);
+		mainCamera->SetRenderer(m_renderer);
+		AssetManager::Instance()->CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
+		mainCamera->SetOutputFrameBuffer("MainCamBuffer");
+		m_ecs->NewEntity("DRAGON");
+		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("dragon");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("room");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0, 0, -2.5);
+		m_ecs->NewestEntity()->AttachComponent<Rotator>();
+		m_ecs->NewEntity("CUBE");
+		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("cube");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("crimsontex");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0.8, 0, -1.2);
+		m_ecs->NewestEntity()->AttachComponent<Rotator>();
+		m_ecs->NewEntity("SPRING");
+		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("knot");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("flat");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-0.8, 0, -1.2);
+		m_ecs->NewestEntity()->AttachComponent<Rotator>();
+	}
 
 #pragma warning(push)
 #pragma warning(disable: 4996)
@@ -85,4 +119,25 @@ void Scene::Serialize()
 std::string Scene::GetSerializedString()
 {
 	return m_serializedString;
+}
+
+void Scene::Update()
+{
+	for (auto& ent : m_ecs->entities)ent->Update();
+}
+
+void Scene::FixedUpdate()
+{
+	for (auto& ent : m_ecs->entities)ent->FixedUpdate();
+}
+
+void Scene::Render()
+{
+	for (auto& ent : m_ecs->entities)ent->Render();
+	m_renderer->Proccess();
+	m_renderer->Flush();
+}
+
+void Scene::FrameSizeChanged(int _width, int _height)
+{
 }

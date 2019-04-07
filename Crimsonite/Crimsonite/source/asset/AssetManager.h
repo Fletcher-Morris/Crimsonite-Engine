@@ -171,7 +171,14 @@ private:
 	bool m_defaultMaterialCreated = false;
 
 
-	//	SCENE MAP
+	//	The map of all loaded scenes.
+	std::map<std::string, Scene> m_scenes;
+	//	A vector of all loaded scene names.
+	std::vector<std::string> m_loadedSceneNames;
+	//	Add a Scene to the list of loaded scenes.
+	void LoadSceneName(std::string _sceneName);
+	//	Does a scene with a given name exist?
+	bool SceneExists(std::string _sceneName);
 
 protected:
 

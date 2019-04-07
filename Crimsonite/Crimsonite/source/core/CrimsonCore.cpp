@@ -5,7 +5,6 @@
 #include "../editor/Editor.h"
 
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
-EcsSystem * ecsSystem;
 
 CrimsonCore::CrimsonCore()
 {
@@ -35,10 +34,6 @@ void CrimsonCore::InitializeEngine(std::string _appName)
 {
 	InitializeGlfw(_appName);
 	InitializeGlew();
-
-	m_renderer = new SimpleRenderer();
-	m_ecs = new EcsSystem();
-	ecsSystem = m_ecs;
 }
 
 void CrimsonCore::InitializeGlfw(std::string _appName)
@@ -54,6 +49,7 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 	m_videoMode = glfwGetVideoMode(m_monitor);
 	//m_window = glfwCreateWindow(1600, 900, _appName.c_str(), NULL, NULL);
 	m_window = glfwCreateWindow(m_videoMode->width, m_videoMode->height, _appName.c_str(), m_monitor, NULL);
+	Window::SetSize(m_videoMode->width, m_videoMode->height);
 	if (!m_window)
 	{
 		std::cout << "Failed to create GLFW window!" << std::endl; return;
@@ -104,53 +100,16 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMaterial(m_assetPath + "materials/room");
 	Assets->LoadMaterial(m_assetPath + "materials/flat");
 
-	m_ecs->NewEntity("MainCamera");
-	Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
-	mainCamera->entity->MakeImmortal(true);
-	mainCamera->SetRenderer(m_renderer);
-	AssetManager::Instance()->CreateFrameBuffer("MainCamBuffer", GetVideoMode()->width, GetVideoMode()->height);
-
-	mainCamera->SetOutputFrameBuffer("MainCamBuffer");
-
-	m_ecs->NewEntity("DRAGON");
-	m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("dragon");
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("room");
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0, 0, -2.5);
-	m_ecs->NewestEntity()->AttachComponent<Rotator>();
-
-	m_ecs->NewEntity("CUBE");
-	m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("cube");
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("crimsontex");
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0.8, 0, -1.2);
-	m_ecs->NewestEntity()->AttachComponent<Rotator>();
-
-	m_ecs->NewEntity("SPRING");
-	m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("knot");
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("flat");
-	m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-0.8, 0, -1.2);
-	m_ecs->NewestEntity()->AttachComponent<Rotator>();
+	Assets->LoadScene(m_assetPath + "scenes/scene1");
 
 
 	while (!glfwWindowShouldClose(m_window) && m_quit == false)
 	{
 		Time::SetFrameTime(glfwGetTime());
-
-		for (auto& ent : m_ecs->entities)ent->Update();
-		for (auto& ent : m_ecs->entities)ent->Render();
-
-		m_renderer->Proccess();
-		m_renderer->Flush();
-
+		m_currentScene->Update();
+		m_currentScene->Render();
 		if (m_editor != NULL) m_editor->DrawGui();
-
 		glfwSwapBuffers(m_window);
-
 		glfwPollEvents();
 	}
 
@@ -164,12 +123,5 @@ void CrimsonCore::QuitEngine()
 
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
-	glViewport(0, 0, _width, _height);
-
-	std::vector<Camera*> cameras = ecsSystem->GetAllComponentsOfType<Camera>();
-	std::cout << "Found " << cameras.size() << " Cameras" << std::endl;
-	for (int i = 0; i < cameras.size(); i++)
-	{
-		cameras[i]->SetCameraSettings(_width, _height);
-	}
+	Window::SetSize(_width, _height);
 }

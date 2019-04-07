@@ -769,6 +769,23 @@ void AssetManager::LoadMaterialName(std::string _materiaName)
 	}
 }
 
+void AssetManager::LoadSceneName(std::string _sceneName)
+{
+	if (std::find(m_loadedSceneNames.begin(), m_loadedSceneNames.end(), _sceneName) == m_loadedSceneNames.end())
+	{
+		m_loadedMaterialNames.push_back(_sceneName);
+	}
+}
+
+bool AssetManager::SceneExists(std::string _sceneName)
+{
+	for (int i = 0; i < m_loadedSceneNames.size(); i++)
+	{
+		if (m_loadedSceneNames[i] == _sceneName) return true;
+	}
+	return false;
+}
+
 void AssetManager::CreateDefaultMaterial()
 {
 	if (m_defaultMaterialCreated == true) return;
@@ -913,7 +930,16 @@ Material * AssetManager::GetDefaultMaterial()
 void AssetManager::LoadScene(std::string _scenePath)
 {
 	Scene loadedScene = Scene(_scenePath);
-	std::cout << "Loaded scene '" << loadedScene.GetName() << "'." << std::endl;
+	if (loadedScene.GetName() != "")
+	{
+		m_scenes[loadedScene.GetName()] = loadedScene;
+		LoadSceneName(loadedScene.GetName());
+		std::cout << "Loaded scene '" << loadedScene.GetName() << "'." << std::endl;
+	}
+	else
+	{
+		std::cout << "Failed to load scene '" << _scenePath << "'!" << std::endl;
+	}
 }
 
 void AssetManager::SaveScene(Scene _scene)

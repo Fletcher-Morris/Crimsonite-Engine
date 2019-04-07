@@ -6,6 +6,8 @@
 #include <gl/glew.h>
 #include <glfw3.h>
 
+#include "Window.h"
+
 #include "../ecs/ECS.h"
 #include "../ecs/Components.h"
 #include "../asset/AssetManager.h"
@@ -25,18 +27,12 @@ public:
 	void InitializeGlfw(std::string _appName);
 	void InitializeGlew();
 
-	GLFWwindow * GetWindow() { return m_window; }
-	GLFWmonitor * GetMonitor() { return m_monitor; }
-	const GLFWvidmode * GetVideoMode() { return m_videoMode; }
-
 	void RunEngine();
 	void QuitEngine();
 
-
-	EcsSystem * ECS() { return m_ecs; }
-
 	std::string AssetsPath() { return m_assetPath; }
-	Renderer * m_renderer;
+
+	Scene * GetCurrentScene() { return m_currentScene; }
 
 private:
 
@@ -53,8 +49,9 @@ private:
 
 	Editor * m_editor;
 	AssetManager * Assets;
-	EcsSystem * m_ecs;
 
 	std::string m_assetPath = "";
+
+	Scene * m_currentScene;
 
 };

@@ -131,6 +131,12 @@
     <ClCompile Include="source\render\FrameBuffer.cpp">
       <Filter>Source Files\render</Filter>
     </ClCompile>
+    <ClCompile Include="source\asset\Scene.cpp">
+      <Filter>Source Files\asset</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core.h">
@@ -225,6 +231,12 @@
     </ClInclude>
     <ClInclude Include="source\render\FrameBuffer.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\asset\Scene.h">
+      <Filter>Header Files\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\Window.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

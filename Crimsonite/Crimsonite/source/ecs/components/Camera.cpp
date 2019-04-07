@@ -20,6 +20,12 @@ void Camera::OnFixedUpdate()
 void Camera::OnRender()
 {
 	if (!m_renderer) return;
+
+	bool dirty = false;
+	if (m_settings.width != Window::Width()) dirty = true;
+	if (m_settings.height != Window::Height()) dirty = true;
+	if (dirty) SetCameraSettings(Window::Width(), Window::Height());
+
 	m_renderer->Submit(this);
 }
 

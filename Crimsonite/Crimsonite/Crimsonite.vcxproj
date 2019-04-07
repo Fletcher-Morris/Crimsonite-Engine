@@ -13,9 +13,11 @@
   <ItemGroup>
     <ClCompile Include="source\asset\Asset.cpp" />
     <ClCompile Include="source\asset\AssetManager.cpp" />
+    <ClCompile Include="source\asset\Scene.cpp" />
     <ClCompile Include="source\core.cpp" />
     <ClCompile Include="source\core\CrimsonCore.cpp" />
     <ClCompile Include="source\core\Time.cpp" />
+    <ClCompile Include="source\core\Window.cpp" />
     <ClCompile Include="source\ecs\components\Camera.cpp" />
     <ClCompile Include="source\ecs\components\MeshRenderer.cpp" />
     <ClCompile Include="source\ecs\components\Rotator.cpp" />
@@ -38,9 +40,11 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="source\asset\Asset.h" />
     <ClInclude Include="source\asset\AssetManager.h" />
+    <ClInclude Include="source\asset\Scene.h" />
     <ClInclude Include="source\core.h" />
     <ClInclude Include="source\core\CrimsonCore.h" />
     <ClInclude Include="source\core\Time.h" />
+    <ClInclude Include="source\core\Window.h" />
     <ClInclude Include="source\ecs\Components.h" />
     <ClInclude Include="source\ecs\components\Camera.h" />
     <ClInclude Include="source\ecs\components\MeshRenderer.h" />

@@ -15,13 +15,20 @@ public:
 
 	Scene(std::string _scenePath);
 
+	void Reload(std::string _scenePath);
+	void Reload();
+
+	void Deserialize();
+
 	void Serialize();
 	std::string GetSerializedString();
+	void Save(std::string _scenePath);
+	void Save();
 
 	std::string GetName() { return m_name; }
 	void SetName(std::string _sceneName) { m_name = _sceneName; }
 	std::string GetPath() { return m_path; }
-	void SetPAth(std::string _path) { m_path = _path; }
+	void SetPath(std::string _path) { m_path = _path; }
 
 
 	EcsSystem * ECS() { return m_ecs; }

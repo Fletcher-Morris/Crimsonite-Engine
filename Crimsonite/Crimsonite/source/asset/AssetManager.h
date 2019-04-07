@@ -89,9 +89,10 @@ public:
 
 	//	SCENE METHODS
 	void LoadScene(std::string _scenePath);
-	void SaveScene(Scene _scene);
+	Scene * GetScene(std::string _sceneName);
+	void SaveScene(Scene * _scene);
 	void SaveScene(std::string _sceneName);
-	void OpenScene(Scene _scene);
+	void OpenScene(Scene * _scene);
 	void OpenScene(std::string _sceneName);
 
 private:

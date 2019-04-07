@@ -17,6 +17,7 @@ Scene::Scene(std::string _scenePath)
 	{
 		m_renderer = new SimpleRenderer();
 		m_ecs = new EcsSystem();
+
 		m_ecs->NewEntity("MainCamera");
 		Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
 		mainCamera->entity->MakeImmortal(true);
@@ -46,6 +47,11 @@ Scene::Scene(std::string _scenePath)
 		m_ecs->NewestEntity()->AttachComponent<Rotator>();
 	}
 
+	Reload(_scenePath);
+}
+
+void Scene::Reload(std::string _scenePath)
+{
 #pragma warning(push)
 #pragma warning(disable: 4996)
 	FILE * file = fopen((_scenePath + ".crimsn").c_str(), "r");
@@ -112,6 +118,18 @@ Scene::Scene(std::string _scenePath)
 #pragma warning(pop)
 }
 
+void Scene::Reload()
+{
+	Reload(m_path);
+}
+
+void Scene::Deserialize()
+{
+	m_serializedString = "";
+	m_serializedString += m_renderer->Serialize();
+	m_serializedString += "\n";
+}
+
 void Scene::Serialize()
 {
 }
@@ -119,6 +137,23 @@ void Scene::Serialize()
 std::string Scene::GetSerializedString()
 {
 	return m_serializedString;
+}
+
+void Scene::Save(std::string _scenePath)
+{
+	m_path = _scenePath;
+	Serialize();
+	std::ofstream file(m_path);
+	file << "# Crimsonite Scene File" << std::endl;
+	file << std::endl;
+	file << GetSerializedString();
+	file.close();
+	std::cout << "Saved scene '" << GetName() << "' to '" << m_path << "'." << std::endl;
+}
+
+void Scene::Save()
+{
+	Save(m_path);
 }
 
 void Scene::Update()

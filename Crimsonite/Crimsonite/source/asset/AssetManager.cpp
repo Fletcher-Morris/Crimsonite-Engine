@@ -942,16 +942,28 @@ void AssetManager::LoadScene(std::string _scenePath)
 	}
 }
 
-void AssetManager::SaveScene(Scene _scene)
+Scene * AssetManager::GetScene(std::string _sceneName)
 {
+	if (!SceneExists(_sceneName))
+	{
+		std::cout << "Scene '" << _sceneName << "' does not exist yet, but something is trying to access it." << std::endl;
+	}
+	return &m_scenes.at(_sceneName);
+}
+
+void AssetManager::SaveScene(Scene * _scene)
+{
+	_scene->Save();
 }
 
 void AssetManager::SaveScene(std::string _sceneName)
 {
+	SaveScene(GetScene(_sceneName));
 }
 
-void AssetManager::OpenScene(Scene _scene)
+void AssetManager::OpenScene(Scene * _scene)
 {
+	
 }
 
 void AssetManager::OpenScene(std::string _sceneName)

@@ -31,8 +31,9 @@ public:
 	virtual void OnRender() override;
 	virtual void OnEnable() override;
 	virtual void OnDisable() override;
-	virtual void Deserialize(std::vector<std::string> _data);
 	virtual void DrawEditorProperties() override;
+	virtual std::string Serialize() override;
+	virtual void Deserialize(std::vector<std::string> _data);
 
 	void SetMesh(Mesh * _newMesh);
 	void SetMesh(std::string _meshName);

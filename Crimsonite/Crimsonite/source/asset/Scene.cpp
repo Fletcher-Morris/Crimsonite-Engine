@@ -4,20 +4,26 @@
 #include <vector>
 
 #include "../core/Window.h"
+#include "../ecs/ECS.h"
+#include "../ecs/Components.h"
+#include "../asset/AssetManager.h"
+#include "../render/SimpleRenderer.h"
 
 #define DESCRIBING_NULL 0
 #define DESCRIBING_ENTITY 1
 #define DESCRIBING_COMPONENT 2
 #define DESCRIBING_RENDERER 3
 
-Scene::Scene(std::string _scenePath)
+Scene::Scene()
 {
-	m_path = _scenePath;
+	m_name = "New Scene";
+	m_path = "";
+	m_serializedString = "";
+
+	m_renderer = new SimpleRenderer();
+	m_ecs = new EcsSystem();
 
 	{
-		m_renderer = new SimpleRenderer();
-		m_ecs = new EcsSystem();
-
 		m_ecs->NewEntity("MainCamera");
 		Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
 		mainCamera->entity->MakeImmortal(true);
@@ -46,6 +52,44 @@ Scene::Scene(std::string _scenePath)
 		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-0.8, 0, -1.2);
 		m_ecs->NewestEntity()->AttachComponent<Rotator>();
 	}
+}
+
+Scene::Scene(std::string _scenePath)
+{
+	m_renderer = new SimpleRenderer();
+	m_ecs = new EcsSystem();
+
+	{
+		m_ecs->NewEntity("MainCamera");
+		Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+		mainCamera->entity->MakeImmortal(true);
+		mainCamera->SetRenderer(m_renderer);
+		AssetManager::Instance()->CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
+		mainCamera->SetOutputFrameBuffer("MainCamBuffer");
+		m_ecs->NewEntity("DRAGON");
+		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("dragon");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("room");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0, 0, -2.5);
+		m_ecs->NewestEntity()->AttachComponent<Rotator>();
+		m_ecs->NewEntity("CUBE");
+		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("cube");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("crimsontex");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0.8, 0, -1.2);
+		m_ecs->NewestEntity()->AttachComponent<Rotator>();
+		m_ecs->NewEntity("SPRING");
+		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("knot");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("flat");
+		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-0.8, 0, -1.2);
+		m_ecs->NewestEntity()->AttachComponent<Rotator>();
+	}
+
+	m_path = _scenePath;
 
 	Reload(_scenePath);
 }
@@ -125,13 +169,15 @@ void Scene::Reload()
 
 void Scene::Deserialize()
 {
-	m_serializedString = "";
-	m_serializedString += m_renderer->Serialize();
-	m_serializedString += "\n";
 }
 
 void Scene::Serialize()
 {
+	m_serializedString = "SceneName " + GetName();
+	m_serializedString += "\n";
+	m_serializedString += m_renderer->Serialize();
+	m_serializedString += "\n";
+	m_serializedString += m_ecs->Serialize();
 }
 
 std::string Scene::GetSerializedString()
@@ -143,9 +189,8 @@ void Scene::Save(std::string _scenePath)
 {
 	m_path = _scenePath;
 	Serialize();
-	std::ofstream file(m_path);
-	file << "# Crimsonite Scene File" << std::endl;
-	file << std::endl;
+	std::ofstream file(m_path + ".crimsn");
+	file << "# Crimsonite Scene File\n" << std::endl;
 	file << GetSerializedString();
 	file.close();
 	std::cout << "Saved scene '" << GetName() << "' to '" << m_path << "'." << std::endl;

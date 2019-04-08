@@ -773,7 +773,7 @@ void AssetManager::LoadSceneName(std::string _sceneName)
 {
 	if (std::find(m_loadedSceneNames.begin(), m_loadedSceneNames.end(), _sceneName) == m_loadedSceneNames.end())
 	{
-		m_loadedMaterialNames.push_back(_sceneName);
+		m_loadedSceneNames.push_back(_sceneName);
 	}
 }
 
@@ -929,12 +929,13 @@ Material * AssetManager::GetDefaultMaterial()
 
 void AssetManager::LoadScene(std::string _scenePath)
 {
-	Scene loadedScene = Scene(_scenePath);
-	if (loadedScene.GetName() != "")
+	m_scenes[m_sceneCount] = Scene(_scenePath);
+	std::cout << "Loaded scene '" << m_scenes[m_sceneCount].GetName() << "'." << std::endl;
+	if (m_scenes[m_sceneCount].GetName() != "")
 	{
-		m_scenes[loadedScene.GetName()] = loadedScene;
-		LoadSceneName(loadedScene.GetName());
-		std::cout << "Loaded scene '" << loadedScene.GetName() << "'." << std::endl;
+		m_scenes[m_sceneCount].SetSceneId(m_sceneCount);
+		LoadSceneName(m_scenes[m_sceneCount].GetName());
+		m_sceneCount++;
 	}
 	else
 	{
@@ -948,7 +949,28 @@ Scene * AssetManager::GetScene(std::string _sceneName)
 	{
 		std::cout << "Scene '" << _sceneName << "' does not exist yet, but something is trying to access it." << std::endl;
 	}
-	return &m_scenes.at(_sceneName);
+	for (int i = 0; i < m_sceneCount; i++)
+	{
+		if (m_loadedSceneNames[i] == _sceneName)
+			return GetScene(i);
+	}
+}
+
+Scene * AssetManager::GetScene(int _sceneId)
+{
+	if (m_sceneCount <= _sceneId)
+	{
+		std::cout << "Scene with id '" << _sceneId << "' does not exist yet, but something is trying to access it." << std::endl;
+		return nullptr;
+	}
+	for (int i = 0; i < m_scenes.size(); i++)
+	{
+		if (_sceneId == m_scenes[i].GetSceneId())
+		{
+			return &m_scenes.at(i);
+		}
+	}
+	std::cout << "Could not find Scene with id '" << _sceneId << "'!" << std::endl;
 }
 
 void AssetManager::SaveScene(Scene * _scene)
@@ -968,4 +990,9 @@ void AssetManager::OpenScene(Scene * _scene)
 
 void AssetManager::OpenScene(std::string _sceneName)
 {
+}
+
+void AssetManager::OpenScene(int _sceneId)
+{
+	OpenScene(GetScene(_sceneId));
 }

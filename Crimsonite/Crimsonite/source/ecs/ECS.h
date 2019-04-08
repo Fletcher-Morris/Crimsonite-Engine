@@ -69,10 +69,12 @@ public:
 	virtual void OnDisable() {}
 
 	//	Called when loading the scene.
-	virtual void Deserialize(std::vector<std::string> _data) {};
+	virtual void Deserialize(std::vector<std::string> _data) {}
+	//	Called when saving the scene.
+	virtual std::string Serialize() { return std::string(); }
 
 	//	Draw the ImGui Editor properties.
-	virtual void DrawEditorProperties() {};
+	virtual void DrawEditorProperties() {}
 
 	//	Returns true if the component is enabled.
 	bool IsEnabled() { return m_enabled; }
@@ -188,6 +190,28 @@ public:
 		std::string serializedRotX = _data[6];
 		std::string serializedRotY = _data[7];
 		std::string serializedRotZ = _data[8];
+	}
+	std::string Serialize()
+	{
+		std::string serialized = "BeginEntity\n";
+		serialized += GetName();
+		serialized += "\n";
+		serialized += IsEnabled();
+		serialized += "\n";
+		serialized += m_immortal;
+		serialized += "\n";
+		serialized += transform.Serialize();
+		serialized += "\n";
+		for (int i = 0; i < m_componentsVector.size(); i++)
+		{
+			serialized += "BeginComponent ";
+			serialized += m_componentsVector.at(i)->GetComponentName();
+			serialized += "\n";
+			serialized += m_componentsVector.at(i)->Serialize();
+			serialized += "\nEndComponent\n";
+		}
+		serialized += "EndEntity";
+		return serialized;
 	}
 
 	//	Called every frame.
@@ -468,5 +492,20 @@ public:
 		m_totalEntityCount = entities.size();
 		m_liveEntityCount = m_totalEntityCount;
 		m_destroyedEntityCount = 0;
+	}
+
+	std::string Serialize()
+	{
+		std::string serialized = "";
+		for (int i = 0; i < EntityCount(); i++)
+		{
+			EcsEntity * ent = &*entities[i];
+			if (ent->IsDestroyed() == false)
+			{
+				serialized += ent->Serialize();
+				serialized += "\n";
+			}
+		}
+		return serialized;
 	}
 };

@@ -90,10 +90,12 @@ public:
 	//	SCENE METHODS
 	void LoadScene(std::string _scenePath);
 	Scene * GetScene(std::string _sceneName);
+	Scene * GetScene(int _sceneId);
 	void SaveScene(Scene * _scene);
 	void SaveScene(std::string _sceneName);
 	void OpenScene(Scene * _scene);
 	void OpenScene(std::string _sceneName);
+	void OpenScene(int _sceneId);
 
 private:
 
@@ -173,9 +175,10 @@ private:
 
 
 	//	The map of all loaded scenes.
-	std::map<std::string, Scene> m_scenes;
+	std::map<int, Scene> m_scenes;
 	//	A vector of all loaded scene names.
 	std::vector<std::string> m_loadedSceneNames;
+	int m_sceneCount;
 	//	Add a Scene to the list of loaded scenes.
 	void LoadSceneName(std::string _sceneName);
 	//	Does a scene with a given name exist?

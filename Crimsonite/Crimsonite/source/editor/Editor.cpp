@@ -29,10 +29,10 @@ void Editor::Init()
 
 	AssetManager::Instance()->CreateFrameBuffer("EditorViewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 
-	m_editorCam = &m_engine->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
+	m_editorCam = &m_engine->GetCurrentScene()->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
 	m_editorCam->SetOutputFrameBuffer("EditorViewport");
 	m_editorCam->entity->MakeImmortal(true);
-	m_editorCam->SetRenderer(m_engine->m_renderer);
+	m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
 
 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -56,10 +56,10 @@ void Editor::LoadIcons()
 
 void CreateObject(std::string _meshName)
 {
-	m_engine->ECS()->NewEntity(_meshName);
-	MeshRenderer * mesh = &m_engine->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
+	m_engine->GetCurrentScene()->ECS()->NewEntity(_meshName);
+	MeshRenderer * mesh = &m_engine->GetCurrentScene()->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
 	mesh->SetMesh(_meshName);
-	mesh->SetRenderer(m_engine->m_renderer);
+	mesh->SetRenderer(m_engine->GetCurrentScene()->Renderer());
 	mesh->SetMaterial("default");
 	mesh->entity->transform.SetPosition(0, 0, -2);
 	mesh->entity->AttachComponent<Rotator>();
@@ -229,9 +229,9 @@ void Editor::DrawGui()
 
 	ImGui::Begin("Entities");
 	{
-		for (int i = 0; i < m_engine->ECS()->EntityCount(); i++)
+		for (int i = 0; i < m_engine->GetCurrentScene()->ECS()->EntityCount(); i++)
 		{
-			EcsEntity * entity = &*m_engine->ECS()->entities[i];
+			EcsEntity * entity = &*m_engine->GetCurrentScene()->ECS()->entities[i];
 
 			if (entity->IsDestroyed() == false)
 			{
@@ -248,7 +248,7 @@ void Editor::DrawGui()
 	{
 		if (m_selectedEntity == NULL)
 		{
-			m_selectedEntity = m_engine->ECS()->GetEntityById(1);
+			m_selectedEntity = m_engine->GetCurrentScene()->ECS()->GetEntityById(1);
 		}
 		m_selectedEntity->DrawEditorProperties();
 	}

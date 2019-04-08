@@ -2,17 +2,16 @@
 
 #include <string>
 
-#include "../ecs/ECS.h"
-#include "../ecs/Components.h"
-#include "../asset/AssetManager.h"
-#include "../render/SimpleRenderer.h"
-
+class EcsSystem;
+class Renderer;
+class SimpleRenderer;
 
 class Scene
 {
 
 public:
 
+	Scene();
 	Scene(std::string _scenePath);
 
 	void Reload(std::string _scenePath);
@@ -29,10 +28,12 @@ public:
 	void SetName(std::string _sceneName) { m_name = _sceneName; }
 	std::string GetPath() { return m_path; }
 	void SetPath(std::string _path) { m_path = _path; }
+	void SetSceneId(int _id) { m_sceneId = _id; }
+	int GetSceneId() { return m_sceneId; }
 
 
 	EcsSystem * ECS() { return m_ecs; }
-	Renderer * Renderer() { return m_renderer; }
+	SimpleRenderer * Renderer() { return m_renderer; }
 
 	void Update();
 	void FixedUpdate();
@@ -47,6 +48,7 @@ private:
 
 	std::string m_name;
 	std::string m_path;
+	int m_sceneId;
 
 
 	EcsSystem * m_ecs;

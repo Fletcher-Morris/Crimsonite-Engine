@@ -76,7 +76,6 @@ void CrimsonCore::InitializeGlew()
 
 void CrimsonCore::RunEngine()
 {
-	if (m_editor) m_editor->Init();
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
@@ -102,6 +101,11 @@ void CrimsonCore::RunEngine()
 
 	Assets->LoadScene(m_assetPath + "scenes/scene1");
 
+	m_currentScene = Assets->GetScene(0);
+
+	m_currentScene->Save();
+
+	if (m_editor) m_editor->Init();
 
 	while (!glfwWindowShouldClose(m_window) && m_quit == false)
 	{

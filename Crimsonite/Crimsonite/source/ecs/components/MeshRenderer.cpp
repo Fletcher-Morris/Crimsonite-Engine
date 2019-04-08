@@ -65,6 +65,11 @@ void MeshRenderer::DrawEditorProperties()
 	m_material->DrawEditorProperties();
 }
 
+std::string MeshRenderer::Serialize()
+{
+	return std::string();
+}
+
 void MeshRenderer::SetMesh(Mesh * _newMesh)
 {
 	m_mesh = _newMesh;

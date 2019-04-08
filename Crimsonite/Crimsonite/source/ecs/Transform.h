@@ -3,6 +3,8 @@
 #include <glm/common.hpp>
 #include <glm/vec3.hpp>
 #include <iostream>
+#include <vector>
+#include <string>
 
 
 class Transform
@@ -96,6 +98,27 @@ public:
 		rotation.x += _x;
 		rotation.y += _y;
 		rotation.z += _z;
+	}
+
+	std::string Serialize()
+	{
+		std::string serialized = "";
+		serialized += std::to_string(GetPosition().x);
+		serialized += "\n";
+		serialized += std::to_string(GetPosition().y);
+		serialized += "\n";
+		serialized += std::to_string(GetPosition().z);
+		serialized += "\n";
+		serialized += std::to_string(GetRotation().x);
+		serialized += "\n";
+		serialized += std::to_string(GetRotation().y);
+		serialized += "\n";
+		serialized += std::to_string(GetRotation().z);
+		return serialized;
+	}
+	void Deserialize(std::vector<std::string> _serializedValues)
+	{
+
 	}
 
 private:

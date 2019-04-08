@@ -124,12 +124,14 @@ void SimpleRenderer::SetClearColor(float _r, float _g, float _b)
 
 std::string SimpleRenderer::Serialize()
 {
-	std::string serialized;
+	std::string serialized = "BeginRenderer\n";
 	serialized += std::to_string(p_r);
-	serialized += ",";
+	serialized += "\n";
 	serialized += std::to_string(p_g);
-	serialized += ",";
+	serialized += "\n";
 	serialized += std::to_string(p_b);
+	serialized += "\n";
+	serialized += "EndRenderer";
 	return serialized;
 }
 

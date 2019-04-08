@@ -57,6 +57,11 @@ void Camera::DrawEditorProperties()
 
 }
 
+std::string Camera::Serialize()
+{
+	return std::string();
+}
+
 void Camera::SetCameraSettings(CameraSettings _newSettings)
 {
 	if

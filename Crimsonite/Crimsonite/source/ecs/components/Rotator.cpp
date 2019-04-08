@@ -39,3 +39,8 @@ void Rotator::DrawEditorProperties()
 	ImGui::DragFloat3("Axis", newAxis);
 	SetAxis(glm::vec3{ newAxis[0],newAxis[1],newAxis[2] });
 }
+
+std::string Rotator::Serialize()
+{
+	return std::string();
+}

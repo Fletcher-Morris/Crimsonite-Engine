@@ -20,8 +20,9 @@ public:
 	virtual void OnRender() override;
 	virtual void OnEnable() override;
 	virtual void OnDisable() override;
-	virtual void Deserialize(std::vector<std::string> _data);
 	virtual void DrawEditorProperties() override;
+	virtual std::string Serialize() override;
+	virtual void Deserialize(std::vector<std::string> _data);
 
 	//	Set the view settings for this camera.
 	void SetCameraSettings(CameraSettings _newSettings);

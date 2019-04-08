@@ -27,6 +27,10 @@ public:
 	void InitializeGlfw(std::string _appName);
 	void InitializeGlew();
 
+	GLFWwindow * GetWindow() { return m_window; }
+	GLFWmonitor * GetMonitor() { return m_monitor; }
+	const GLFWvidmode * GetVideoMode() { return m_videoMode; }
+
 	void RunEngine();
 	void QuitEngine();
 

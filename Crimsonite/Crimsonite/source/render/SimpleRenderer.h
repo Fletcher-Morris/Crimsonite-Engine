@@ -35,6 +35,6 @@ public:
 	virtual void SetClearColor(float _r, float _g, float _b) override;
 
 	virtual std::string Serialize() override;
-	virtual void Deserialize(std::vector<std::string> _serializedValues);
+	virtual void Deserialize(std::vector<std::string> _serializedValues) override;
 
 };

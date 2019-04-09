@@ -102,23 +102,24 @@ public:
 
 	std::string Serialize()
 	{
-		std::string serialized = "";
+		std::string serialized = "val ";
 		serialized += std::to_string(GetPosition().x);
-		serialized += "\n";
+		serialized += "\nval ";
 		serialized += std::to_string(GetPosition().y);
-		serialized += "\n";
+		serialized += "\nval ";
 		serialized += std::to_string(GetPosition().z);
-		serialized += "\n";
+		serialized += "\nval ";
 		serialized += std::to_string(GetRotation().x);
-		serialized += "\n";
+		serialized += "\nval ";
 		serialized += std::to_string(GetRotation().y);
-		serialized += "\n";
+		serialized += "\nval ";
 		serialized += std::to_string(GetRotation().z);
 		return serialized;
 	}
-	void Deserialize(std::vector<std::string> _serializedValues)
+	void Deserialize(std::vector<std::string> _data)
 	{
-
+		SetPosition(std::stof(_data[3]), std::stof(_data[4]), std::stof(_data[5]));
+		SetRotation(std::stof(_data[6]), std::stof(_data[7]), std::stof(_data[8]));
 	}
 
 private:

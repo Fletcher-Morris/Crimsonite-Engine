@@ -22,7 +22,7 @@ public:
 	virtual void OnDisable() override;
 	virtual void DrawEditorProperties() override;
 	virtual std::string Serialize() override;
-	virtual void Deserialize(std::vector<std::string> _data);
+	virtual void Deserialize(std::vector<std::string> _data) override;
 
 	//	Set the view settings for this camera.
 	void SetCameraSettings(CameraSettings _newSettings);
@@ -30,6 +30,8 @@ public:
 	void SetCameraSettings(float _fov);
 	//	Set the near and farliiping values for this camera.
 	void SetCameraSettings(float _near, float _far);
+	//	Set the near and farliiping values for this camera.
+	void SetCameraSettings(float _fov, float _near, float _far);
 	//	Set thewidth and height of this camera.
 	void SetCameraSettings(int _width, int _height);
 	//	Return the view settingsused for this camera.

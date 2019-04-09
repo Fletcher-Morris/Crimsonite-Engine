@@ -181,26 +181,23 @@ public:
 	//	Called when loading the scene.
 	void Deserialize(std::vector<std::string> _data)
 	{
-		std::string serializedName = _data[0];
-		std::string serializedEnabled = _data[1];
-		std::string serializedImmortal = _data[2];
-		std::string serializedPosX = _data[3];
-		std::string serializedPosY = _data[4];
-		std::string serializedPosZ = _data[5];
-		std::string serializedRotX = _data[6];
-		std::string serializedRotY = _data[7];
-		std::string serializedRotZ = _data[8];
+		SetName(_data[0]);
+		SetEnabled(_data[1] == "true" ? true : false);
+		MakeImmortal(_data[2] == "true" ? true : false);
+		transform.Deserialize(_data);
 	}
 	std::string Serialize()
 	{
-		std::string serialized = "BeginEntity\n";
+		std::string serialized = "BeginEntity";
+		serialized += "\nval ";
 		serialized += GetName();
-		serialized += "\n";
-		serialized += IsEnabled();
-		serialized += "\n";
-		serialized += m_immortal;
+		serialized += "\nval ";
+		serialized += IsEnabled() == true ? "true" : "false";
+		serialized += "\nval ";
+		serialized += m_immortal == true ? "true" : "false";
 		serialized += "\n";
 		serialized += transform.Serialize();
+		serialized += "\nEndEntity";
 		serialized += "\n";
 		for (int i = 0; i < m_componentsVector.size(); i++)
 		{
@@ -210,7 +207,6 @@ public:
 			serialized += m_componentsVector.at(i)->Serialize();
 			serialized += "\nEndComponent\n";
 		}
-		serialized += "EndEntity";
 		return serialized;
 	}
 
@@ -507,5 +503,15 @@ public:
 			}
 		}
 		return serialized;
+	}
+
+	void DeserializeEntity(std::vector<std::string> _serializedComponent)
+	{
+		NewEntity(_serializedComponent[0]);
+		m_newestEntity->Deserialize(_serializedComponent);
+	}
+	void DeserializeComponent(std::vector<std::string> _serializedComponent)
+	{
+		
 	}
 };

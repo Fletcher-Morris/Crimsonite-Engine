@@ -124,11 +124,11 @@ void SimpleRenderer::SetClearColor(float _r, float _g, float _b)
 
 std::string SimpleRenderer::Serialize()
 {
-	std::string serialized = "BeginRenderer\n";
+	std::string serialized = "BeginRenderer\nval ";
 	serialized += std::to_string(p_r);
-	serialized += "\n";
+	serialized += "\nval ";
 	serialized += std::to_string(p_g);
-	serialized += "\n";
+	serialized += "\nval ";
 	serialized += std::to_string(p_b);
 	serialized += "\n";
 	serialized += "EndRenderer";
@@ -137,4 +137,5 @@ std::string SimpleRenderer::Serialize()
 
 void SimpleRenderer::Deserialize(std::vector<std::string> _serializedValues)
 {
+	SetClearColor(std::stof(_serializedValues[0]), std::stof(_serializedValues[1]), std::stof(_serializedValues[2]));
 }

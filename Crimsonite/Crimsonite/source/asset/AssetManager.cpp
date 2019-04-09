@@ -107,6 +107,7 @@ void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _h
 {
 	m_frameBuffers[_bufferName] = FrameBuffer();
 	FrameBuffer * buffer = &m_frameBuffers.at(_bufferName);
+	buffer->SetName(_bufferName);
 
 	glGenFramebuffers(1, &buffer->FrameBufferId);
 	glBindFramebuffer(GL_FRAMEBUFFER, buffer->FrameBufferId);

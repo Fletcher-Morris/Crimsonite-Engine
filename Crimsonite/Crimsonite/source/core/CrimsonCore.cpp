@@ -99,6 +99,9 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMaterial(m_assetPath + "materials/room");
 	Assets->LoadMaterial(m_assetPath + "materials/flat");
 
+	AssetManager::Instance()->CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
+
+
 	Assets->LoadScene(m_assetPath + "scenes/scene1");
 
 	m_currentScene = Assets->GetScene(0);

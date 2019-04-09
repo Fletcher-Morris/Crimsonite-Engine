@@ -22,80 +22,19 @@ Scene::Scene()
 
 	m_renderer = new SimpleRenderer();
 	m_ecs = new EcsSystem();
-
-	{
-		m_ecs->NewEntity("MainCamera");
-		Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
-		mainCamera->entity->MakeImmortal(true);
-		mainCamera->SetRenderer(m_renderer);
-		AssetManager::Instance()->CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
-		mainCamera->SetOutputFrameBuffer("MainCamBuffer");
-		m_ecs->NewEntity("DRAGON");
-		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("dragon");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("room");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0, 0, -2.5);
-		m_ecs->NewestEntity()->AttachComponent<Rotator>();
-		m_ecs->NewEntity("CUBE");
-		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("cube");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("crimsontex");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0.8, 0, -1.2);
-		m_ecs->NewestEntity()->AttachComponent<Rotator>();
-		m_ecs->NewEntity("SPRING");
-		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("knot");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("flat");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-0.8, 0, -1.2);
-		m_ecs->NewestEntity()->AttachComponent<Rotator>();
-	}
 }
 
 Scene::Scene(std::string _scenePath)
 {
-	m_renderer = new SimpleRenderer();
-	m_ecs = new EcsSystem();
-
-	{
-		m_ecs->NewEntity("MainCamera");
-		Camera * mainCamera = &m_ecs->NewestEntity()->AttachComponent<Camera>();
-		mainCamera->entity->MakeImmortal(true);
-		mainCamera->SetRenderer(m_renderer);
-		AssetManager::Instance()->CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
-		mainCamera->SetOutputFrameBuffer("MainCamBuffer");
-		m_ecs->NewEntity("DRAGON");
-		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("dragon");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("room");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0, 0, -2.5);
-		m_ecs->NewestEntity()->AttachComponent<Rotator>();
-		m_ecs->NewEntity("CUBE");
-		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("cube");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("crimsontex");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(0.8, 0, -1.2);
-		m_ecs->NewestEntity()->AttachComponent<Rotator>();
-		m_ecs->NewEntity("SPRING");
-		m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetRenderer(m_renderer);
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMesh("knot");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().SetMaterial("flat");
-		m_ecs->NewestEntity()->GetComponent<MeshRenderer>().entity->transform.SetPosition(-0.8, 0, -1.2);
-		m_ecs->NewestEntity()->AttachComponent<Rotator>();
-	}
-
 	m_path = _scenePath;
-
 	Reload(_scenePath);
 }
 
 void Scene::Reload(std::string _scenePath)
 {
+	m_ecs = new EcsSystem();
+	m_renderer = new SimpleRenderer();
+
 #pragma warning(push)
 #pragma warning(disable: 4996)
 	FILE * file = fopen((_scenePath + ".crimsn").c_str(), "r");
@@ -107,6 +46,8 @@ void Scene::Reload(std::string _scenePath)
 	{
 		char lineData[256];
 		res = fscanf(file, "%s", lineData);
+
+		if (res == EOF) break;
 
 		prevType = descType;
 
@@ -122,41 +63,54 @@ void Scene::Reload(std::string _scenePath)
 		else if (strcmp(lineData, "EndEntity") == 0)
 		{
 			descType = DESCRIBING_NULL;
+			m_ecs->DeserializeEntity(descriptionLines);
+			descriptionLines.clear();
 		}
 		else if (strcmp(lineData, "BeginComponent") == 0)
 		{
 			descType = DESCRIBING_COMPONENT;
+			fscanf(file, "%s", &lineData);
+			descriptionLines.push_back((std::string)lineData);
 		}
 		else if (strcmp(lineData, "EndComponent") == 0)
 		{
 			descType = DESCRIBING_NULL;
+			m_ecs->DeserializeComponent(descriptionLines);
+			std::string componentName = descriptionLines[0];
+			if (componentName == "Camera")
+			{
+				Camera * comp = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+				if (descriptionLines.size() >= 1)
+				comp->Deserialize(descriptionLines);
+			}
+			else if (componentName == "MeshRenderer")
+			{
+				MeshRenderer * comp = &m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+				if (descriptionLines.size() >= 1)
+				comp->Deserialize(descriptionLines);
+			}
+			else if (componentName == "Rotator")
+			{
+				Rotator * comp = &m_ecs->NewestEntity()->AttachComponent<Rotator>();
+				if(descriptionLines.size() >= 1)
+				comp->Deserialize(descriptionLines);
+			}
+			descriptionLines.clear();
 		}
 		else if (strcmp(lineData, "BeginRenderer") == 0)
 		{
 			descType = DESCRIBING_RENDERER;
-			std::cout << "Began describing scene renderer" << std::endl;
 		}
 		else if (strcmp(lineData, "EndRenderer") == 0)
 		{
 			descType = DESCRIBING_NULL;
-			std::cout << "Ended describing scene renderer" << std::endl;
+			m_renderer->Deserialize(descriptionLines);
+			descriptionLines.clear();
 		}
-		else
+		else if (strcmp(lineData, "val") == 0)
 		{
-			if (descType != prevType)
-			{
-				if (descType == 0)
-				{
-					descriptionLines.clear();
-				}
-			}
-			else
-			{
-				fscanf(file, "%s", &lineData);
-				descriptionLines.push_back((std::string)lineData);
-				std::cout << "LINE DATA :" << std::endl;
-				std::cout << (std::string)lineData << std::endl;
-			}
+			fscanf(file, "%s", &lineData);
+			descriptionLines.push_back((std::string)lineData);
 		}
 	}
 #pragma warning(pop)
@@ -165,10 +119,6 @@ void Scene::Reload(std::string _scenePath)
 void Scene::Reload()
 {
 	Reload(m_path);
-}
-
-void Scene::Deserialize()
-{
 }
 
 void Scene::Serialize()

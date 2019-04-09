@@ -21,11 +21,15 @@ public:
 	//	The ID of the linked depth buffer.
 	unsigned int DepthBufferId;
 
+	void SetName(std::string _name) { m_name = _name; }
+	std::string GetName() { return m_name; }
+
 	void Bind();
 	void Unbind() {};
 
 private:
 
 	Texture * m_linkedTex;
+	std::string m_name;
 
 };

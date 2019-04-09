@@ -37,10 +37,6 @@ void Camera::OnDisable()
 {
 }
 
-void Camera::Deserialize(std::vector<std::string> _data)
-{
-}
-
 void Camera::DrawEditorProperties()
 {
 	if (m_frameBuffer)
@@ -59,7 +55,22 @@ void Camera::DrawEditorProperties()
 
 std::string Camera::Serialize()
 {
-	return std::string();
+	std::string serialized = "val " + std::to_string(m_settings.fov);
+	serialized += "\nval " + std::to_string(m_settings.nearClip);
+	serialized += "\nval " + std::to_string(m_settings.farClip);
+	serialized += "\nval " + m_frameBuffer->GetName();
+	return serialized;
+}
+
+void Camera::Deserialize(std::vector<std::string> _data)
+{
+	//	_data[0] is just the component name.
+	//	_data[1] is the field of view.
+	//	_data[2] is the near clipping plane.
+	//	_data[3] is the far clipping plane.
+	//	_data[4] is the name of the FrameBuffer.
+	SetCameraSettings(std::stof(_data[1]), std::stof(_data[2]), std::stof(_data[3]));
+	SetOutputFrameBuffer(_data[4]);
 }
 
 void Camera::SetCameraSettings(CameraSettings _newSettings)
@@ -88,6 +99,15 @@ void Camera::SetCameraSettings(float _fov)
 void Camera::SetCameraSettings(float _near, float _far)
 {
 	CameraSettings newSettings = GetCameraSettings();
+	newSettings.nearClip = _near;
+	newSettings.farClip = _far;
+	SetCameraSettings(newSettings);
+}
+
+void Camera::SetCameraSettings(float _fov, float _near, float _far)
+{
+	CameraSettings newSettings = GetCameraSettings();
+	newSettings.fov = _fov;
 	newSettings.nearClip = _near;
 	newSettings.farClip = _far;
 	SetCameraSettings(newSettings);

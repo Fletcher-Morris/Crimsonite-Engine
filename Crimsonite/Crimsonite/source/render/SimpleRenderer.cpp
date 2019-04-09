@@ -6,6 +6,7 @@
 
 void SimpleRenderer::Init()
 {
+
 	SetClearColor(0.863f, 0.078f, 0.235f);
 
 	glEnable(GL_MULTISAMPLE);

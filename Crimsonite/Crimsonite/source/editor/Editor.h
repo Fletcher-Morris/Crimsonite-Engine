@@ -20,23 +20,17 @@ public:
 
 	Editor(CrimsonCore * _core);
 	void Init();
+	void CreateEditorCam();
 
 	void LoadIcons();
 
 	void DrawGui();
 
-
-	void SaveScene();
-
-
 	void PlayGame();
 	void PauseGame();
 	void StopGame();
 
-
 	void Quit();
-
-
 
 	int m_selectedTool = 0;
 	void SelectEditorTool(int _tool);

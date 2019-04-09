@@ -29,15 +29,20 @@ void Editor::Init()
 
 	AssetManager::Instance()->CreateFrameBuffer("EditorViewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 
-	m_editorCam = &m_engine->GetCurrentScene()->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
-	m_editorCam->SetOutputFrameBuffer("EditorViewport");
-	m_editorCam->entity->MakeImmortal(true);
-	m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
-
+	CreateEditorCam();
 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigDockingWithShift = false;
 	io.ConfigWindowsResizeFromEdges = true;
+}
+
+void Editor::CreateEditorCam()
+{
+	m_editorCam = &m_engine->GetCurrentScene()->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
+	m_editorCam->SetOutputFrameBuffer("EditorViewport");
+	m_editorCam->entity->MakeImmortal(true);
+	m_editorCam->entity->SetSerializable(false);
+	m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
 }
 
 void Editor::LoadIcons()
@@ -86,7 +91,12 @@ void Editor::DrawGui()
 			}
 			if (ImGui::Button("Save Scene"))
 			{
-				SaveScene();
+				m_engine->GetCurrentScene()->Save();
+			}
+			if (ImGui::Button("Reload Scene"))
+			{
+				m_engine->GetCurrentScene()->Reload();
+				CreateEditorCam();
 			}
 			if (ImGui::Button("Quit"))
 			{
@@ -256,10 +266,6 @@ void Editor::DrawGui()
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void Editor::SaveScene()
-{
 }
 
 void Editor::PlayGame()

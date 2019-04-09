@@ -130,6 +130,8 @@ private:
 	bool m_doDestroy;
 	//	Is this entity immortal?
 	bool m_immortal = false;
+	//	Should this entity be serialized?
+	bool m_serializable = true;
 
 	std::vector<std::unique_ptr<EcsComponent>> m_componentsVector;
 	std::array<EcsComponent*, MAX_ENT_COMPONENTS> m_componentsArray;
@@ -165,6 +167,10 @@ public:
 	}
 	//	Make this entity immortal.
 	void MakeImmortal(bool _immortal) { m_immortal = _immortal; }
+	//	Prevent this entity from being serialized.
+	void SetSerializable(bool _serializable) { m_serializable = _serializable; }
+	//	Is this entity serializable?
+	bool Serializable() { return m_serializable; }
 	//	Return the unique identity assigned to this entity.
 	int GetEcsEntityId() { return m_ecsEntityId; }
 	//	Return the EcsSystem this entity is part of.
@@ -498,6 +504,7 @@ public:
 			EcsEntity * ent = &*entities[i];
 			if (ent->IsDestroyed() == false)
 			{
+				if(ent->Serializable())
 				serialized += ent->Serialize();
 				serialized += "\n";
 			}

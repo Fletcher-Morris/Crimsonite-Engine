@@ -106,8 +106,6 @@ void CrimsonCore::RunEngine()
 
 	m_currentScene = Assets->GetScene(0);
 
-	m_currentScene->Save();
-
 	if (m_editor) m_editor->Init();
 
 	while (!glfwWindowShouldClose(m_window) && m_quit == false)

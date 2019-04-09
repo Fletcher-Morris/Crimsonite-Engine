@@ -26,10 +26,6 @@ void Rotator::OnDisable()
 {
 }
 
-void Rotator::Deserialize(std::vector<std::string> _data)
-{
-}
-
 void Rotator::DrawEditorProperties()
 {
 	float newAxis[3];
@@ -42,5 +38,13 @@ void Rotator::DrawEditorProperties()
 
 std::string Rotator::Serialize()
 {
-	return std::string();
+	std::string serialized = "val " + std::to_string(m_axis.x);
+	serialized += "\nval " + std::to_string(m_axis.y);
+	serialized += "\nval " + std::to_string(m_axis.z);
+	return serialized;
+}
+
+void Rotator::Deserialize(std::vector<std::string> _data)
+{
+	SetAxis(glm::vec3(std::stof(_data[1]), std::stof(_data[2]), std::stof(_data[3])));
 }

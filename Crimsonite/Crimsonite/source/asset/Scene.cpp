@@ -27,13 +27,14 @@ Scene::Scene()
 Scene::Scene(std::string _scenePath)
 {
 	m_path = _scenePath;
+	m_renderer = new SimpleRenderer();
 	Reload(_scenePath);
 }
 
 void Scene::Reload(std::string _scenePath)
 {
+
 	m_ecs = new EcsSystem();
-	m_renderer = new SimpleRenderer();
 
 #pragma warning(push)
 #pragma warning(disable: 4996)
@@ -80,12 +81,14 @@ void Scene::Reload(std::string _scenePath)
 			if (componentName == "Camera")
 			{
 				Camera * comp = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+				comp->SetRenderer(m_renderer);
 				if (descriptionLines.size() >= 1)
 				comp->Deserialize(descriptionLines);
 			}
 			else if (componentName == "MeshRenderer")
 			{
 				MeshRenderer * comp = &m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+				comp->SetRenderer(m_renderer);
 				if (descriptionLines.size() >= 1)
 				comp->Deserialize(descriptionLines);
 			}

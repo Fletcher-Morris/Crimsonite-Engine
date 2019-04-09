@@ -19,7 +19,7 @@ void main()
 	MVP = Projection * View * Model;
 	gl_Position = MVP * vec4(position.x, position.y, position.z, 1.0);
 
-	Position = vec3(Model * vec4(position, 1.0));
+	Position = vec3(vec4(position, 1.0) * Model);
 	Normal = mat3(transpose(inverse(Model))) * normal;
 	TexCoord = texCoord;
 }

@@ -83,20 +83,29 @@ void Scene::Reload(std::string _scenePath)
 				Camera * comp = &m_ecs->NewestEntity()->AttachComponent<Camera>();
 				comp->SetRenderer(m_renderer);
 				if (descriptionLines.size() >= 1)
-				comp->Deserialize(descriptionLines);
+				{
+					comp->SetEnabled(descriptionLines[1] == "true" ? true : false);
+					comp->Deserialize(descriptionLines);
+				}
 			}
 			else if (componentName == "MeshRenderer")
 			{
 				MeshRenderer * comp = &m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
 				comp->SetRenderer(m_renderer);
 				if (descriptionLines.size() >= 1)
-				comp->Deserialize(descriptionLines);
+				{
+					comp->SetEnabled(descriptionLines[1] == "true" ? true : false);
+					comp->Deserialize(descriptionLines);
+				}
 			}
 			else if (componentName == "Rotator")
 			{
 				Rotator * comp = &m_ecs->NewestEntity()->AttachComponent<Rotator>();
-				if(descriptionLines.size() >= 1)
-				comp->Deserialize(descriptionLines);
+				if (descriptionLines.size() >= 1)
+				{
+					comp->SetEnabled(descriptionLines[1] == "true" ? true : false);
+					comp->Deserialize(descriptionLines);
+				}
 			}
 			descriptionLines.clear();
 		}

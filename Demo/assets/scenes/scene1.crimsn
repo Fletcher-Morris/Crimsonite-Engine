@@ -51,7 +51,7 @@ val room
 val 4
 EndComponent
 BeginComponent Rotator
-val true
+val false
 val 0.000000
 val 0.000000
 val 0.000000
@@ -137,5 +137,3 @@ val 0.200000
 val 0.200000
 val 0.000000
 EndComponent
-
-

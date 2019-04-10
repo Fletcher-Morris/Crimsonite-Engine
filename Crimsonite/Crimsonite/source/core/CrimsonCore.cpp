@@ -104,14 +104,24 @@ void CrimsonCore::RunEngine()
 
 	Assets->LoadScene(m_assetPath + "scenes/scene1");
 
-	m_currentScene = Assets->GetScene(0);
+	OpenScene(0);
 
-	if (m_editor) m_editor->Init();
+	if (m_editor)
+	{
+		m_editor->Init();
+	}
+	else
+	{
+		SetPlayMode(PLAYMODE_RUNNING);
+	}
 
 	while (!glfwWindowShouldClose(m_window) && m_quit == false)
 	{
 		Time::SetFrameTime(glfwGetTime());
-		m_currentScene->Update();
+		if (GetPlayMode() == PLAYMODE_RUNNING)
+		{
+			m_currentScene->Update();
+		}
 		m_currentScene->Render();
 		if (m_editor != NULL) m_editor->DrawGui();
 		glfwSwapBuffers(m_window);

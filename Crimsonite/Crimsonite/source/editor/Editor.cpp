@@ -81,13 +81,17 @@ void Editor::DrawGui()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::Button("New Scene"))
+			if (m_engine->GetPlayMode() == PLAYMODE_STOPPED)
 			{
 
 			}
+			if (ImGui::Button("New Scene"))
+			{
+	
+			}
 			if (ImGui::Button("Open Scene"))
 			{
-
+	
 			}
 			if (ImGui::Button("Save Scene"))
 			{
@@ -198,7 +202,6 @@ void Editor::DrawGui()
 				SelectEditorTool(TOOL_MOVE);
 			}
 		}
-
 		ImGui::SameLine();
 		if (m_selectedTool == TOOL_ROTATE)
 		{
@@ -210,8 +213,7 @@ void Editor::DrawGui()
 			{
 				SelectEditorTool(TOOL_ROTATE);
 			}
-		}
-		
+		}		
 		ImGui::SameLine();
 		if (m_selectedTool == TOOL_SCALE)
 		{
@@ -223,11 +225,23 @@ void Editor::DrawGui()
 			{ SelectEditorTool(TOOL_SCALE); }
 		}
 
-		ImGui::SameLine();
-		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
-		ImGui::SameLine();
-		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("error")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
-
+		if (m_engine->GetPlayMode() == PLAYMODE_STOPPED)
+		{
+			ImGui::SameLine();
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			{
+				m_engine->SetPlayMode(PLAYMODE_RUNNING);
+			}
+		}
+		else
+		{
+			ImGui::SameLine();
+			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_stop")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			{
+				m_engine->SetPlayMode(PLAYMODE_STOPPED);
+				m_engine->GetCurrentScene()->Reload();
+			}
+		}
 	}
 	ImGui::End();
 

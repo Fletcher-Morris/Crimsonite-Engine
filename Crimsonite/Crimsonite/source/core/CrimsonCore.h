@@ -15,6 +15,10 @@
 
 class Editor;
 
+#define PLAYMODE_STOPPED 0
+#define PLAYMODE_RUNNING 1
+#define PLAYMODE_PAUSED 2
+
 class CrimsonCore
 {
 
@@ -37,6 +41,11 @@ public:
 	std::string AssetsPath() { return m_assetPath; }
 
 	Scene * GetCurrentScene() { return m_currentScene; }
+	void OpenScene(int _sceneId){ m_currentScene = Assets->GetScene(_sceneId); }
+	void OpenScene(std::string _sceneName){ m_currentScene = Assets->GetScene(_sceneName); }
+
+	int GetPlayMode() { return m_playMode; }
+	void SetPlayMode(int _playMode) { m_playMode = _playMode; }
 
 private:
 
@@ -58,4 +67,5 @@ private:
 
 	Scene * m_currentScene;
 
+	int m_playMode = PLAYMODE_STOPPED;
 };

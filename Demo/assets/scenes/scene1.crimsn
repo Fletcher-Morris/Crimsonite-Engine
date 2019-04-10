@@ -80,7 +80,7 @@ EndComponent
 BeginComponent Rotator
 val true
 val 0.000000
-val 0.000000
+val 90.000000
 val 0.000000
 EndComponent
 
@@ -137,3 +137,5 @@ val 0.200000
 val 0.200000
 val 0.000000
 EndComponent
+
+

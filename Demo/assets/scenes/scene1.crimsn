@@ -1,11 +1,13 @@
 # Crimsonite Scene File
 
-SceneName BeginRenderer
+SceneName TestScene
+
 BeginRenderer
 val 0.863000
 val 0.078000
 val 0.235000
 EndRenderer
+
 BeginEntity
 val MainCamera
 val true
@@ -21,6 +23,7 @@ val 1.000000
 val 1.000000
 EndEntity
 BeginComponent Camera
+val true
 val 60.000000
 val 0.100000
 val 100.000000
@@ -42,11 +45,13 @@ val 1.000000
 val 1.000000
 EndEntity
 BeginComponent MeshRenderer
+val true
 val dragon
 val room
 val 4
 EndComponent
 BeginComponent Rotator
+val true
 val 0.000000
 val 0.000000
 val 0.000000
@@ -67,11 +72,13 @@ val 0.500000
 val 0.500000
 EndEntity
 BeginComponent MeshRenderer
+val true
 val teapot
 val crimsontex
 val 4
 EndComponent
 BeginComponent Rotator
+val true
 val 0.000000
 val 0.000000
 val 0.000000
@@ -84,19 +91,21 @@ val false
 val 0.700000
 val 0.000000
 val 1.050000
-val 131.969574
-val 131.969574
+val 140.006500
+val 140.006500
 val 0.000000
 val 1.000000
 val 1.000000
 val 1.000000
 EndEntity
 BeginComponent MeshRenderer
+val true
 val knot
 val flat
 val 4
 EndComponent
 BeginComponent Rotator
+val true
 val 0.200000
 val 0.200000
 val 0.000000
@@ -109,19 +118,21 @@ val false
 val -0.500000
 val 0.500000
 val 1.000000
-val 3.614819
-val 51.868038
+val 11.689443
+val 59.946964
 val -77.750000
 val 1.000000
 val 1.000000
 val 1.000000
 EndEntity
 BeginComponent MeshRenderer
+val true
 val cube
 val default
 val 4
 EndComponent
 BeginComponent Rotator
+val true
 val 0.200000
 val 0.200000
 val 0.000000

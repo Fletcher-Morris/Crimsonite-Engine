@@ -209,6 +209,8 @@ public:
 		{
 			serialized += "BeginComponent ";
 			serialized += m_componentsVector.at(i)->GetComponentName();
+			serialized += "\nval ";
+			serialized += m_componentsVector.at(i)->IsEnabled() == true ? "true" : "false";
 			serialized += "\n";
 			serialized += m_componentsVector.at(i)->Serialize();
 			serialized += "\nEndComponent\n";

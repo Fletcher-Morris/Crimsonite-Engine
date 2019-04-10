@@ -71,9 +71,14 @@ std::string MeshRenderer::Serialize()
 
 void MeshRenderer::Deserialize(std::vector<std::string> _data)
 {
-	SetMesh(_data[1]);
-	SetMaterial(_data[2]);
-	SetRenderMode(std::stoi(_data[3]));
+	//	_data[0] is just the component name.
+	//	_data[1] is just the enabled state.
+	//	_data[2] is name of the mesh to use.
+	//	_data[3] is name of the material to use.
+	//	_data[4] is render mode to use.
+	SetMesh(_data[2]);
+	SetMaterial(_data[3]);
+	SetRenderMode(std::stoi(_data[4]));
 }
 
 void MeshRenderer::SetMesh(Mesh * _newMesh)

@@ -127,9 +127,9 @@ void Scene::Reload()
 void Scene::Serialize()
 {
 	m_serializedString = "SceneName " + GetName();
-	m_serializedString += "\n";
+	m_serializedString += "\n\n";
 	m_serializedString += m_renderer->Serialize();
-	m_serializedString += "\n";
+	m_serializedString += "\n\n";
 	m_serializedString += m_ecs->Serialize();
 }
 

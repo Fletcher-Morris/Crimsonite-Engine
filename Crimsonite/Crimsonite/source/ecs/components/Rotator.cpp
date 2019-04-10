@@ -46,5 +46,7 @@ std::string Rotator::Serialize()
 
 void Rotator::Deserialize(std::vector<std::string> _data)
 {
-	SetAxis(glm::vec3(std::stof(_data[1]), std::stof(_data[2]), std::stof(_data[3])));
+	//	_data[0] is just the component name.
+	//	_data[1] is just the enabled state.
+	SetAxis(glm::vec3(std::stof(_data[2]), std::stof(_data[3]), std::stof(_data[4])));
 }

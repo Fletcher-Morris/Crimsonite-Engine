@@ -65,12 +65,13 @@ std::string Camera::Serialize()
 void Camera::Deserialize(std::vector<std::string> _data)
 {
 	//	_data[0] is just the component name.
-	//	_data[1] is the field of view.
-	//	_data[2] is the near clipping plane.
-	//	_data[3] is the far clipping plane.
-	//	_data[4] is the name of the FrameBuffer.
-	SetCameraSettings(std::stof(_data[1]), std::stof(_data[2]), std::stof(_data[3]));
-	SetOutputFrameBuffer(_data[4]);
+	//	_data[1] is just the enabled state.
+	//	_data[2] is the field of view.
+	//	_data[3] is the near clipping plane.
+	//	_data[4] is the far clipping plane.
+	//	_data[5] is the name of the FrameBuffer.
+	SetCameraSettings(std::stof(_data[2]), std::stof(_data[3]), std::stof(_data[4]));
+	SetOutputFrameBuffer(_data[5]);
 }
 
 void Camera::SetCameraSettings(CameraSettings _newSettings)

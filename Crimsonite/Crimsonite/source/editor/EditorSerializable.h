@@ -6,8 +6,14 @@
 
 class EditorSerializable
 {
+
 public:
+
+	//	Set the serializable values of the class when the scene deserializes.
 	virtual void Deserialize(std::vector<std::string> _data) {}
-	virtual std::string Serialize() {}
+	//	Get the serializable properties of the class.
+	virtual std::string Serialize() { return std::string(); }
+
+	//	Used for drawing editor properties and tools.
 	virtual void DrawEditorProperties() {}
 };

@@ -5,9 +5,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "../editor/EditorSerializable.h"
 
 
-class Transform
+class Transform : public EditorSerializable
 {
 
 public:
@@ -100,7 +101,7 @@ public:
 		rotation.z += _z;
 	}
 
-	std::string Serialize()
+	std::string Serialize() override
 	{
 		std::string serialized = "val ";
 		serialized += std::to_string(GetPosition().x);
@@ -122,11 +123,34 @@ public:
 		serialized += std::to_string(GetScale().z);
 		return serialized;
 	}
-	void Deserialize(std::vector<std::string> _data)
+	void Deserialize(std::vector<std::string> _data) override
 	{
 		SetPosition(std::stof(_data[3]), std::stof(_data[4]), std::stof(_data[5]));
 		SetRotation(std::stof(_data[6]), std::stof(_data[7]), std::stof(_data[8]));
 		SetScale(std::stof(_data[9]), std::stof(_data[10]), std::stof(_data[11]));
+	}
+	void DrawEditorProperties()
+	{
+		ImGui::Text("Transform Properties");
+		ImGui::NewLine();
+		float pos[3];
+		pos[0] = GetPosition().x;
+		pos[1] = GetPosition().y;
+		pos[2] = GetPosition().z;
+		ImGui::DragFloat3("Position", pos, 0.05f);
+		SetPosition(glm::vec3{ pos[0],pos[1],pos[2] });
+		float rot[3];
+		rot[0] = GetRotation().x;
+		rot[1] = GetRotation().y;
+		rot[2] = GetRotation().z;
+		ImGui::DragFloat3("Rotation", rot, 0.25f);
+		SetRotation(glm::vec3{ rot[0],rot[1],rot[2] });
+		float scale[3];
+		scale[0] = GetScale().x;
+		scale[1] = GetScale().y;
+		scale[2] = GetScale().z;
+		ImGui::DragFloat3("Scale", scale, 0.1f);
+		SetScale(glm::vec3{ scale[0],scale[1],scale[2] });
 	}
 
 private:

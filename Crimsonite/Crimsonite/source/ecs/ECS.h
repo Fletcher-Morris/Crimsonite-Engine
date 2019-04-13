@@ -9,7 +9,6 @@
 #include <typeinfo>
 
 #include "../asset/AssetManager.h"
-#include "../external/imgui/imgui.h"
 #include "../core/Time.h"
 #include "Transform.h"
 
@@ -33,7 +32,7 @@ inline int GetComponentId() noexcept
 }
 
 //	The template class for all ecs components.
-class EcsComponent
+class EcsComponent : public EditorSerializable
 {
 
 private:
@@ -68,14 +67,6 @@ public:
 	//	Called when the component becomes disabled.
 	virtual void OnDisable() {}
 
-	//	Called when loading the scene.
-	virtual void Deserialize(std::vector<std::string> _data) {}
-	//	Called when saving the scene.
-	virtual std::string Serialize() { return std::string(); }
-
-	//	Draw the ImGui Editor properties.
-	virtual void DrawEditorProperties() {}
-
 	//	Returns true if the component is enabled.
 	bool IsEnabled() { return m_enabled; }
 	//	Enables the component and calls the OnEnable() method.
@@ -105,7 +96,7 @@ public:
 
 };
 
-class EcsEntity
+class EcsEntity : public EditorSerializable
 {
 	
 private:
@@ -185,15 +176,18 @@ public:
 	int ComponentCount() { return m_componentsArray.size(); }
 
 	//	Called when loading the scene.
-	void Deserialize(std::vector<std::string> _data)
+	void Deserialize(std::vector<std::string> _data) override
 	{
+		if (m_serializable == false) return;
 		SetName(_data[0]);
 		SetEnabled(_data[1] == "true" ? true : false);
 		MakeImmortal(_data[2] == "true" ? true : false);
 		transform.Deserialize(_data);
 	}
-	std::string Serialize()
+	std::string Serialize() override
 	{
+		if (m_serializable == false) return std::string();
+
 		std::string serialized = "BeginEntity";
 		serialized += "\nval ";
 		serialized += GetName();
@@ -260,7 +254,7 @@ public:
 
 
 	//	Called by the editor.
-	void DrawEditorProperties()
+	void DrawEditorProperties() override
 	{
 		ImGui::Text("%s", m_name.c_str());
 		std::string enableString = "ENABLE";
@@ -276,34 +270,7 @@ public:
 		}
 		ImGui::Separator();
 		ImGui::NewLine();
-		ImGui::Text("Transform Properties");
-		ImGui::NewLine();
-		float pos[3];
-		pos[0] = transform.GetPosition().x;
-		pos[1] = transform.GetPosition().y;
-		pos[2] = transform.GetPosition().z;
-		ImGui::DragFloat3("Position", pos, 0.25f);
-		transform.SetPosition(glm::vec3{ pos[0],pos[1],pos[2] });
-		float rot[3];
-		rot[0] = transform.GetRotation().x;
-		rot[1] = transform.GetRotation().y;
-		rot[2] = transform.GetRotation().z;
-		ImGui::DragFloat3("Rotation", rot, 0.25f);
-		transform.SetRotation(glm::vec3{ rot[0],rot[1],rot[2] });
-		float scale[3];
-		scale[0] = transform.GetScale().x;
-		scale[1] = transform.GetScale().y;
-		scale[2] = transform.GetScale().z;
-		ImGui::DragFloat3("Scale", scale, 0.25f);
-		transform.SetScale(glm::vec3{ scale[0],scale[1],scale[2] });
-
-		ImGui::Text("Forward  : %f,%f,%f", transform.Forward().x, transform.Forward().y, transform.Forward().z);
-		ImGui::Text("Backward : %f,%f,%f", transform.Back().x, transform.Back().y, transform.Back().z);
-		ImGui::Text("Up       : %f,%f,%f", transform.Up().x, transform.Up().y, transform.Up().z);
-		ImGui::Text("Down     : %f,%f,%f", transform.Down().x, transform.Down().y, transform.Down().z);
-		ImGui::Text("Right    : %f,%f,%f", transform.Right().x, transform.Right().y, transform.Right().z);
-		ImGui::Text("Left     : %f,%f,%f", transform.Left().x, transform.Left().y, transform.Left().z);
-
+		transform.DrawEditorProperties();
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			ImGui::NewLine();
@@ -369,7 +336,7 @@ public:
 
 };
 
-class EcsSystem
+class EcsSystem : public EditorSerializable
 {
 
 private:
@@ -494,7 +461,7 @@ public:
 		m_destroyedEntityCount = 0;
 	}
 
-	std::string Serialize()
+	std::string Serialize() override
 	{
 		std::string serialized = "";
 		for (int i = 0; i < EntityCount(); i++)

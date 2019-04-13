@@ -37,7 +37,7 @@ public:
 
 	Camera * m_editorCam;
 
-	EcsEntity * m_selectedEntity;
+	EditorSerializable * m_selectedEditorObject;
 	/*void SelectEntity(int _id);
 	void DeselectEntity();*/
 

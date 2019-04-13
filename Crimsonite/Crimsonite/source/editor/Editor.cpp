@@ -262,7 +262,7 @@ void Editor::DrawGui()
 			{
 				if (ImGui::Button(entity->GetName().c_str()))
 				{
-					m_selectedEntity = entity;
+					m_selectedEditorObject = entity;
 				}
 			}
 		}
@@ -271,11 +271,11 @@ void Editor::DrawGui()
 
 	ImGui::Begin("Properties");
 	{
-		if (m_selectedEntity == NULL)
+		if (!m_selectedEditorObject)
 		{
-			m_selectedEntity = m_engine->GetCurrentScene()->ECS()->GetEntityById(1);
+			m_selectedEditorObject = m_editorCam->entity;
 		}
-		m_selectedEntity->DrawEditorProperties();
+		m_selectedEditorObject->DrawEditorProperties();
 	}
 	ImGui::End();
 

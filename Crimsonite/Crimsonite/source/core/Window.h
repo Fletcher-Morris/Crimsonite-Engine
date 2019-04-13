@@ -16,7 +16,6 @@ public:
 	{
 		Instance()->m_width = _width;
 		Instance()->m_height = _height;
-		std::cout << "Set window size to " << _width << "X" << _height << "." << std::endl;
 	}
 
 

@@ -83,24 +83,23 @@ void Editor::DrawGui()
 		{
 			if (m_engine->GetPlayMode() == PLAYMODE_STOPPED)
 			{
+				if (ImGui::Button("New Scene"))
+				{
 
-			}
-			if (ImGui::Button("New Scene"))
-			{
-	
-			}
-			if (ImGui::Button("Open Scene"))
-			{
-	
-			}
-			if (ImGui::Button("Save Scene"))
-			{
-				m_engine->GetCurrentScene()->Save();
-			}
-			if (ImGui::Button("Reload Scene"))
-			{
-				m_engine->GetCurrentScene()->Reload();
-				CreateEditorCam();
+				}
+				if (ImGui::Button("Open Scene"))
+				{
+
+				}
+				if (ImGui::Button("Save Scene"))
+				{
+					m_engine->GetCurrentScene()->Save();
+				}
+				if (ImGui::Button("Reload Scene"))
+				{
+					m_engine->GetCurrentScene()->Reload();
+					CreateEditorCam();
+				}
 			}
 			if (ImGui::Button("Quit"))
 			{
@@ -230,6 +229,7 @@ void Editor::DrawGui()
 			ImGui::SameLine();
 			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
+				m_engine->GetCurrentScene()->Serialize();
 				m_engine->SetPlayMode(PLAYMODE_RUNNING);
 			}
 		}
@@ -239,7 +239,8 @@ void Editor::DrawGui()
 			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_stop")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
 				m_engine->SetPlayMode(PLAYMODE_STOPPED);
-				m_engine->GetCurrentScene()->Reload();
+				m_engine->GetCurrentScene()->Deserialize();
+				CreateEditorCam();
 			}
 		}
 	}

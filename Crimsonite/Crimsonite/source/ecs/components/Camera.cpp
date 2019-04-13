@@ -55,7 +55,8 @@ void Camera::DrawEditorProperties()
 
 std::string Camera::Serialize()
 {
-	std::string serialized = "val " + std::to_string(m_settings.fov);
+	std::string serialized = "";
+	serialized += "val " + std::to_string(m_settings.fov);
 	serialized += "\nval " + std::to_string(m_settings.nearClip);
 	serialized += "\nval " + std::to_string(m_settings.farClip);
 	serialized += "\nval " + m_frameBuffer->GetName();
@@ -134,7 +135,6 @@ void Camera::Bind()
 void Camera::ReInit()
 {
 	m_projectionMatrix = CreateProjectionMatrix(m_settings);
-	std::cout << "Initialised Camera '" << entity->GetName() << "'." << std::endl;
 }
 
 void Camera::CreateCameraViewMatrix()

@@ -38,7 +38,8 @@ void Rotator::DrawEditorProperties()
 
 std::string Rotator::Serialize()
 {
-	std::string serialized = "val " + std::to_string(m_axis.x);
+	std::string serialized = "";
+	serialized += "val " + std::to_string(m_axis.x);
 	serialized += "\nval " + std::to_string(m_axis.y);
 	serialized += "\nval " + std::to_string(m_axis.z);
 	return serialized;

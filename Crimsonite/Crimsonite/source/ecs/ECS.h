@@ -204,17 +204,18 @@ public:
 		serialized += "\n";
 		serialized += transform.Serialize();
 		serialized += "\nEndEntity";
-		serialized += "\n";
 		for (int i = 0; i < m_componentsVector.size(); i++)
 		{
+			serialized += "\n";
 			serialized += "BeginComponent ";
 			serialized += m_componentsVector.at(i)->GetComponentName();
 			serialized += "\nval ";
 			serialized += m_componentsVector.at(i)->IsEnabled() == true ? "true" : "false";
 			serialized += "\n";
 			serialized += m_componentsVector.at(i)->Serialize();
-			serialized += "\nEndComponent\n";
+			serialized += "\nEndComponent";
 		}
+		serialized += "\n";
 		return serialized;
 	}
 
@@ -321,7 +322,6 @@ public:
 	{
 		m_enabled = _enable;
 		m_enabledPrev = _enable;
-		std::cout << m_name << " : " << _enable << std::endl;
 		for (int i = 0; i < m_componentsCount; i++)
 		{
 			if(_enable == true) m_componentsVector[i]->OnEnable();
@@ -346,7 +346,6 @@ public:
 		m_componentsArray[GetComponentId<T>()] = newComponent;
 		m_componentsBitset[GetComponentId<T>()] = true;
 		m_componentsCount++;
-		std::cout << "Attached Component '" << typeid(T).name() << "' to Entity '" << m_name << "'." << std::endl;
 		std::string nameStr = typeid(T).name();
 		nameStr.erase(0, 6);
 		newComponent->SetComponentName(nameStr);
@@ -418,7 +417,6 @@ public:
 		EcsEntity * newEntity = new EcsEntity(this, _entityName);
 		std::unique_ptr<EcsEntity>entPtr{ newEntity };
 		entities.emplace_back(std::move(entPtr));
-		std::cout << "Created new entity : " << _entityName << std::endl;
 		m_newestEntity = newEntity;
 		m_totalEntityCount++;
 		m_liveEntityCount++;
@@ -439,8 +437,6 @@ public:
 				}
 			}
 		}
-
-		std::cout << "Could not find entity : " << _entityName << std::endl;
 		return NULL;
 	}
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 class EcsSystem;
 class Renderer;
@@ -14,7 +15,7 @@ public:
 	Scene();
 	Scene(std::string _scenePath);
 
-	void Reload(std::string _scenePath);
+	void LoadFromPath(std::string _scenePath);
 	void Reload();
 
 	void Deserialize();
@@ -44,6 +45,8 @@ public:
 private:
 
 	std::string m_serializedString;
+	std::vector<std::string> m_initialVector;
+	std::vector<std::string> m_serializedVector;
 
 
 	std::string m_name;

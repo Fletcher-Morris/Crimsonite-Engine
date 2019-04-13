@@ -63,7 +63,8 @@ void MeshRenderer::DrawEditorProperties()
 
 std::string MeshRenderer::Serialize()
 {
-	std::string serialized = "val " + m_mesh->GetName();
+	std::string serialized = "";
+	serialized += "val " + m_mesh->GetName();
 	serialized += "\nval " + m_material->GetName();
 	serialized += "\nval " + std::to_string(m_renderMode);
 	return serialized;

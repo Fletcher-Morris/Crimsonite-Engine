@@ -101,12 +101,13 @@ class EcsEntity : public EditorSerializable
 	
 private:
 
-	//	Pointer toe the EcsSystem this entity is part of.
+	//	Pointer to the EcsSystem this entity is part of.
 	EcsSystem * m_system;
 	//	The unique id assigned to this entity.
 	int m_ecsEntityId;
 	//	The name of this entity.
 	std::string m_name;
+	char m_tempName[128] = "temp name";
 	//	The enabled state of this entity.
 	bool m_enabled = true;
 	bool m_enabledPrev = true;
@@ -133,11 +134,12 @@ private:
 public:
 
 	EcsEntity(EcsSystem * _system) { m_system = _system; };
-	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; m_name = _entityName; };
-	EcsEntity(std::string _entityName, EcsSystem * _system) { m_system = _system; m_name = _entityName; };
+	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; SetName(_entityName);};
+	EcsEntity(std::string _entityName, EcsSystem * _system) { m_system = _system; SetName(_entityName);};
 
 	//	Set the name of this entity.
-	void SetName(std::string _name) { m_name = _name; }
+	void SetName(std::string _name);
+
 	//	Return the name of this entity.
 	std::string GetName() { return m_name; }
 	//	Return true of this entity is enabled.
@@ -257,6 +259,12 @@ public:
 	void DrawEditorProperties() override
 	{
 		ImGui::Text("%s", m_name.c_str());
+		ImGui::InputText("", m_tempName, 128);
+		ImGui::SameLine();
+		if (ImGui::Button("Rename"))
+		{
+			SetName((std::string)m_tempName);
+		}
 		std::string enableString = "ENABLE";
 		if(m_enabled) enableString = "DISABLE";
 		if (ImGui::Button(enableString.c_str()))
@@ -364,23 +372,6 @@ public:
 	//	Create a new entity with a given name.
 	EcsEntity& NewEntity(std::string _entityName)
 	{
-		bool nameFound = false;
-		int entityCounter = 1;
-		std::string tempName = _entityName;
-		while (nameFound == false)
-		{
-			if (FindEntity(tempName))
-			{
-				entityCounter++;
-				tempName = _entityName + " (" + std::to_string(entityCounter) + ")";
-
-			}
-			else
-			{
-				nameFound = true;
-			}
-		}
-		_entityName = tempName;
 		EcsEntity * newEntity = new EcsEntity(this, _entityName);
 		std::unique_ptr<EcsEntity>entPtr{ newEntity };
 		entities.emplace_back(std::move(entPtr));

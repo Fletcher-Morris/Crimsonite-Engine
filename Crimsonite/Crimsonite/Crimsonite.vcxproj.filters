@@ -238,5 +238,8 @@
     <ClInclude Include="source\core\Window.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="source\editor\EditorSerializable.h">
+      <Filter>Header Files\editor</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

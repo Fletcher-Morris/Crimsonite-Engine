@@ -52,6 +52,7 @@
     <ClInclude Include="source\ecs\ECS.h" />
     <ClInclude Include="source\ecs\Transform.h" />
     <ClInclude Include="source\editor\Editor.h" />
+    <ClInclude Include="source\editor\EditorSerializable.h" />
     <ClInclude Include="source\external\imgui\imconfig.h" />
     <ClInclude Include="source\external\imgui\imgui.h" />
     <ClInclude Include="source\external\imgui\imgui_impl_glfw.h" />

@@ -50,10 +50,8 @@ public:
 
 	//	Entity reference
 	EcsEntity * entity;
-
 	//	Component destructor
 	virtual ~EcsComponent() {}
-
 	//	Called when the component is first initialised.
 	virtual void OnInit() {}
 	//	Called every frame.
@@ -66,7 +64,6 @@ public:
 	virtual void OnEnable() {}
 	//	Called when the component becomes disabled.
 	virtual void OnDisable() {}
-
 	//	Returns true if the component is enabled.
 	bool IsEnabled() { return m_enabled; }
 	//	Enables the component and calls the OnEnable() method.
@@ -124,11 +121,9 @@ private:
 	bool m_immortal = false;
 	//	Should this entity be serialized?
 	bool m_serializable = true;
-
 	std::vector<std::unique_ptr<EcsComponent>> m_componentsVector;
 	std::array<EcsComponent*, MAX_ENT_COMPONENTS> m_componentsArray;
 	std::bitset<MAX_ENT_COMPONENTS> m_componentsBitset;
-
 	int m_componentsCount = 0;
 
 public:
@@ -136,10 +131,8 @@ public:
 	EcsEntity(EcsSystem * _system) { m_system = _system; };
 	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; SetName(_entityName);};
 	EcsEntity(std::string _entityName, EcsSystem * _system) { m_system = _system; SetName(_entityName);};
-
 	//	Set the name of this entity.
 	void SetName(std::string _name);
-
 	//	Return the name of this entity.
 	std::string GetName() { return m_name; }
 	//	Return true of this entity is enabled.
@@ -147,17 +140,7 @@ public:
 	//	Return true if this entity is marked as destroyed.
 	bool IsDestroyed() { return m_doDestroy; }
 	//	Mark this entity for destruction.
-	void Destroy()
-	{
-		if (m_immortal)
-		{
-			std::cout << "Cannot destroy immortal entity '" << m_name << "'!" << std::endl;
-			return;
-		}
-		std::cout << "Destroyed entity : " << m_name << std::endl;
-		/*m_system->AlertEntityDestruction();*/
-		m_doDestroy = true;
-	}
+	void Destroy();
 	//	Make this entity immortal.
 	void MakeImmortal(bool _immortal) { m_immortal = _immortal; }
 	//	Prevent this entity from being serialized.
@@ -168,180 +151,44 @@ public:
 	int GetEcsEntityId() { return m_ecsEntityId; }
 	//	Return the EcsSystem this entity is part of.
 	EcsSystem * GetEcsSystem() { return m_system; }
-
 	//	The Transform of the entity.
 	Transform transform;
 	//	Return a reference to the entity's Transform.
 	Transform * GetTransformRef() { return &transform; }
-
 	//	Return the number of components on this entity.
 	int ComponentCount() { return m_componentsArray.size(); }
-
 	//	Called when loading the scene.
-	void Deserialize(std::vector<std::string> _data) override
-	{
-		if (m_serializable == false) return;
-		SetName(_data[0]);
-		SetEnabled(_data[1] == "true" ? true : false);
-		MakeImmortal(_data[2] == "true" ? true : false);
-		transform.Deserialize(_data);
-	}
-	std::string Serialize() override
-	{
-		if (m_serializable == false) return std::string();
-
-		std::string serialized = "BeginEntity";
-		serialized += "\nval ";
-		serialized += GetName();
-		serialized += "\nval ";
-		serialized += IsEnabled() == true ? "true" : "false";
-		serialized += "\nval ";
-		serialized += m_immortal == true ? "true" : "false";
-		serialized += "\n";
-		serialized += transform.Serialize();
-		serialized += "\nEndEntity";
-		for (int i = 0; i < m_componentsVector.size(); i++)
-		{
-			serialized += "\n";
-			serialized += "BeginComponent ";
-			serialized += m_componentsVector.at(i)->GetComponentName();
-			serialized += "\nval ";
-			serialized += m_componentsVector.at(i)->IsEnabled() == true ? "true" : "false";
-			serialized += "\n";
-			serialized += m_componentsVector.at(i)->Serialize();
-			serialized += "\nEndComponent";
-		}
-		serialized += "\n";
-		return serialized;
-	}
-
+	void Deserialize(std::vector<std::string> _data) override;
+	//	Called when loading the scene.
+	std::string Serialize() override;
 	//	Called every frame.
-	void Update()
-	{
-		if (m_doDestroy) return;
-		EnabledChangedCheck();
-		if (m_enabled == false) return;
-		for (int i = 0; i < m_componentsCount; i++)
-		{
-			if(m_componentsVector[i]->IsEnabled())
-			m_componentsVector[i]->OnUpdate();
-		}
-	}
-
+	void Update();
 	//	Called at fixed intervals.
-	void FixedUpdate()
-	{
-		if (m_doDestroy) return;
-		EnabledChangedCheck();
-		if (m_enabled == false) return;
-		for (int i = 0; i < m_componentsCount; i++)
-		{
-			if (m_componentsVector[i]->IsEnabled())
-			m_componentsVector[i]->OnFixedUpdate();
-		}
-	}
-
+	void FixedUpdate();
 	//	Called by the renderer.
-	void Render()
-	{
-		if (m_doDestroy) return;
-		EnabledChangedCheck();
-		if (m_enabled == false) return;
-		for (int i = 0; i < m_componentsCount; i++)
-		{
-			if (m_componentsVector[i]->IsEnabled())
-			m_componentsVector[i]->OnRender();
-		}
-	}
-
-
+	void Render();
 	//	Called by the editor.
-	void DrawEditorProperties() override
-	{
-		ImGui::Text("%s", m_name.c_str());
-		ImGui::InputText("", m_tempName, 128);
-		ImGui::SameLine();
-		if (ImGui::Button("Rename"))
-		{
-			SetName((std::string)m_tempName);
-		}
-		std::string enableString = "ENABLE";
-		if(m_enabled) enableString = "DISABLE";
-		if (ImGui::Button(enableString.c_str()))
-		{
-			SetEnabled(!m_enabled);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("DESTROY"))
-		{
-			Destroy();
-		}
-		ImGui::Separator();
-		ImGui::NewLine();
-		transform.DrawEditorProperties();
-		for (int i = 0; i < m_componentsCount; i++)
-		{
-			ImGui::NewLine();
-			ImGui::Separator();
-			ImGui::NewLine();
-			ImGui::Text("%s", m_componentsVector[i]->GetComponentName().c_str());
-			bool componentEnabled = m_componentsVector[i]->IsEnabled();
-			ImGui::Checkbox("Enabled", &componentEnabled);
-			m_componentsVector[i]->SetEnabled(componentEnabled);
-			ImGui::NewLine();
-			m_componentsVector[i]->DrawEditorProperties();
-		}
-	}
-
-	void SetEnabled(bool _enable)
-	{
-		m_enabled = _enable;
-		m_enabledPrev = _enable;
-		for (int i = 0; i < m_componentsCount; i++)
-		{
-			if(_enable == true) m_componentsVector[i]->OnEnable();
-			else m_componentsVector[i]->OnDisable();
-		}
-	}
-
+	void DrawEditorProperties() override;
+	//	Set the enabled state of the entity.
+	void SetEnabled(bool _enable);
 	//	Check if this entity has a specific component attached.
 	template<typename T> bool HasComponent()
 	{
 		return m_componentsBitset[GetComponentId<T>];
 	}
-
 	//	Add a component to this entity and return a reference.
 	template<typename T, typename... args>
-	T& AttachComponent(args&&... _args)
-	{
-		T* newComponent(new T(std::forward<args>(_args)...));
-		newComponent->entity = this;
-		std::unique_ptr<EcsComponent> uniquePtr{ newComponent };
-		m_componentsVector.emplace_back(std::move(uniquePtr));
-		m_componentsArray[GetComponentId<T>()] = newComponent;
-		m_componentsBitset[GetComponentId<T>()] = true;
-		m_componentsCount++;
-		std::string nameStr = typeid(T).name();
-		nameStr.erase(0, 6);
-		newComponent->SetComponentName(nameStr);
-		newComponent->OnInit();
-		return *newComponent;
-	}
-
+	T& AttachComponent(args&&... _args);
 	//	Return a reference to a component on this entity.
 	template<typename T> T& GetComponent()
 	{
-		auto ptr(m_componentsArray[GetComponentId<T>()]);
-		return *static_cast<T*>(ptr);
+		return *static_cast<T*>(m_componentsArray[GetComponentId<T>()]);
 	}
-
 	//	Return a reference to a component on this entity with a given ID.
 	template<typename T> T& GetComponentWithId(int _id)
 	{
-		auto ptr(m_componentsVector.at(_id));
-		return *static_cast<T*>(ptr);
+		return *static_cast<T*>(m_componentsVector.at(_id));
 	}
-
 };
 
 class EcsSystem : public EditorSerializable
@@ -361,76 +208,18 @@ private:
 public:
 
 	EcsSystem() { Refresh(); }
-
 	//	A vector of all created entities.
 	std::vector<std::unique_ptr<EcsEntity>> entities;
-
 	int EntityCount() { return m_totalEntityCount; }
-
 	EcsEntity * NewestEntity() { return m_newestEntity; }
-
 	//	Create a new entity with a given name.
-	EcsEntity& NewEntity(std::string _entityName)
-	{
-		EcsEntity * newEntity = new EcsEntity(this, _entityName);
-		std::unique_ptr<EcsEntity>entPtr{ newEntity };
-		entities.emplace_back(std::move(entPtr));
-		m_newestEntity = newEntity;
-		m_totalEntityCount++;
-		m_liveEntityCount++;
-		return *newEntity;
-	}
-
+	EcsEntity& NewEntity(std::string _entityName);
 	//	Find an entity with a given name.
-	EcsEntity * FindEntity(std::string _entityName)
-	{
-		//	MAKE THIS FASTER
-		for (int i = 0; i < m_totalEntityCount; i++)
-		{
-			if (entities[i]->IsDestroyed() == false)
-			{
-				if (entities[i]->GetName() == _entityName)
-				{
-					return &*entities[i];
-				}
-			}
-		}
-		return NULL;
-	}
-
+	EcsEntity * FindEntity(std::string _entityName);
 	template<typename T>
-	std::vector<EcsEntity*> FindEntitiesWithComponent()
-	{
-		std::vector<EcsEntity*> foundEntities;
-		for (int i = 0; i < m_totalEntityCount; i++)
-		{
-			if (entities[i]->HasComponent<T>())
-			{
-				foundEntities.push_back(&*entities[i]);
-			}
-		}
-		return foundEntities;
-	}
-
-	template<typename T> std::vector<T*> GetAllComponentsOfType()
-	{
-		std::vector<T*> foundComponents;
-		for (int i = 0; i < m_totalEntityCount; i++)
-		{
-			T* component = &entities[i]->GetComponent<T>();
-			if (component)
-			{
-				foundComponents.push_back(component);
-			}
-		}
-		return foundComponents;
-	}
-
-	EcsEntity * GetEntityById(int _id)
-	{
-		return &*entities[_id];
-	}
-
+	std::vector<EcsEntity*> FindEntitiesWithComponent();
+	template<typename T> std::vector<T*> GetAllComponentsOfType();
+	EcsEntity * GetEntityById(int _id) { return &*entities[_id]; }
 	//	Destroy a given entity.
 	void DestroyEntity(EcsEntity & _deleteEntity) { _deleteEntity.Destroy(); }
 	//	Destroy an entity with a given name.
@@ -441,40 +230,55 @@ public:
 		m_destroyedEntityCount++;
 		if (m_liveEntityCount > 0) m_liveEntityCount--;
 	}
-
 	//	Clear out all destroyed entities and reset counters.
-	void Refresh()
-	{
-		entities.erase(std::remove_if(std::begin(entities), std::end(entities),
-		[](const std::unique_ptr<EcsEntity> &ent) {return ent->IsDestroyed(); }), std::end(entities));
-		m_totalEntityCount = entities.size();
-		m_liveEntityCount = m_totalEntityCount;
-		m_destroyedEntityCount = 0;
-	}
-
-	std::string Serialize() override
-	{
-		std::string serialized = "";
-		for (int i = 0; i < EntityCount(); i++)
-		{
-			EcsEntity * ent = &*entities[i];
-			if (ent->IsDestroyed() == false)
-			{
-				if(ent->Serializable())
-				serialized += ent->Serialize();
-				serialized += "\n";
-			}
-		}
-		return serialized;
-	}
-
-	void DeserializeEntity(std::vector<std::string> _serializedComponent)
-	{
-		NewEntity(_serializedComponent[0]);
-		m_newestEntity->Deserialize(_serializedComponent);
-	}
-	void DeserializeComponent(std::vector<std::string> _serializedComponent)
-	{
-		
-	}
+	void Refresh();
+	std::string Serialize() override;
+	void DeserializeEntity(std::vector<std::string> _serializedComponent);
+	void DeserializeComponent(std::vector<std::string> _serializedComponent);
 };
+
+template<typename T, typename ...args>
+inline T & EcsEntity::AttachComponent(args && ..._args)
+{
+	T* newComponent(new T(std::forward<args>(_args)...));
+	newComponent->entity = this;
+	std::unique_ptr<EcsComponent> uniquePtr{ newComponent };
+	m_componentsVector.emplace_back(std::move(uniquePtr));
+	m_componentsArray[GetComponentId<T>()] = newComponent;
+	m_componentsBitset[GetComponentId<T>()] = true;
+	m_componentsCount++;
+	std::string nameStr = typeid(T).name();
+	nameStr.erase(0, 6);
+	newComponent->SetComponentName(nameStr);
+	newComponent->OnInit();
+	return *newComponent;
+}
+
+template<typename T>
+inline std::vector<EcsEntity*> EcsSystem::FindEntitiesWithComponent()
+{
+	std::vector<EcsEntity*> foundEntities;
+	for (int i = 0; i < m_totalEntityCount; i++)
+	{
+		if (entities[i]->HasComponent<T>())
+		{
+			foundEntities.push_back(&*entities[i]);
+		}
+	}
+	return foundEntities;
+}
+
+template<typename T>
+inline std::vector<T*> EcsSystem::GetAllComponentsOfType()
+{
+	std::vector<T*> foundComponents;
+	for (int i = 0; i < m_totalEntityCount; i++)
+	{
+		T* component = &entities[i]->GetComponent<T>();
+		if (component)
+		{
+			foundComponents.push_back(component);
+		}
+	}
+	return foundComponents;
+}

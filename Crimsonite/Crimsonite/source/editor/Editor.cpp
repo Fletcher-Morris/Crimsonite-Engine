@@ -226,7 +226,8 @@ void Editor::DrawGui()
 
 		if (m_engine->GetPlayMode() == PLAYMODE_STOPPED)
 		{
-			ImGui::SameLine();
+
+			ImGui::SameLine(ImGui::GetWindowWidth()/2);
 			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
 				PlayGame();
@@ -234,7 +235,7 @@ void Editor::DrawGui()
 		}
 		else
 		{
-			ImGui::SameLine();
+			ImGui::SameLine(ImGui::GetWindowWidth() / 2);
 			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_stop")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
 				StopGame();

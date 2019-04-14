@@ -44,4 +44,6 @@ public:
 	/*void SelectEntity(int _id);
 	void DeselectEntity();*/
 
+	void CreateAndLoadNewScene(std::string _sceneName);
+
 };

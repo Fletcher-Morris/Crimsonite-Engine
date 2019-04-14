@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 #include <SOIL2/SOIL2.h>
+#include "../core/CrimsonCore.h"
 
 AssetManager * AssetManager::m_instance(0);
 AssetManager * AssetManager::Instance()
@@ -11,6 +12,11 @@ AssetManager * AssetManager::Instance()
 AssetManager::~AssetManager()
 {
 	m_instance = 0;
+}
+
+void AssetManager::SetEngine(CrimsonCore * _core)
+{
+	m_core = _core;
 }
 
 void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
@@ -986,11 +992,12 @@ void AssetManager::SaveScene(std::string _sceneName)
 
 void AssetManager::OpenScene(Scene * _scene)
 {
-	
+	m_core->OpenScene(_scene->GetSceneId());
 }
 
 void AssetManager::OpenScene(std::string _sceneName)
 {
+	OpenScene(GetScene(_sceneName));
 }
 
 void AssetManager::OpenScene(int _sceneId)

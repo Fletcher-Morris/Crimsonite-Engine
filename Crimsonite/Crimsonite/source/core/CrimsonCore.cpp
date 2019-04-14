@@ -79,6 +79,8 @@ void CrimsonCore::RunEngine()
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
+	Assets->SetEngine(this);
+
 	Assets->LoadTexture("noise", m_assetPath + "textures/noise.png");
 	Assets->LoadTexture("crimsontex", m_assetPath + "textures/crimsontex.png");
 	Assets->LoadTexture("room", m_assetPath + "textures/room.png");
@@ -99,8 +101,7 @@ void CrimsonCore::RunEngine()
 	Assets->LoadMaterial(m_assetPath + "materials/room");
 	Assets->LoadMaterial(m_assetPath + "materials/flat");
 
-	AssetManager::Instance()->CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
-
+	Assets->CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
 
 	Assets->LoadScene(m_assetPath + "scenes/scene1");
 

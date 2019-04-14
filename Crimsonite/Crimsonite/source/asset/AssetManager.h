@@ -14,6 +14,8 @@
 #include "../render/Material.h"
 #include "Scene.h"
 
+class CrimsonCore;
+
 class AssetManager
 {
 
@@ -24,6 +26,7 @@ public:
 	//	Virtual destructor for the asset manager class.
 	virtual ~AssetManager();
 
+	void SetEngine(CrimsonCore * _core);
 
 	//	Load a Texture from a file with an assigned name.
 	void LoadTexture(std::string _textureName, std::string _filePath);
@@ -98,6 +101,8 @@ public:
 	void OpenScene(int _sceneId);
 
 private:
+
+	CrimsonCore * m_core;
 
 	std::map<std::string, Asset> m_assets;
 

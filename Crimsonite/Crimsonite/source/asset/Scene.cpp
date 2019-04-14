@@ -12,12 +12,16 @@
 
 Scene::Scene()
 {
-	m_name = "New Scene";
+	m_name = "NewScene";
 	m_path = "";
 	m_serializedString = "";
 
 	m_renderer = new SimpleRenderer();
 	m_ecs = new EcsSystem();
+
+	m_ecs->NewEntity("MainCamera");
+	Camera * cam = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+	cam->SetOutputFrameBuffer("MainCamBuffer");
 }
 
 Scene::Scene(std::string _scenePath)

@@ -85,7 +85,7 @@ void Editor::DrawGui()
 			{
 				if (ImGui::Button("New Scene"))
 				{
-
+					CreateAndLoadNewScene("New Scene");
 				}
 				if (ImGui::Button("Open Scene"))
 				{
@@ -323,4 +323,13 @@ void Editor::SelectEditorTool(int _tool)
 {
 	m_selectedTool = _tool;
 	std::cout << "Selected editor tool '" << m_selectedTool << "'." << std::endl;
+}
+
+void Editor::CreateAndLoadNewScene(std::string _sceneName)
+{
+	Scene newScene = Scene();
+	newScene.SetPath(m_engine->AssetsPath() + "scenes/NewScene");
+	newScene.Save();
+	AssetManager::Instance()->LoadScene(m_engine->AssetsPath() + "scenes/NewScene");
+	AssetManager::Instance()->OpenScene("NewScene");
 }

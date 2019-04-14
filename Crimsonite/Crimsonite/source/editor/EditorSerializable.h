@@ -16,4 +16,6 @@ public:
 
 	//	Used for drawing editor properties and tools.
 	virtual void DrawEditorProperties() {}
+
+	virtual std::string GetTypeString() { return std::string(); }
 };

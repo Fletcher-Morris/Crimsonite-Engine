@@ -36,8 +36,11 @@ public:
 	void SelectEditorTool(int _tool);
 
 	Camera * m_editorCam;
+	glm::vec3 m_storedEdCamPos;
+	glm::vec3 m_storedEdCamRot;
 
 	EditorSerializable * m_selectedEditorObject;
+	std::string m_selectedEntityName = "";
 	/*void SelectEntity(int _id);
 	void DeselectEntity();*/
 

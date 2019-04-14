@@ -229,8 +229,7 @@ void Editor::DrawGui()
 			ImGui::SameLine();
 			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
-				m_engine->GetCurrentScene()->Serialize();
-				m_engine->SetPlayMode(PLAYMODE_RUNNING);
+				PlayGame();
 			}
 		}
 		else
@@ -238,9 +237,7 @@ void Editor::DrawGui()
 			ImGui::SameLine();
 			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_stop")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
-				m_engine->SetPlayMode(PLAYMODE_STOPPED);
-				m_engine->GetCurrentScene()->Deserialize();
-				CreateEditorCam();
+				StopGame();
 			}
 		}
 	}
@@ -285,14 +282,35 @@ void Editor::DrawGui()
 
 void Editor::PlayGame()
 {
+	m_engine->GetCurrentScene()->Serialize();
+	m_engine->SetPlayMode(PLAYMODE_RUNNING);
 }
 
 void Editor::PauseGame()
 {
+	m_engine->SetPlayMode(PLAYMODE_PAUSED);
 }
 
 void Editor::StopGame()
 {
+	m_storedEdCamPos = m_editorCam->entity->transform.GetPosition();
+	m_storedEdCamRot = m_editorCam->entity->transform.GetRotation();
+	if (m_selectedEditorObject->GetTypeString() == "EcsEntity")
+	{
+		EcsEntity * ent = static_cast<EcsEntity*>(m_selectedEditorObject);
+		m_selectedEntityName = ent->GetName();
+	}
+	else { m_selectedEntityName = ""; }
+	m_engine->SetPlayMode(PLAYMODE_STOPPED);
+	m_engine->GetCurrentScene()->Deserialize();
+	CreateEditorCam();
+	m_editorCam->entity->transform.SetPosition(m_storedEdCamPos);
+	m_editorCam->entity->transform.SetRotation(m_storedEdCamRot);
+	if (m_selectedEntityName != "")
+	{
+		m_selectedEditorObject = m_engine->GetCurrentScene()->ECS()->FindEntity(m_selectedEntityName);
+	}
+	else if (!m_selectedEditorObject) { m_selectedEditorObject = m_editorCam->entity; }
 }
 
 void Editor::Quit()

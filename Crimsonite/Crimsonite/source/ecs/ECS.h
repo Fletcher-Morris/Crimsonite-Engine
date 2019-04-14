@@ -90,6 +90,11 @@ public:
 		return m_componentName;
 	}
 	void SetComponentName(std::string _name) { m_componentName = _name; }
+	//	Called by the editor.
+	std::string GetTypeString() override
+	{
+		return "EcsComponent";
+	}
 
 };
 
@@ -169,6 +174,11 @@ public:
 	void Render();
 	//	Called by the editor.
 	void DrawEditorProperties() override;
+	//	Called by the editor.
+	std::string GetTypeString() override
+	{
+		return "EcsEntity";
+	}
 	//	Set the enabled state of the entity.
 	void SetEnabled(bool _enable);
 	//	Check if this entity has a specific component attached.
@@ -233,6 +243,11 @@ public:
 	//	Clear out all destroyed entities and reset counters.
 	void Refresh();
 	std::string Serialize() override;
+	//	Called by the editor.
+	std::string GetTypeString() override
+	{
+		return "EcsSystem";
+	}
 	void DeserializeEntity(std::vector<std::string> _serializedComponent);
 	void DeserializeComponent(std::vector<std::string> _serializedComponent);
 };

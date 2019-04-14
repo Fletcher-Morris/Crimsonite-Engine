@@ -163,6 +163,7 @@ void EcsEntity::SetEnabled(bool _enable)
 
 EcsEntity & EcsSystem::NewEntity(std::string _entityName)
 {
+	if (_entityName == "") _entityName = "New Entity";
 	EcsEntity * newEntity = new EcsEntity(this, _entityName);
 	std::unique_ptr<EcsEntity>entPtr{ newEntity };
 	entities.emplace_back(std::move(entPtr));

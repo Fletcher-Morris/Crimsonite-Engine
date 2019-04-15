@@ -52,7 +52,7 @@ public:
 	{
 		up = glm::cross(Forward(), Right());
 		up = glm::normalize(up);
-		return up;
+		return -up;
 	}
 	glm::vec3 Down()
 	{

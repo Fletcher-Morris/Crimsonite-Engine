@@ -290,6 +290,18 @@ void Editor::DrawGui()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+void Editor::Update()
+{
+	glm::vec3 moveVector = glm::vec3();
+	if (Input::GetKey(KEYCODE_RIGHT)) moveVector.x = 1;
+	else if (Input::GetKey(KEYCODE_LEFT)) moveVector.x = -1;
+	if (Input::GetKey(KEYCODE_RIGHT_SHIFT)) moveVector.y = 1;
+	else if (Input::GetKey(KEYCODE_RIGHT_CONTROL)) moveVector.y = -1;
+	if (Input::GetKey(KEYCODE_UP)) moveVector.z = 1;
+	else if (Input::GetKey(KEYCODE_DOWN)) moveVector.z = -1;
+	m_editorCam->entity->transform.Move(moveVector * Time::DeltaTime());
+}
+
 void Editor::PlayGame()
 {
 	m_engine->GetCurrentScene()->Serialize();

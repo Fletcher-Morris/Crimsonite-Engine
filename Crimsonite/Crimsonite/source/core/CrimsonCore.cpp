@@ -115,6 +115,7 @@ void CrimsonCore::RunEngine()
 		{
 			m_currentScene->Update();
 		}
+		if (m_editor != NULL) m_editor->Update();
 		m_currentScene->Render();
 		if (m_editor != NULL) m_editor->DrawGui();
 		glfwSwapBuffers(m_window);

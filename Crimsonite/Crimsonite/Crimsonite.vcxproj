@@ -16,6 +16,7 @@
     <ClCompile Include="source\asset\Scene.cpp" />
     <ClCompile Include="source\core.cpp" />
     <ClCompile Include="source\core\CrimsonCore.cpp" />
+    <ClCompile Include="source\core\Input.cpp" />
     <ClCompile Include="source\core\Time.cpp" />
     <ClCompile Include="source\core\Window.cpp" />
     <ClCompile Include="source\ecs\components\Camera.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="source\asset\Scene.h" />
     <ClInclude Include="source\core.h" />
     <ClInclude Include="source\core\CrimsonCore.h" />
+    <ClInclude Include="source\core\Input.h" />
     <ClInclude Include="source\core\Time.h" />
     <ClInclude Include="source\core\Window.h" />
     <ClInclude Include="source\ecs\Components.h" />

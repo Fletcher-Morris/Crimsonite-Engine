@@ -5,6 +5,7 @@
 #include "../editor/Editor.h"
 
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
+void GlfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods);
 
 CrimsonCore::CrimsonCore()
 {
@@ -17,7 +18,6 @@ CrimsonCore::CrimsonCore(std::string _appName)
 	printf("CRIMSONITE\n");
 	std::cout << "==========" << std::endl;
 
-	Assets = AssetManager::Instance();
 	m_assetPath = (std::string)_getcwd(NULL, 0) + "/assets/";
 	//m_assetPath = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
 	std::cout << "Assets path is : " << m_assetPath << std::endl;
@@ -52,6 +52,7 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 	}
 	glfwMakeContextCurrent(m_window);
 	glfwSetFramebufferSizeCallback(m_window, GlfwFrameBufferSizeCallback);
+	glfwSetKeyCallback(m_window, GlfwKeyCallback);
 	glfwSwapInterval(0);
 }
 
@@ -75,31 +76,31 @@ void CrimsonCore::RunEngine()
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	Assets->SetEngine(this);
+	AssetManager::SetEngine(this);
 
-	Assets->LoadTexture("noise", m_assetPath + "textures/noise.png");
-	Assets->LoadTexture("crimsontex", m_assetPath + "textures/crimsontex.png");
-	Assets->LoadTexture("room", m_assetPath + "textures/room.png");
-	Assets->LoadTexture("flat", m_assetPath + "textures/flat.png");
+	AssetManager::LoadTexture("noise", m_assetPath + "textures/noise.png");
+	AssetManager::LoadTexture("crimsontex", m_assetPath + "textures/crimsontex.png");
+	AssetManager::LoadTexture("room", m_assetPath + "textures/room.png");
+	AssetManager::LoadTexture("flat", m_assetPath + "textures/flat.png");
 
-	Assets->LoadMesh("quad", m_assetPath + "meshes/quad");
-	Assets->LoadMesh("cube", m_assetPath + "meshes/cube");
-	Assets->LoadMesh("sphere", m_assetPath + "meshes/sphere");
-	Assets->LoadMesh("dragon", m_assetPath + "meshes/dragon");
-	Assets->LoadMesh("spring", m_assetPath + "meshes/spring");
-	Assets->LoadMesh("knot", m_assetPath + "meshes/knot");
-	Assets->LoadMesh("teapot", m_assetPath + "meshes/teapot");
+	AssetManager::LoadMesh("quad", m_assetPath + "meshes/quad");
+	AssetManager::LoadMesh("cube", m_assetPath + "meshes/cube");
+	AssetManager::LoadMesh("sphere", m_assetPath + "meshes/sphere");
+	AssetManager::LoadMesh("dragon", m_assetPath + "meshes/dragon");
+	AssetManager::LoadMesh("spring", m_assetPath + "meshes/spring");
+	AssetManager::LoadMesh("knot", m_assetPath + "meshes/knot");
+	AssetManager::LoadMesh("teapot", m_assetPath + "meshes/teapot");
 
-	Assets->LoadShader("color", m_assetPath + "shaders/vertex.vert", m_assetPath + "shaders/fragment.frag");
-	Assets->CreatePassthroughShader();
+	AssetManager::LoadShader("color", m_assetPath + "shaders/vertex.vert", m_assetPath + "shaders/fragment.frag");
+	AssetManager::CreatePassthroughShader();
 
-	Assets->LoadMaterial(m_assetPath + "materials/crimsontex");
-	Assets->LoadMaterial(m_assetPath + "materials/room");
-	Assets->LoadMaterial(m_assetPath + "materials/flat");
+	AssetManager::LoadMaterial(m_assetPath + "materials/crimsontex");
+	AssetManager::LoadMaterial(m_assetPath + "materials/room");
+	AssetManager::LoadMaterial(m_assetPath + "materials/flat");
 
-	Assets->CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
+	AssetManager::CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
 
-	Assets->LoadScene(m_assetPath + "scenes/scene1");
+	AssetManager::LoadScene(m_assetPath + "scenes/scene1");
 
 #if _DEBUG
 	m_editor = new Editor(this);
@@ -151,4 +152,10 @@ void CrimsonCore::OpenScene(std::string _sceneName)
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
 	Window::SetSize(_width, _height);
+}
+
+void GlfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods)
+{
+	std::cout << _key << ", " << _scancode << ", " << _action << std::endl;
+	Input::SetKeyState(_key, _action);
 }

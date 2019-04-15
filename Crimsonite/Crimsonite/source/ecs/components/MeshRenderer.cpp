@@ -42,9 +42,9 @@ void MeshRenderer::DrawEditorProperties()
 	}
 	if (ImGui::BeginCombo("Mesh", currentMeshName.c_str()))
 	{
-		for (int i = 0; i < AssetManager::Instance()->MeshCount(); i++)
+		for (int i = 0; i < AssetManager::MeshCount(); i++)
 		{
-			std::string foundMeshName = AssetManager::Instance()->GetMesh(i)->GetName();
+			std::string foundMeshName = AssetManager::GetMesh(i)->GetName();
 			bool isSelected = (currentMeshName == foundMeshName);
 			if (ImGui::Button(foundMeshName.c_str()))
 			{
@@ -89,7 +89,7 @@ void MeshRenderer::SetMesh(Mesh * _newMesh)
 
 void MeshRenderer::SetMesh(std::string _meshName)
 {
-	SetMesh(AssetManager::Instance()->GetMesh(_meshName));
+	SetMesh(AssetManager::GetMesh(_meshName));
 }
 
 void MeshRenderer::SetMaterial(Material * _newMaterial)
@@ -99,7 +99,7 @@ void MeshRenderer::SetMaterial(Material * _newMaterial)
 
 void MeshRenderer::SetMaterial(std::string _materialName)
 {
-	SetMaterial(AssetManager::Instance()->GetMaterial(_materialName));
+	SetMaterial(AssetManager::GetMaterial(_materialName));
 }
 
 Material * MeshRenderer::GetMaterial()

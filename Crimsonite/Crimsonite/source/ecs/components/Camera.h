@@ -54,7 +54,7 @@ public:
 	const glm::mat4 GetProjectionViewMatrix() { return m_projectionViewMatrix; }
 
 	void SetOutputFrameBuffer(FrameBuffer * _buffer) { m_frameBuffer = _buffer; }
-	void SetOutputFrameBuffer(std::string _bufferName) { SetOutputFrameBuffer(AssetManager::Instance()->GetFrameBuffer(_bufferName)); }
+	void SetOutputFrameBuffer(std::string _bufferName) { SetOutputFrameBuffer(AssetManager::GetFrameBuffer(_bufferName)); }
 	void UpdateOutputBufferSize();
 	FrameBuffer * GetOutputFrameBuffer() { return m_frameBuffer; }
 

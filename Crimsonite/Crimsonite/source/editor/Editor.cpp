@@ -28,7 +28,7 @@ void Editor::Init()
 
 	LoadIcons();
 
-	AssetManager::Instance()->CreateFrameBuffer("EditorViewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
+	AssetManager::CreateFrameBuffer("EditorViewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigDockingWithShift = false;
@@ -46,16 +46,16 @@ void Editor::CreateEditorCam()
 
 void Editor::LoadIcons()
 {
-	AssetManager::Instance()->LoadTexture("editor_tool_move", m_engine->AssetsPath() + "editor/tool_move.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_move_selected", m_engine->AssetsPath() + "editor/tool_move_selected.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_rotate", m_engine->AssetsPath() + "editor/tool_rotate.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_rotate_selected", m_engine->AssetsPath() + "editor/tool_rotate_selected.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_scale", m_engine->AssetsPath() + "editor/tool_scale.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_scale_selected", m_engine->AssetsPath() + "editor/tool_scale_selected.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_play", m_engine->AssetsPath() + "editor/tool_play.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_play_selected", m_engine->AssetsPath() + "editor/tool_play_selected.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_stop", m_engine->AssetsPath() + "editor/tool_stop.png");
-	AssetManager::Instance()->LoadTexture("editor_tool_stop_selected", m_engine->AssetsPath() + "editor/tool_stop_selected.png");
+	AssetManager::LoadTexture("editor_tool_move", m_engine->AssetsPath() + "editor/tool_move.png");
+	AssetManager::LoadTexture("editor_tool_move_selected", m_engine->AssetsPath() + "editor/tool_move_selected.png");
+	AssetManager::LoadTexture("editor_tool_rotate", m_engine->AssetsPath() + "editor/tool_rotate.png");
+	AssetManager::LoadTexture("editor_tool_rotate_selected", m_engine->AssetsPath() + "editor/tool_rotate_selected.png");
+	AssetManager::LoadTexture("editor_tool_scale", m_engine->AssetsPath() + "editor/tool_scale.png");
+	AssetManager::LoadTexture("editor_tool_scale_selected", m_engine->AssetsPath() + "editor/tool_scale_selected.png");
+	AssetManager::LoadTexture("editor_tool_play", m_engine->AssetsPath() + "editor/tool_play.png");
+	AssetManager::LoadTexture("editor_tool_play_selected", m_engine->AssetsPath() + "editor/tool_play_selected.png");
+	AssetManager::LoadTexture("editor_tool_stop", m_engine->AssetsPath() + "editor/tool_stop.png");
+	AssetManager::LoadTexture("editor_tool_stop_selected", m_engine->AssetsPath() + "editor/tool_stop_selected.png");
 }
 
 void Editor::CreateObject(std::string _meshName)
@@ -110,21 +110,21 @@ void Editor::DrawGui()
 		{
 			if (ImGui::BeginMenu("Textures"))
 			{
-				for (int i = 0; i < AssetManager::Instance()->TextureCount(); i++)
+				for (int i = 0; i < AssetManager::TextureCount(); i++)
 				{
-					ImGui::Text("%s", AssetManager::Instance()->GetTexture(i)->GetName().c_str());
-					ImGui::Text("%i X %i", AssetManager::Instance()->GetTexture(i)->GetWidth(), AssetManager::Instance()->GetTexture(i)->GetHeight());
-					ImGui::Text("GL ID : %i", AssetManager::Instance()->GetTexture(i)->TextureId);
-					if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture(i)->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
+					ImGui::Text("%s", AssetManager::GetTexture(i)->GetName().c_str());
+					ImGui::Text("%i X %i", AssetManager::GetTexture(i)->GetWidth(), AssetManager::GetTexture(i)->GetHeight());
+					ImGui::Text("GL ID : %i", AssetManager::GetTexture(i)->TextureId);
+					if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture(i)->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128))) {}
 					ImGui::Separator();
 				}
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Models"))
 			{
-				for (int i = 0; i < AssetManager::Instance()->MeshCount(); i++)
+				for (int i = 0; i < AssetManager::MeshCount(); i++)
 				{
-					if (ImGui::Button(AssetManager::Instance()->GetMeshName(i).c_str()))
+					if (ImGui::Button(AssetManager::GetMeshName(i).c_str()))
 					{
 
 					}
@@ -201,11 +201,11 @@ void Editor::DrawGui()
 		ImGui::SameLine();
 		if (m_selectedTool == TOOL_MOVE)
 		{
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_move_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_move_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
 		}
 		else
 		{
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_move")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_move")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
 				SelectEditorTool(TOOL_MOVE);
 			}
@@ -213,11 +213,11 @@ void Editor::DrawGui()
 		ImGui::SameLine();
 		if (m_selectedTool == TOOL_ROTATE)
 		{
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_rotate_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_rotate_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
 		}
 		else
 		{
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_rotate")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_rotate")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
 				SelectEditorTool(TOOL_ROTATE);
 			}
@@ -225,11 +225,11 @@ void Editor::DrawGui()
 		ImGui::SameLine();
 		if (m_selectedTool == TOOL_SCALE)
 		{
-		if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_scale_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
+		if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_scale_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
 		}
 		else
 		{
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_scale")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_scale")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{ SelectEditorTool(TOOL_SCALE); }
 		}
 
@@ -237,7 +237,7 @@ void Editor::DrawGui()
 		{
 
 			ImGui::SameLine(ImGui::GetWindowWidth()/2);
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_play")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
 				PlayGame();
 			}
@@ -245,7 +245,7 @@ void Editor::DrawGui()
 		else
 		{
 			ImGui::SameLine(ImGui::GetWindowWidth() / 2);
-			if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture("editor_tool_stop")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
+			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_stop")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{
 				StopGame();
 			}
@@ -255,7 +255,7 @@ void Editor::DrawGui()
 
 	ImGui::Begin("Viewport");
 	{
-		ImGui::Image((GLuint*)AssetManager::Instance()->GetTexture("EditorViewport")->TextureId, ImVec2(1280, 720));
+		ImGui::Image((GLuint*)AssetManager::GetTexture("EditorViewport")->TextureId, ImVec2(1280, 720));
 	}
 	ImGui::End();
 
@@ -348,6 +348,6 @@ void Editor::CreateAndLoadNewScene(std::string _sceneName)
 	Scene newScene = Scene();
 	newScene.SetPath(m_engine->AssetsPath() + "scenes/NewScene");
 	newScene.Save();
-	AssetManager::Instance()->LoadScene(m_engine->AssetsPath() + "scenes/NewScene");
-	AssetManager::Instance()->OpenScene("NewScene");
+	AssetManager::LoadScene(m_engine->AssetsPath() + "scenes/NewScene");
+	AssetManager::OpenScene("NewScene");
 }

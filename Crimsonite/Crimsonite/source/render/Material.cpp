@@ -50,7 +50,7 @@ void Material::UpdateShaderProperties()
 
 void Material::SetShader(std::string _shader)
 {
-	m_shader = AssetManager::Instance()->GetShader(_shader);
+	m_shader = AssetManager::GetShader(_shader);
 }
 
 void Material::SetColor(glm::vec3 _color)
@@ -76,12 +76,12 @@ void Material::SetTextureProperty(std::string _propertyName, Texture * _texture)
 
 void Material::SetTextureProperty(std::string _propertyName, std::string _textureName)
 {
-	SetTextureProperty(_propertyName, AssetManager::Instance()->GetTexture(_textureName));
+	SetTextureProperty(_propertyName, AssetManager::GetTexture(_textureName));
 }
 
 void Material::SetMainTex(std::string _textureName)
 {
-	SetMainTex(AssetManager::Instance()->GetTexture(_textureName));
+	SetMainTex(AssetManager::GetTexture(_textureName));
 }
 
 void Material::SetMainTex(Texture * _texture)
@@ -139,15 +139,15 @@ void Material::DrawEditorProperties()
 		Texture * currentTex = textureProperties[reservedTexName];
 		if (currentTex == NULL)
 		{
-			currentTex = AssetManager::Instance()->GetTexture("error");
+			currentTex = AssetManager::GetTexture("error");
 		}
 		std::string currentTexName = currentTex->GetName();
 		if (ImGui::BeginCombo(reservedTexName.c_str(), currentTexName.c_str()))
 		{
 			int r = 0;
-			for (int i = 0; i < AssetManager::Instance()->TextureCount(); i++)
+			for (int i = 0; i < AssetManager::TextureCount(); i++)
 			{
-				std::string foundTexName = AssetManager::Instance()->GetTexture(i)->GetName();
+				std::string foundTexName = AssetManager::GetTexture(i)->GetName();
 				bool isSelected = (currentTexName == foundTexName);
 				if (r < 6)
 				{
@@ -158,7 +158,7 @@ void Material::DrawEditorProperties()
 				{
 					r = 0;
 				}
-				if (ImGui::ImageButton((GLuint*)AssetManager::Instance()->GetTexture(i)->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128)))
+				if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture(i)->TextureId, ImVec2(50.0f, 50.0f), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 128)))
 				{
 					SetTextureProperty(reservedTexName, foundTexName);
 				}

@@ -197,7 +197,7 @@ void Scene::Save()
 
 void Scene::SetName(std::string _newName)
 {
-	AssetManager::Instance()->ChangeLoadedSceneName(m_name, _newName);
+	AssetManager::ChangeLoadedSceneName(m_name, _newName);
 	m_name = _newName;
 }
 

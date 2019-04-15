@@ -16,3 +16,5 @@ glm::mat4 CreateModelMatrix(const Transform & _transform);
 glm::mat4 CreateViewMatrix(const Camera & _camera);
 //	Create a projection matrix using given CameraSettings.
 glm::mat4 CreateProjectionMatrix(const CameraSettings & _settings);
+//	Create a projection matrix using given values.
+glm::mat4 CreateProjectionMatrix(const float _fov, const float _ratio, const float _near, const float _far);

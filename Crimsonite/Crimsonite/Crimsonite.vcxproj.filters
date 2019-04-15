@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Source Files\asset">
       <UniqueIdentifier>{c76814d1-250b-466c-ac54-4fc91a6b8fea}</UniqueIdentifier>
     </Filter>
@@ -48,6 +44,24 @@
     </Filter>
     <Filter Include="Header Files\core">
       <UniqueIdentifier>{0ac7661e-5bf1-4f35-be25-df21b7c2070b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editor">
+      <UniqueIdentifier>{fb7c797b-bc5e-46ba-ae64-1cf13c248df5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editor">
+      <UniqueIdentifier>{35f02f0e-5576-44b9-b670-2ef98015a856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\external">
+      <UniqueIdentifier>{f2134276-aa72-48d0-ae51-2421213d10d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\external\imgui">
+      <UniqueIdentifier>{43a0f08d-a3fa-4027-a902-7f37bec5c859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\extenal">
+      <UniqueIdentifier>{e10c7800-dcfa-4f1c-830e-e73434bf460a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\extenal\imgui">
+      <UniqueIdentifier>{8442b0f3-b2b1-41b6-b9fd-90fd70635bc3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +109,36 @@
     </ClCompile>
     <ClCompile Include="source\render\Material.cpp">
       <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\editor\Editor.cpp">
+      <Filter>Source Files\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\external\imgui\imgui.cpp">
+      <Filter>Source Files\external\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\external\imgui\imgui_draw.cpp">
+      <Filter>Source Files\external\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\external\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\external\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\external\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\external\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\external\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\external\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\render\FrameBuffer.cpp">
+      <Filter>Source Files\render</Filter>
+    </ClCompile>
+    <ClCompile Include="source\asset\Scene.cpp">
+      <Filter>Source Files\asset</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ecs\ECS.cpp">
+      <Filter>Source Files\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\Window.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +201,48 @@
     </ClInclude>
     <ClInclude Include="source\render\Texture.h">
       <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\editor\Editor.h">
+      <Filter>Header Files\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\external\imgui\imstb_truetype.h">
+      <Filter>Header Files\extenal\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\external\imgui\imconfig.h">
+      <Filter>Header Files\extenal\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\external\imgui\imgui.h">
+      <Filter>Header Files\extenal\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\external\imgui\imgui_impl_glfw.h">
+      <Filter>Header Files\extenal\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\external\imgui\imgui_impl_opengl3.h">
+      <Filter>Header Files\extenal\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\external\imgui\imgui_internal.h">
+      <Filter>Header Files\extenal\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\external\imgui\imstb_rectpack.h">
+      <Filter>Header Files\extenal\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\external\imgui\imstb_textedit.h">
+      <Filter>Header Files\extenal\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\render\FrameBuffer.h">
+      <Filter>Header Files\render</Filter>
+    </ClInclude>
+    <ClInclude Include="source\asset\Scene.h">
+      <Filter>Header Files\asset</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\Window.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\editor\EditorSerializable.h">
+      <Filter>Header Files\editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

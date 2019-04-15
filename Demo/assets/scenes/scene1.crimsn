@@ -1,0 +1,116 @@
+# Crimsonite Scene File
+
+BeginScene
+val TestScene
+EndScene
+
+BeginRenderer
+val 0.863000
+val 0.078000
+val 0.235000
+EndRenderer
+
+BeginEntity
+val MainCamera
+val true
+val true
+val 0.000000
+val 0.000000
+val 2.050000
+val 0.000000
+val 0.000000
+val 0.000000
+val 1.000000
+val 1.000000
+val 1.000000
+EndEntity
+BeginComponent Camera
+val true
+val 60.000000
+val 0.100000
+val 100.000000
+val MainCamBuffer
+EndComponent
+
+BeginEntity
+val DRAGON
+val true
+val false
+val 0.000000
+val 0.000000
+val 0.200000
+val 0.000000
+val 28.750000
+val 0.000000
+val 1.000000
+val 1.000000
+val 1.000000
+EndEntity
+BeginComponent MeshRenderer
+val true
+val dragon
+val room
+val 4
+EndComponent
+BeginComponent Rotator
+val false
+val 0.000000
+val 0.000000
+val 0.000000
+EndComponent
+
+BeginEntity
+val CUBE
+val true
+val false
+val -0.700000
+val 0.000000
+val 1.000000
+val -25.500000
+val 79.500000
+val 0.000000
+val 1.000000
+val 1.000000
+val 1.000000
+EndEntity
+BeginComponent MeshRenderer
+val true
+val cube
+val crimsontex
+val 4
+EndComponent
+BeginComponent Rotator
+val true
+val 0.000000
+val 90.000000
+val 0.000000
+EndComponent
+
+BeginEntity
+val KNOT
+val true
+val false
+val 0.600000
+val 0.000000
+val 1.050000
+val 140.006500
+val 140.006500
+val 0.000000
+val 1.000000
+val 1.000000
+val 1.000000
+EndEntity
+BeginComponent MeshRenderer
+val true
+val knot
+val flat
+val 4
+EndComponent
+BeginComponent Rotator
+val true
+val 48.000000
+val 85.000000
+val 62.000000
+EndComponent
+
+

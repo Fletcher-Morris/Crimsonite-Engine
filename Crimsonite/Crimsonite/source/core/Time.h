@@ -16,9 +16,15 @@ public:
 	static double DeltaTimeDouble() { return Instance()->m_deltaTimeDouble; }
 	//	Return DeltaTime as a double.
 	static double FixedTimeDouble() { return Instance()->m_fixedTimeDouble; }
+	//	Return the current time as a float.
+	static float GetTime() { return (float) Instance()->m_currentFrameTime; }
+	//	Return the current time as a float.
+	static double GetTimeDouble() { return Instance()->m_currentFrameTime; }
 
 	//	Set the frame time to calculate DeltaTime.
 	static void SetFrameTime(double _frameTime);
+
+	static int GetFps() { return Instance()->m_averageFps; }
 
 private:
 
@@ -35,6 +41,11 @@ private:
 	double m_currentFrameTime;
 	//	The time the previous frame started.
 	double m_lastFrameTime;
+
+	//	A frame counter for measuring FPS.
+	int m_frameCounter = 0;
+	double m_lastFpsCheckTime;
+	int m_averageFps = 0;
 
 protected:
 

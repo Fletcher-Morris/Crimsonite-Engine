@@ -5,6 +5,7 @@
 class Mesh;
 class Material;
 class Renderer;
+class Camera;
 
 class MeshRenderer : public EcsComponent
 {
@@ -17,7 +18,10 @@ private:
 
 	int m_renderMode = GL_TRIANGLES;
 
-	int i = 0;
+	glm::mat4 m_modelMatrix;
+	glm::mat4 m_viewMatrix;
+	glm::mat4 m_projMatrix;
+	glm::mat4 m_mvpMatrix;
 
 public:
 
@@ -27,7 +31,9 @@ public:
 	virtual void OnRender() override;
 	virtual void OnEnable() override;
 	virtual void OnDisable() override;
-
+	virtual void DrawEditorProperties() override;
+	virtual std::string Serialize() override;
+	virtual void Deserialize(std::vector<std::string> _data) override;
 
 	void SetMesh(Mesh * _newMesh);
 	void SetMesh(std::string _meshName);
@@ -42,11 +48,13 @@ public:
 	void SubmitToRenderer(Renderer * _renderer);
 
 	void SetShaderMvp();
+	void SetShaderMvp(Camera * _camera);
+	void SetShaderMvp(float _fov, float _ratio, float _near, float _far);
+	void UpdateShaderMvp();
 
 	void SetRenderMode(int _mode)
 	{
 		m_renderMode = _mode;
-		std::cout << "Set Mesh Render Mode Of '" << entity->GetName() << "' To '" << m_renderMode << "'." << std::endl;
 	}
 	int GetRenderMode() { return m_renderMode; }
 };

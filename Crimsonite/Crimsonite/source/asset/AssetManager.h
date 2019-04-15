@@ -8,9 +8,13 @@
 
 #include "Asset.h"
 #include "../render/Texture.h"
+#include "../render/FrameBuffer.h"
 #include "../mesh/Mesh.h"
 #include "../render/Shader.h"
 #include "../render/Material.h"
+#include "Scene.h"
+
+class CrimsonCore;
 
 class AssetManager
 {
@@ -22,48 +26,84 @@ public:
 	//	Virtual destructor for the asset manager class.
 	virtual ~AssetManager();
 
+	static void SetEngine(CrimsonCore * _core);
 
 	//	Load a Texture from a file with an assigned name.
-	void LoadTexture(std::string _textureName, std::string _filePath);
+	static void LoadTexture(std::string _textureName, std::string _filePath);
+	//	Create a blank Texture.
+	static void CreateTexture(std::string _textureName, int _width, int _height);
+	static void CreateTexture(std::string _textureName);
+	static void CreateTexture(std::string _textureName, int _width, int _height, int _glId);
 	//	Return a reference to a Texture with a given name.
-	Texture * GetTexture(std::string _textureName);
+	static Texture * GetTexture(std::string _textureName);
+	static Texture * GetTexture(int _textureId) { return &Instance()->m_textures.at(Instance()->m_loadedTextureNames[_textureId]); }
+	static int TextureCount() { return Instance()->m_loadedTextureNames.size(); }
+
+
+	//	Create a new FrameBuffer.
+	static void CreateFrameBuffer(std::string _bufferName, int _width, int _height);
+	static void CreateFrameBuffer(std::string _bufferName, int _width, int _height, bool _useDepth);
+	//	Bind a specified FrameBuffer.
+	static void BindFrameBuffer(std::string _bufferName);
+	//	Return a specific FrameBuffer.
+	static FrameBuffer * GetFrameBuffer(std::string _bufferName);
 
 
 	//	Load a Mesh from a file with an assigned name.
-	void LoadMesh(std::string _meshName, std::string _filePath);
+	static void LoadMesh(std::string _meshName, std::string _filePath);
 	//	Save a given Mesh instance to a file.
-	void WriteMeshFile(Mesh _mesh, std::string _filePath);
+	static void WriteMeshFile(Mesh _mesh, std::string _filePath);
 	//	Return a reference to a Mesh with a given name.
-	Mesh * GetMesh(std::string _meshName);
+	static Mesh * GetMesh(std::string _meshName);
+	static Mesh * GetMesh(int _meshId) { return &Instance()->m_meshes.at(Instance()->m_loadedMeshNames[_meshId]); }
+	static std::string GetMeshName(int _meshId) { return Instance()->m_loadedMeshNames[_meshId]; }
+	static int MeshCount() { return Instance()->m_loadedMeshNames.size(); }
 
 
 	//	Add a Shader with a given name.
-	void AddShader(std::string _shaderName);
+	static void AddShader(std::string _shaderName);
 	//	Load a Shader from a single file with an assigned name.
-	void LoadShader(std::string _shaderName, std::string _filePath);
+	static void LoadShader(std::string _shaderName, std::string _filePath);
 	//	Load a Shader from a vertex and fragment file with an assigned name.
-	void LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath);
+	static void LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath);
 	//	Return a reference to a Shader with a given name.
-	Shader * GetShader(std::string _shaderName);
+	static Shader * GetShader(std::string _shaderName);
 	//	Forcibly create the defaut Shader.
-	void CreateDefaultShader();
+	static void CreateDefaultShader();
+	//	Create the passthrough Shader.
+	static void CreatePassthroughShader();
+	//	Return a reference to the passthrough Shader.
+	static 	Shader * GetPassthroughShader();
 
 
 	//	Add a Material with a given name.
-	void AddMaterial(std::string _materialName);
+	static void AddMaterial(std::string _materialName);
 	//	Add a material to the AssetManager.
-	void AddMaterial(Material _material);
+	static void AddMaterial(Material _material);
 	//	Load a Material from a file.
-	void LoadMaterial(std::string _filePath);
+	static void LoadMaterial(std::string _filePath);
 	//	Return a refernce to a Material with a given name.
-	Material * GetMaterial(std::string _materialName);
+	static Material * GetMaterial(std::string _materialName);
 	//	Forcibly create the default Material.
-	void CreateDefaultMaterial();
+	static void CreateDefaultMaterial();
+	//	Return a reference to the default Material.
+	static Material * GetDefaultMaterial();
 
 
 	//	SCENE METHODS
+	static void LoadScene(std::string _scenePath);
+	static Scene * GetScene(std::string _sceneName);
+	static Scene * GetScene(int _sceneId);
+	static void SaveScene(Scene * _scene);
+	static void SaveScene(std::string _sceneName);
+	static void OpenScene(Scene * _scene);
+	static void OpenScene(std::string _sceneName);
+	static void OpenScene(int _sceneId);
+	static void ChangeLoadedSceneName(std::string _currentName, std::string _newName);
 
 private:
+
+	CrimsonCore * m_core;
 
 	std::map<std::string, Asset> m_assets;
 
@@ -81,6 +121,13 @@ private:
 	bool m_errorTextureCreated = false;
 	//	Return a reference to the error Texture.
 	Texture * GetErrorTexture();
+
+	//	The map of framebuffers.
+	std::map<std::string, FrameBuffer> m_frameBuffers;
+	//	A vector of the names of all loaded FrameBuffers.
+	std::vector<std::string> m_loadedFrameBufferNames;
+	//	Does a FrameBuffer with a given name exist?
+	bool FrameBufferExists(std::string _bufferName);
 
 
 	//	The map of loaded meshes.
@@ -115,6 +162,8 @@ private:
 	bool m_defaultShaderCreated = false;
 	//	Return a reference to the default Shader.
 	Shader * GetDefaultShader();
+	//	Has the passthrough Shader been created?
+	bool m_passthroughShaderCreated = false;
 
 
 	//	The map of all loaded materials.
@@ -129,11 +178,17 @@ private:
 	int m_latestMaterialRevision = 1;
 	//	Has the default Material been created?
 	bool m_defaultMaterialCreated = false;
-	//	Return a reference to the default Material.
-	Material * GetDefaultMaterial();
 
 
-	//	SCENE MAP
+	//	The map of all loaded scenes.
+	std::map<int, Scene> m_scenes;
+	//	A vector of all loaded scene names.
+	std::vector<std::string> m_loadedSceneNames;
+	int m_sceneCount;
+	//	Add a Scene to the list of loaded scenes.
+	void LoadSceneName(std::string _sceneName);
+	//	Does a scene with a given name exist?
+	bool SceneExists(std::string _sceneName);
 
 protected:
 

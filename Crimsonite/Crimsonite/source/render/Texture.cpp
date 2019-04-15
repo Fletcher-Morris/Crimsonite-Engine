@@ -13,6 +13,12 @@ Texture::Texture(std::string _name, int _width, int _height, unsigned char * _da
 	SetData(_data);
 }
 
+Texture::Texture(std::string _name, int _width, int _height)
+{
+	m_name = _name;
+	SetSize(_width, _height);
+}
+
 Texture::~Texture()
 {
 	glDeleteTextures(1, &TextureId);

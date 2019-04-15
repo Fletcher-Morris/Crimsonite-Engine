@@ -4,7 +4,12 @@ Shader::Shader()
 {
 }
 
-Shader::Shader(const char * _vertexPath, const char * _fragmentPath)
+Shader::Shader(std::string _shaderName)
+{
+	m_name = _shaderName;
+}
+
+Shader::Shader(std::string _shaderName, const char * _vertexPath, const char * _fragmentPath)
 {
 	std::string vertexCode;
 	std::string fragmentCode;
@@ -45,13 +50,15 @@ Shader::Shader(const char * _vertexPath, const char * _fragmentPath)
 	}
 
 	if (fail == false) Compile(vertexCode, fragmentCode);
+
+	m_name = _shaderName;
 }
 
-Shader::Shader(const char * _comboPath)
+Shader::Shader(std::string _shaderName, const char * _comboPath)
 {
 }
 
-Shader::Shader(const std::string _comboPath)
+Shader::Shader(std::string _shaderName, const std::string _comboPath)
 {
 }
 
@@ -119,12 +126,18 @@ void Shader::Unbind() const
 	glUseProgram(0);
 }
 
-void Shader::SetMvpMatrix(const glm::mat4 _mvp)
+void Shader::SetMvpMatrix(const glm::mat4 _m, const glm::mat4 _v, const glm::mat4 _p)
 {
 	if (ShaderId == 0) return;
-	int location = GetUniformLocation("u_MVP");
+	int location = GetUniformLocation("Model");
 	if (location == -1) return;
-	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(_mvp));
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(_m));
+	location = GetUniformLocation("View");
+	if (location == -1) return;
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(_v));
+	location = GetUniformLocation("Projection");
+	if (location == -1) return;
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(_p));
 }
 
 void Shader::SetBool(const std::string & _name, bool _value)
@@ -193,6 +206,7 @@ void Shader::SetVector4(const std::string & _name, glm::vec4 _value)
 
 void Shader::SetTexture(const std::string & _name, Texture * _texture)
 {
+	if (_texture == NULL) return;
 	if (ShaderId == 0) return;
 	int location = GetUniformLocation(_name);
 	if (location == -1) return;

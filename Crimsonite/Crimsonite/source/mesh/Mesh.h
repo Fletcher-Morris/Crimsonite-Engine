@@ -16,6 +16,8 @@ public:
 	Mesh();
 	//	Constructor for mesh using vertices and indices parameters.
 	Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices);
+	//	Constructor for mesh using vertices and indices parameters.
+	Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, std::string _name);
 	//	A vector holding the unique vertices used in the mesh.
 	std::vector<Vertex> vertices;
 	int VertexCount() { return m_vertexCount; }
@@ -30,6 +32,9 @@ public:
 	unsigned int GetVao() { return VAO; }
 	unsigned int GetVbo() { return VBO; }
 	unsigned int GetEbo() { return EBO; }
+
+	void SetName(std::string _name) { m_name = _name; }
+	std::string GetName() { return m_name; }
 
 private:
 
@@ -50,4 +55,6 @@ private:
 
 	//	Has the mesh been initialized and sent to the gpu?
 	bool m_initialized = false;
+
+	std::string m_name;
 };

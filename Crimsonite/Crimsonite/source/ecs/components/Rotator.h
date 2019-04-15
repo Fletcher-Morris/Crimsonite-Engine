@@ -13,6 +13,12 @@ public:
 	virtual void OnRender() override;
 	virtual void OnEnable() override;
 	virtual void OnDisable() override;
+	virtual void DrawEditorProperties() override;
+	virtual std::string Serialize() override;
+	virtual void Deserialize(std::vector<std::string> _data);
+
+	glm::vec3 GetAxis() { return m_axis; }
+	void SetAxis(glm::vec3 _axis) { m_axis = _axis; }
 
 private:
 

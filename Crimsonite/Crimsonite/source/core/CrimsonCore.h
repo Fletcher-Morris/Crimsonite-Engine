@@ -6,10 +6,18 @@
 #include <gl/glew.h>
 #include <glfw3.h>
 
+#include "Window.h"
+
 #include "../ecs/ECS.h"
 #include "../ecs/Components.h"
 #include "../asset/AssetManager.h"
 #include "../render/SimpleRenderer.h"
+
+class Editor;
+
+#define PLAYMODE_STOPPED 0
+#define PLAYMODE_RUNNING 1
+#define PLAYMODE_PAUSED 2
 
 class CrimsonCore
 {
@@ -23,7 +31,21 @@ public:
 	void InitializeGlfw(std::string _appName);
 	void InitializeGlew();
 
+	GLFWwindow * GetWindow() { return m_window; }
+	GLFWmonitor * GetMonitor() { return m_monitor; }
+	const GLFWvidmode * GetVideoMode() { return m_videoMode; }
+
 	void RunEngine();
+	void QuitEngine();
+
+	std::string AssetsPath() { return m_assetPath; }
+
+	Scene * GetCurrentScene() { return m_currentScene; }
+	void OpenScene(int _sceneId);
+	void OpenScene(std::string _sceneName);
+
+	int GetPlayMode() { return m_playMode; }
+	void SetPlayMode(int _playMode) { m_playMode = _playMode; }
 
 private:
 
@@ -32,12 +54,18 @@ private:
 	std::string m_appName = "Crimsonite Engine";
 
 
+	bool m_quit = false;
+
 	GLFWwindow * m_window;
+	GLFWmonitor * m_monitor;
+	const GLFWvidmode * m_videoMode;
 
-	Renderer * m_renderer;
+	Editor * m_editor;
 	AssetManager * Assets;
-	EcsSystem * m_ecs;
 
-	std::string m_assetPath = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
+	std::string m_assetPath = "";
 
+	Scene * m_currentScene;
+
+	int m_playMode = PLAYMODE_STOPPED;
 };

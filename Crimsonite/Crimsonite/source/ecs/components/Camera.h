@@ -7,6 +7,8 @@
 #include <glm\gtc\type_ptr.hpp>
 #include "../../render/CameraSettings.h"
 
+class Renderer;
+
 class Camera : public EcsComponent
 {
 
@@ -18,6 +20,9 @@ public:
 	virtual void OnRender() override;
 	virtual void OnEnable() override;
 	virtual void OnDisable() override;
+	virtual void DrawEditorProperties() override;
+	virtual std::string Serialize() override;
+	virtual void Deserialize(std::vector<std::string> _data) override;
 
 	//	Set the view settings for this camera.
 	void SetCameraSettings(CameraSettings _newSettings);
@@ -25,10 +30,18 @@ public:
 	void SetCameraSettings(float _fov);
 	//	Set the near and farliiping values for this camera.
 	void SetCameraSettings(float _near, float _far);
+	//	Set the near and farliiping values for this camera.
+	void SetCameraSettings(float _fov, float _near, float _far);
 	//	Set thewidth and height of this camera.
 	void SetCameraSettings(int _width, int _height);
 	//	Return the view settingsused for this camera.
 	CameraSettings GetCameraSettings() { return m_settings; }
+
+	//	Set the renderer reference.
+	void SetRenderer(Renderer * _renderer) { m_renderer = _renderer; }
+
+	//	Bind this Camera.
+	void Bind();
 
 	//	Initialize the camera using it's settings.
 	void ReInit();
@@ -36,8 +49,14 @@ public:
 	const glm::mat4 GetProjectionMatrix() { return m_projectionMatrix; }
 	//	Get the view matrix for this camera.
 	const glm::mat4 GetViewMatrix() { return m_viewMatrix; }
+	void CreateCameraViewMatrix();
 	//	Get the view-projection matrix for this camera.
 	const glm::mat4 GetProjectionViewMatrix() { return m_projectionViewMatrix; }
+
+	void SetOutputFrameBuffer(FrameBuffer * _buffer) { m_frameBuffer = _buffer; }
+	void SetOutputFrameBuffer(std::string _bufferName) { SetOutputFrameBuffer(AssetManager::GetFrameBuffer(_bufferName)); }
+	void UpdateOutputBufferSize();
+	FrameBuffer * GetOutputFrameBuffer() { return m_frameBuffer; }
 
 
 private:
@@ -51,5 +70,9 @@ private:
 	glm::mat4 m_viewMatrix;
 	//	The view-projection matrix of the camera.
 	glm::mat4 m_projectionViewMatrix;
+
+	FrameBuffer * m_frameBuffer;
+
+	Renderer * m_renderer;
 
 };

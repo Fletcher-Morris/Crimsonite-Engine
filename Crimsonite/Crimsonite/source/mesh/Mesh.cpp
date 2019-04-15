@@ -6,9 +6,14 @@ Mesh::Mesh()
 
 Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indeces)
 {
+	Mesh(_vertices, _indeces, "");
+}
+
+Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indeces, std::string _name)
+{
 	this->vertices = _vertices;
 	this->indices = _indeces;
-
+	SetName(_name);
 	UploadToGpu();
 }
 

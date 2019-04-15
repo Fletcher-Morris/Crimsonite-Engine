@@ -2,6 +2,7 @@
 
 #include <vector>
 
+class Camera;
 class Mesh;
 class MeshRenderer;
 class Shader;
@@ -19,6 +20,7 @@ public:
 
 	virtual void Init() {}
 
+	virtual void Submit(Camera * _cam) {}
 	virtual void Submit(Mesh * _mesh) {}
 	virtual void Submit(Mesh * _mesh, Shader * _shader) {}
 	virtual void Submit(MeshRenderer * _meshRenderer) {}
@@ -28,5 +30,8 @@ public:
 
 	virtual void SetClearColor(float _clearColor [3]) {}
 	virtual void SetClearColor(float _r, float _g, float _b) {}
+
+	virtual std::string Serialize() { return  ""; }
+	virtual void Deserialize(std::vector<std::string> _serializedValues) {}
 
 };

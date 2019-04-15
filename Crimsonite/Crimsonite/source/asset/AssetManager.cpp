@@ -16,7 +16,7 @@ AssetManager::~AssetManager()
 
 void AssetManager::SetEngine(CrimsonCore * _core)
 {
-	m_core = _core;
+	Instance()->m_core = _core;
 }
 
 void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
@@ -27,8 +27,8 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 
 	if (data)
 	{
-		m_textures[_textureName] = Texture(_textureName, width, height, data);
-		Texture * tex = &m_textures.at(_textureName);
+		Instance()->m_textures[_textureName] = Texture(_textureName, width, height, data);
+		Texture * tex = &Instance()->m_textures.at(_textureName);
 
 		glGenTextures(1, &tex->TextureId);
 		glBindTexture(GL_TEXTURE_2D, tex->TextureId);
@@ -42,9 +42,9 @@ void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		if (!TextureExists(_textureName))
+		if (!m_instance->TextureExists(_textureName))
 		{
-			m_loadedTextureNames.push_back(_textureName);
+			m_instance->m_loadedTextureNames.push_back(_textureName);
 		}
 
 		std::cout << "Loaded Texture '" << _textureName << "'."<< std::endl;
@@ -64,29 +64,29 @@ void AssetManager::CreateTexture(std::string _textureName)
 
 void AssetManager::CreateTexture(std::string _textureName, int _width, int _height, int _glId)
 {
-	m_textures[_textureName] = Texture(_textureName, _width, _height);
-	Texture * tex = &m_textures.at(_textureName);
+	Instance()->m_textures[_textureName] = Texture(_textureName, _width, _height);
+	Texture * tex = &m_instance->m_textures.at(_textureName);
 	tex->TextureId = _glId;
-	if (!TextureExists(_textureName))
+	if (!m_instance->TextureExists(_textureName))
 	{
-		m_loadedTextureNames.push_back(_textureName);
+		m_instance->m_loadedTextureNames.push_back(_textureName);
 	}
 	std::cout << "Created Texture '" << _textureName << "'." << std::endl;
 }
 
 void AssetManager::CreateTexture(std::string _textureName, int _width, int _height)
 {
-	m_textures[_textureName] = Texture(_textureName, _width, _height);
-	Texture * tex = &m_textures.at(_textureName);
+	Instance()->m_textures[_textureName] = Texture(_textureName, _width, _height);
+	Texture * tex = &m_instance->m_textures.at(_textureName);
 	glGenTextures(1, &tex->TextureId);
 	glBindTexture(GL_TEXTURE_2D, tex->TextureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	if (!TextureExists(_textureName))
+	if (!m_instance->TextureExists(_textureName))
 	{
-		m_loadedTextureNames.push_back(_textureName);
+		m_instance->m_loadedTextureNames.push_back(_textureName);
 	}
 
 	std::cout << "Created Texture '" << _textureName << "'." << std::endl;
@@ -96,12 +96,12 @@ void AssetManager::CreateTexture(std::string _textureName, int _width, int _heig
 
 Texture * AssetManager::GetTexture(std::string _textureName)
 {
-	if (!TextureExists(_textureName))
+	if (!Instance()->TextureExists(_textureName))
 	{
 		std::cout << "Texture '" << _textureName << "' does not exist yet, but something is trying to access it." << std::endl;
-		return GetErrorTexture();
+		return m_instance->GetErrorTexture();
 	}
-	return &m_textures.at(_textureName);
+	return &m_instance->m_textures.at(_textureName);
 }
 
 void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _height)
@@ -111,8 +111,8 @@ void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _h
 
 void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _height, bool _useDepth)
 {
-	m_frameBuffers[_bufferName] = FrameBuffer();
-	FrameBuffer * buffer = &m_frameBuffers.at(_bufferName);
+	Instance()->m_frameBuffers[_bufferName] = FrameBuffer();
+	FrameBuffer * buffer = &m_instance->m_frameBuffers.at(_bufferName);
 	buffer->SetName(_bufferName);
 
 	glGenFramebuffers(1, &buffer->FrameBufferId);
@@ -120,7 +120,7 @@ void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _h
 
 	CreateTexture(_bufferName, _width, _height);
 	buffer->SetTexture(GetTexture(_bufferName));
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textures.at(_bufferName).TextureId, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_instance->m_textures.at(_bufferName).TextureId, 0);
 
 	glGenRenderbuffers(1, &buffer->DepthBufferId);
 	glBindRenderbuffer(GL_RENDERBUFFER, buffer->DepthBufferId);
@@ -136,9 +136,9 @@ void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _h
 	else
 	{
 
-		if (!FrameBufferExists(_bufferName))
+		if (!m_instance->FrameBufferExists(_bufferName))
 		{
-			m_loadedFrameBufferNames.push_back(_bufferName);
+			m_instance->m_loadedFrameBufferNames.push_back(_bufferName);
 		}
 
 		std::cout << "Created Frame Buffer '" << _bufferName << "'." << std::endl;
@@ -149,17 +149,17 @@ void AssetManager::CreateFrameBuffer(std::string _bufferName, int _width, int _h
 
 void AssetManager::BindFrameBuffer(std::string _bufferName)
 {
-	if (FrameBufferExists(_bufferName))
+	if (Instance()->FrameBufferExists(_bufferName))
 	GetFrameBuffer(_bufferName)->Bind();
 }
 
 FrameBuffer * AssetManager::GetFrameBuffer(std::string _bufferName)
 {
-	if (!FrameBufferExists(_bufferName))
+	if (!Instance()->FrameBufferExists(_bufferName))
 	{
 		std::cout << "FrameBuffer '" << _bufferName << "' does not exist yet, but something is trying to access it." << std::endl;
 	}
-	return &m_frameBuffers.at(_bufferName);
+	return &m_instance->m_frameBuffers.at(_bufferName);
 }
 
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
@@ -195,9 +195,9 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				int fileRevision;
 				fscanf(file, "%d", &fileRevision);
 				//	Check if the mesh file matches the latest format revision.
-				if (fileRevision != m_latestMeshRevision)
+				if (fileRevision != Instance()->m_latestMeshRevision)
 				{
-					std::cout << "Mesh : " + _filePath + " does not match the latest mesh format revision (" << m_latestMeshRevision << ")!" << std::endl;
+					std::cout << "Mesh : " + _filePath + " does not match the latest mesh format revision (" << m_instance->m_latestMeshRevision << ")!" << std::endl;
 				}
 
 			}
@@ -227,9 +227,9 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 		//	Upload the new mesh to the GPU.
 		newMesh.UploadToGpu();
 		//	Store the new mesh in the asset manager.
-		this->m_meshes[_meshName] = newMesh;
+		Instance()->m_meshes[_meshName] = newMesh;
 		//	Add this mesh's name to the list of loaded mesh names.
-		LoadMeshName(_meshName);
+		m_instance->LoadMeshName(_meshName);
 
 		std::cout << "Loaded MESH file : " << _filePath << std::endl;
 	}
@@ -300,7 +300,7 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				glm::vec3 tempPos = input_positions[input_triplets[i].position];
 				glm::vec2 tempUv = input_uvs[input_triplets[i].uv];
 				glm::vec3 tempNorm = input_normals[input_triplets[i].normal];
-				int ind = FindExistingVertex(output_vertices, tempPos, tempUv, tempNorm);
+				int ind = Instance()->FindExistingVertex(output_vertices, tempPos, tempUv, tempNorm);
 				if (ind == -1)
 				{
 					Vertex newVert;
@@ -313,9 +313,9 @@ void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 				}
 				output_indices.push_back(ind);
 			}
-			m_meshes[_meshName] = Mesh(output_vertices, output_indices, _meshName);
-			WriteMeshFile(m_meshes[_meshName], _filePath + ".mesh");
-			LoadMeshName(_meshName);
+			Instance()->m_meshes[_meshName] = Mesh(output_vertices, output_indices, _meshName);
+			WriteMeshFile(m_instance->m_meshes[_meshName], _filePath + ".mesh");
+			m_instance->LoadMeshName(_meshName);
 			std::cout << "Loaded OBJ file : " << _filePath << std::endl;
 		}
 	}
@@ -359,7 +359,7 @@ void AssetManager::WriteMeshFile(Mesh _mesh, std::string _filePath)
 
 	//	Add the mesh revision.
 	fileData.append("r ");
-	fileData.append(std::to_string(m_latestMeshRevision));
+	fileData.append(std::to_string(Instance()->m_latestMeshRevision));
 	fileData.append("\n\n");
 
 	//	Prepare the mesh vertex data.
@@ -404,18 +404,18 @@ void AssetManager::WriteMeshFile(Mesh _mesh, std::string _filePath)
 
 Mesh * AssetManager::GetMesh(std::string _meshName)
 {
-	if (!MeshExists(_meshName))
+	if (!Instance()->MeshExists(_meshName))
 	{
 		std::cout << "Mesh '" << _meshName << "' does not exist yet, but something is trying to access it." << std::endl;
-		return GetErrorMesh();
+		return m_instance->GetErrorMesh();
 	}
-	return &m_meshes.at(_meshName);
+	return &m_instance->m_meshes.at(_meshName);
 }
 
 void AssetManager::AddShader(std::string _shaderName)
 {
-	m_shaders[_shaderName] = Shader();
-	LoadShaderName(_shaderName);
+	Instance()->m_shaders[_shaderName] = Shader();
+	m_instance->LoadShaderName(_shaderName);
 }
 
 void AssetManager::LoadShader(std::string _shaderName, std::string _filePath)
@@ -424,34 +424,34 @@ void AssetManager::LoadShader(std::string _shaderName, std::string _filePath)
 
 void AssetManager::LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath)
 {
-	m_shaders[_shaderName] = Shader(_shaderName, _vertexPath.c_str(), _fragmentPath.c_str());
-	LoadShaderName(_shaderName);
+	Instance()->m_shaders[_shaderName] = Shader(_shaderName, _vertexPath.c_str(), _fragmentPath.c_str());
+	m_instance->LoadShaderName(_shaderName);
 }
 
 Shader * AssetManager::GetShader(std::string _shaderName)
 {
 	if (_shaderName == "default")
 	{
-		return GetDefaultShader();
+		return Instance()->GetDefaultShader();
 	}
-	if (!ShaderExists(_shaderName))
+	if (!Instance()->ShaderExists(_shaderName))
 	{
 		std::cout << "Shader '" << _shaderName << "' does not exist yet, but something is trying to access it." << std::endl;
-		return GetDefaultShader();
+		return m_instance->GetDefaultShader();
 	}
-	return &m_shaders.at(_shaderName);
+	return &m_instance->m_shaders.at(_shaderName);
 }
 
 void AssetManager::AddMaterial(std::string _materialName)
 {
-	m_materials[_materialName] = Material(_materialName);
-	LoadMaterialName(_materialName);
+	Instance()->m_materials[_materialName] = Material(_materialName);
+	m_instance->LoadMaterialName(_materialName);
 }
 
 void AssetManager::AddMaterial(Material _material)
 {
-	m_materials[_material.GetName()] = _material;
-	LoadMaterialName(_material.GetName());
+	Instance()->m_materials[_material.GetName()] = _material;
+	m_instance->LoadMaterialName(_material.GetName());
 }
 
 void AssetManager::LoadMaterial(std::string _filePath)
@@ -483,7 +483,7 @@ void AssetManager::LoadMaterial(std::string _filePath)
 				int fileRevision;
 				fscanf(file, "%d", &fileRevision);
 				//	Check if the material file matches the latest format revision.
-				if (fileRevision != m_latestMaterialRevision)
+				if (fileRevision != Instance()->m_latestMaterialRevision)
 				{
 					std::cout << "Material is out of date (" << _filePath << ")" << std::endl;
 				}
@@ -554,12 +554,12 @@ Material * AssetManager::GetMaterial(std::string _materialName)
 	{
 		return GetDefaultMaterial();
 	}
-	if (!MaterialExists(_materialName))
+	if (!Instance()->MaterialExists(_materialName))
 	{
 		std::cout << "Material '" << _materialName << "' does not exist yet, but something is trying to access it." << std::endl;
 		return GetDefaultMaterial();
 	}
-	return &m_materials.at(_materialName);
+	return &m_instance->m_materials.at(_materialName);
 }
 
 void AssetManager::LoadMeshName(std::string _meshName)
@@ -662,7 +662,7 @@ void AssetManager::LoadShaderName(std::string _shaderName)
 
 void AssetManager::CreateDefaultShader()
 {
-	if (m_defaultShaderCreated == true) return;
+	if (Instance()->m_defaultShaderCreated == true) return;
 	std::string vertexString =
 		"#version 330 core\n"
 		"layout(location = 0) in vec3 position;\n"
@@ -706,15 +706,15 @@ void AssetManager::CreateDefaultShader()
 
 	Shader shader = Shader("default");
 	shader.Compile(vertexString, fragmentString);
-	m_shaders["default"] = shader;
-	m_defaultShaderCreated = true;
-	LoadShaderName("default");
+	m_instance->m_shaders["default"] = shader;
+	m_instance->m_defaultShaderCreated = true;
+	m_instance->LoadShaderName("default");
 	std::cout << "Created Default Shader." << std::endl;
 }
 
 void AssetManager::CreatePassthroughShader()
 {
-	if (m_passthroughShaderCreated == true) return;
+	if (Instance()->m_passthroughShaderCreated == true) return;
 	std::string vertexString =
 		"#version 330 core\n"
 		"\n"
@@ -741,9 +741,9 @@ void AssetManager::CreatePassthroughShader()
 
 	Shader shader = Shader();
 	shader.Compile(vertexString, fragmentString);
-	m_shaders["passthrough"] = shader;
-	m_passthroughShaderCreated = true;
-	LoadShaderName("passthrough");
+	m_instance->m_shaders["passthrough"] = shader;
+	m_instance->m_passthroughShaderCreated = true;
+	m_instance->LoadShaderName("passthrough");
 	std::cout << "Created Passthrough Shader." << std::endl;
 }
 
@@ -756,7 +756,7 @@ Shader * AssetManager::GetDefaultShader()
 Shader * AssetManager::GetPassthroughShader()
 {
 	CreatePassthroughShader();
-	return &m_shaders.at("passthrough");
+	return &m_instance->m_shaders.at("passthrough");
 }
 
 bool AssetManager::MaterialExists(std::string _materialName)
@@ -795,13 +795,13 @@ bool AssetManager::SceneExists(std::string _sceneName)
 
 void AssetManager::CreateDefaultMaterial()
 {
-	if (m_defaultMaterialCreated == true) return;
+	if (Instance()->m_defaultMaterialCreated == true) return;
 	Material newMat = Material("default");
 	newMat.ReserveTexturePropertyName("MainTex");
 	newMat.SetShader("default");
 	newMat.SetColor({ 1.0f,1.0f,1.0f });
-	m_materials["default"] = newMat;
-	m_defaultMaterialCreated = true;
+	m_instance->m_materials["default"] = newMat;
+	m_instance->m_defaultMaterialCreated = true;
 	std::cout << "Created Default Material." << std::endl;
 }
 
@@ -931,18 +931,18 @@ bool AssetManager::FrameBufferExists(std::string _bufferName)
 Material * AssetManager::GetDefaultMaterial()
 {
 	CreateDefaultMaterial();
-	return &m_materials.at("default");
+	return &m_instance->m_materials.at("default");
 }
 
 void AssetManager::LoadScene(std::string _scenePath)
 {
-	m_scenes[m_sceneCount] = Scene(_scenePath);
-	std::cout << "Loaded scene '" << m_scenes[m_sceneCount].GetName() << "'." << std::endl;
-	if (m_scenes[m_sceneCount].GetName() != "")
+	Instance()->m_scenes[m_instance->m_sceneCount] = Scene(_scenePath);
+	std::cout << "Loaded scene '" << m_instance->m_scenes[m_instance->m_sceneCount].GetName() << "'." << std::endl;
+	if (m_instance->m_scenes[m_instance->m_sceneCount].GetName() != "")
 	{
-		m_scenes[m_sceneCount].SetSceneId(m_sceneCount);
-		LoadSceneName(m_scenes[m_sceneCount].GetName());
-		m_sceneCount++;
+		m_instance->m_scenes[m_instance->m_sceneCount].SetSceneId(m_instance->m_sceneCount);
+		m_instance->LoadSceneName(m_instance->m_scenes[m_instance->m_sceneCount].GetName());
+		m_instance->m_sceneCount++;
 	}
 	else
 	{
@@ -952,29 +952,29 @@ void AssetManager::LoadScene(std::string _scenePath)
 
 Scene * AssetManager::GetScene(std::string _sceneName)
 {
-	if (!SceneExists(_sceneName))
+	if (!Instance()->SceneExists(_sceneName))
 	{
 		std::cout << "Scene '" << _sceneName << "' does not exist yet, but something is trying to access it." << std::endl;
 	}
-	for (int i = 0; i < m_sceneCount; i++)
+	for (int i = 0; i < m_instance->m_sceneCount; i++)
 	{
-		if (m_loadedSceneNames[i] == _sceneName)
+		if (m_instance->m_loadedSceneNames[i] == _sceneName)
 			return GetScene(i);
 	}
 }
 
 Scene * AssetManager::GetScene(int _sceneId)
 {
-	if (m_sceneCount <= _sceneId)
+	if (Instance()->m_sceneCount <= _sceneId)
 	{
 		std::cout << "Scene with id '" << _sceneId << "' does not exist yet, but something is trying to access it." << std::endl;
 		return nullptr;
 	}
-	for (int i = 0; i < m_scenes.size(); i++)
+	for (int i = 0; i < m_instance->m_scenes.size(); i++)
 	{
-		if (_sceneId == m_scenes[i].GetSceneId())
+		if (_sceneId == m_instance->m_scenes[i].GetSceneId())
 		{
-			return &m_scenes.at(i);
+			return &m_instance->m_scenes.at(i);
 		}
 	}
 	std::cout << "Could not find Scene with id '" << _sceneId << "'!" << std::endl;
@@ -992,7 +992,7 @@ void AssetManager::SaveScene(std::string _sceneName)
 
 void AssetManager::OpenScene(Scene * _scene)
 {
-	m_core->OpenScene(_scene->GetSceneId());
+	Instance()->m_core->OpenScene(_scene->GetSceneId());
 }
 
 void AssetManager::OpenScene(std::string _sceneName)
@@ -1007,11 +1007,11 @@ void AssetManager::OpenScene(int _sceneId)
 
 void AssetManager::ChangeLoadedSceneName(std::string _currentName, std::string _newName)
 {
-	for (int i = 0; i < m_loadedSceneNames.size(); i++)
+	for (int i = 0; i < Instance()->m_loadedSceneNames.size(); i++)
 	{
-		if (m_loadedSceneNames[i] == _currentName)
+		if (m_instance->m_loadedSceneNames[i] == _currentName)
 		{
-			m_loadedSceneNames[i] = _newName;
+			m_instance->m_loadedSceneNames[i] = _newName;
 			return;
 		}
 	}

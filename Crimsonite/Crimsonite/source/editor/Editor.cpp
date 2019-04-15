@@ -13,6 +13,7 @@ CrimsonCore * m_engine;
 Editor::Editor(CrimsonCore * _core)
 {
 	m_engine = _core;
+	Init();
 }
 
 void Editor::Init()
@@ -29,8 +30,6 @@ void Editor::Init()
 
 	AssetManager::Instance()->CreateFrameBuffer("EditorViewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 
-	CreateEditorCam();
-
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigDockingWithShift = false;
 	io.ConfigWindowsResizeFromEdges = true;
@@ -38,7 +37,7 @@ void Editor::Init()
 
 void Editor::CreateEditorCam()
 {
-	m_editorCam = &m_engine->GetCurrentScene()->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
+	m_editorCam = &m_currentScene->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
 	m_editorCam->SetOutputFrameBuffer("EditorViewport");
 	m_editorCam->entity->MakeImmortal(true);
 	m_editorCam->entity->SetSerializable(false);
@@ -59,10 +58,10 @@ void Editor::LoadIcons()
 	AssetManager::Instance()->LoadTexture("editor_tool_stop_selected", m_engine->AssetsPath() + "editor/tool_stop_selected.png");
 }
 
-void CreateObject(std::string _meshName)
+void Editor::CreateObject(std::string _meshName)
 {
-	m_engine->GetCurrentScene()->ECS()->NewEntity(_meshName);
-	MeshRenderer * mesh = &m_engine->GetCurrentScene()->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
+	m_currentScene->ECS()->NewEntity(_meshName);
+	MeshRenderer * mesh = &m_currentScene->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
 	mesh->SetMesh(_meshName);
 	mesh->SetRenderer(m_engine->GetCurrentScene()->Renderer());
 	mesh->SetMaterial("default");
@@ -93,11 +92,11 @@ void Editor::DrawGui()
 				}
 				if (ImGui::Button("Save Scene"))
 				{
-					m_engine->GetCurrentScene()->Save();
+					m_currentScene->Save();
 				}
 				if (ImGui::Button("Reload Scene"))
 				{
-					m_engine->GetCurrentScene()->Reload();
+					m_currentScene->Reload();
 					CreateEditorCam();
 				}
 			}
@@ -179,6 +178,16 @@ void Editor::DrawGui()
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Scene"))
+		{
+			ImGui::InputText("", m_tempSceneName, 128);
+			ImGui::SameLine();
+			if (ImGui::Button("Rename"))
+			{
+				m_currentScene->SetName((std::string)m_tempSceneName);
+			}
+			ImGui::EndMenu();
+		}
 
 		ImGui::Separator();
 		ImGui::SameLine(ImGui::GetWindowWidth() - (80));
@@ -252,9 +261,9 @@ void Editor::DrawGui()
 
 	ImGui::Begin("Entities");
 	{
-		for (int i = 0; i < m_engine->GetCurrentScene()->ECS()->EntityCount(); i++)
+		for (int i = 0; i < m_currentScene->ECS()->EntityCount(); i++)
 		{
-			EcsEntity * entity = &*m_engine->GetCurrentScene()->ECS()->entities[i];
+			EcsEntity * entity = &*m_currentScene->ECS()->entities[i];
 
 			if (entity->IsDestroyed() == false)
 			{
@@ -323,6 +332,15 @@ void Editor::SelectEditorTool(int _tool)
 {
 	m_selectedTool = _tool;
 	std::cout << "Selected editor tool '" << m_selectedTool << "'." << std::endl;
+}
+
+void Editor::SetCurrentSceneData(Scene * _scene)
+{
+#pragma warning(push)
+#pragma warning(disable: 4996)
+	std::strcpy(m_tempSceneName, _scene->GetName().c_str());
+#pragma warning(pop)
+	m_currentScene = _scene;
 }
 
 void Editor::CreateAndLoadNewScene(std::string _sceneName)

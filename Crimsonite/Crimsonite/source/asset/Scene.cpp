@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include <iostream>
+#include <cstdio>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -192,6 +193,12 @@ void Scene::Save(std::string _scenePath)
 void Scene::Save()
 {
 	Save(m_path);
+}
+
+void Scene::SetName(std::string _newName)
+{
+	AssetManager::Instance()->ChangeLoadedSceneName(m_name, _newName);
+	m_name = _newName;
 }
 
 void Scene::Update()

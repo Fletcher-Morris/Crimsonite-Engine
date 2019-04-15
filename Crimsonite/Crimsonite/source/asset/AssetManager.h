@@ -99,6 +99,7 @@ public:
 	void OpenScene(Scene * _scene);
 	void OpenScene(std::string _sceneName);
 	void OpenScene(int _sceneId);
+	void ChangeLoadedSceneName(std::string _currentName, std::string _newName);
 
 private:
 

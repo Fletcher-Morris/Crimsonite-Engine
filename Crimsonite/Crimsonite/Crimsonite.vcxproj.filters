@@ -134,11 +134,11 @@
     <ClCompile Include="source\asset\Scene.cpp">
       <Filter>Source Files\asset</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\ecs\ECS.cpp">
       <Filter>Source Files\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\Window.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

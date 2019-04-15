@@ -41,8 +41,8 @@ public:
 	std::string AssetsPath() { return m_assetPath; }
 
 	Scene * GetCurrentScene() { return m_currentScene; }
-	void OpenScene(int _sceneId){ m_currentScene = Assets->GetScene(_sceneId); }
-	void OpenScene(std::string _sceneName){ m_currentScene = Assets->GetScene(_sceneName); }
+	void OpenScene(int _sceneId);
+	void OpenScene(std::string _sceneName);
 
 	int GetPlayMode() { return m_playMode; }
 	void SetPlayMode(int _playMode) { m_playMode = _playMode; }

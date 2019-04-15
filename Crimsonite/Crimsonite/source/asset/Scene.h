@@ -26,7 +26,7 @@ public:
 	void Save();
 
 	std::string GetName() { return m_name; }
-	void SetName(std::string _sceneName) { m_name = _sceneName; }
+	void SetName(std::string _sceneName);
 	std::string GetPath() { return m_path; }
 	void SetPath(std::string _path) { m_path = _path; }
 	void SetSceneId(int _id) { m_sceneId = _id; }

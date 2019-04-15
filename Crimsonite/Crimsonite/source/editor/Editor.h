@@ -16,6 +16,10 @@ class Camera;
 class Editor
 {
 
+private:
+
+	char m_tempSceneName[128] = "temp";
+
 public:
 
 	Editor(CrimsonCore * _core);
@@ -34,6 +38,7 @@ public:
 
 	int m_selectedTool = 0;
 	void SelectEditorTool(int _tool);
+	void CreateObject(std::string _meshName);
 
 	Camera * m_editorCam;
 	glm::vec3 m_storedEdCamPos;
@@ -44,6 +49,8 @@ public:
 	/*void SelectEntity(int _id);
 	void DeselectEntity();*/
 
+	Scene * m_currentScene;
+	void SetCurrentSceneData(Scene * _scene);
 	void CreateAndLoadNewScene(std::string _sceneName);
 
 };

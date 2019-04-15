@@ -1004,3 +1004,15 @@ void AssetManager::OpenScene(int _sceneId)
 {
 	OpenScene(GetScene(_sceneId));
 }
+
+void AssetManager::ChangeLoadedSceneName(std::string _currentName, std::string _newName)
+{
+	for (int i = 0; i < m_loadedSceneNames.size(); i++)
+	{
+		if (m_loadedSceneNames[i] == _currentName)
+		{
+			m_loadedSceneNames[i] = _newName;
+			return;
+		}
+	}
+}

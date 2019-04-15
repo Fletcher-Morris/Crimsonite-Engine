@@ -13,10 +13,6 @@ CrimsonCore::CrimsonCore()
 
 CrimsonCore::CrimsonCore(std::string _appName)
 {
-#if _DEBUG
-	m_editor = new Editor(this);
-#endif // DEBUG
-
 	std::cout << "==========" << std::endl;
 	printf("CRIMSONITE\n");
 	std::cout << "==========" << std::endl;
@@ -105,16 +101,11 @@ void CrimsonCore::RunEngine()
 
 	Assets->LoadScene(m_assetPath + "scenes/scene1");
 
-	OpenScene(0);
+#if _DEBUG
+	m_editor = new Editor(this);
+#endif // DEBUG
 
-	if (m_editor)
-	{
-		m_editor->Init();
-	}
-	else
-	{
-		SetPlayMode(PLAYMODE_RUNNING);
-	}
+	OpenScene(0);
 
 	while (!glfwWindowShouldClose(m_window) && m_quit == false)
 	{
@@ -135,6 +126,26 @@ void CrimsonCore::RunEngine()
 void CrimsonCore::QuitEngine()
 {
 	m_quit = true;
+}
+
+void CrimsonCore::OpenScene(int _sceneId)
+{
+	Scene * openScene = Assets->GetScene(_sceneId);
+	OpenScene(openScene->GetName());
+}
+
+void CrimsonCore::OpenScene(std::string _sceneName)
+{
+	m_currentScene = Assets->GetScene(_sceneName);
+	if (m_editor)
+	{
+		m_editor->SetCurrentSceneData(m_currentScene);
+		m_editor->CreateEditorCam();
+	}
+	else
+	{
+		SetPlayMode(PLAYMODE_RUNNING);
+	}
 }
 
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)

@@ -29,6 +29,7 @@ public:
 	void LoadIcons();
 
 	void DrawGui();
+	void Update();
 
 	void PlayGame();
 	void PauseGame();

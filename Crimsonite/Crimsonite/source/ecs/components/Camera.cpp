@@ -43,14 +43,13 @@ void Camera::DrawEditorProperties()
 	{
 		ImGui::Image((GLuint*)m_frameBuffer->GetLinkedTexture()->TextureId, ImVec2(267, 150));
 	}
-	float newFov = GetCameraSettings().fov;
-	ImGui::DragFloat("FOV", &newFov, 1.0f, 179.0f);
-	SetCameraSettings(newFov);
+	CameraSettings newSettings = GetCameraSettings();
+	ImGui::DragFloat("FOV", &newSettings.fov, 1.0f, 179.0f);
+	ImGui::DragFloat("Near Clip", &newSettings.nearClip, 0.0001f, 1000.0f);
+	ImGui::DragFloat("Far Clip", &newSettings.farClip, newSettings.nearClip, 1000.0f);
+	SetCameraSettings(newSettings);
 	ImGui::Text("Width : %i", m_settings.width);
 	ImGui::Text("Height : %i", m_settings.height);
-	//ImGui::DragFloat("Near Clip", &newSettings.nearClip, 0.01f, 1000.0f);
-	//ImGui::DragFloat("Far Clip", &newSettings.farClip, 0.01f, 1000.0f);
-
 }
 
 std::string Camera::Serialize()

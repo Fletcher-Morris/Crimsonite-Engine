@@ -56,6 +56,8 @@ void Editor::LoadIcons()
 	AssetManager::LoadTexture("editor_tool_play_selected", m_engine->AssetsPath() + "editor/tool_play_selected.png");
 	AssetManager::LoadTexture("editor_tool_stop", m_engine->AssetsPath() + "editor/tool_stop.png");
 	AssetManager::LoadTexture("editor_tool_stop_selected", m_engine->AssetsPath() + "editor/tool_stop_selected.png");
+	AssetManager::LoadTexture("editor_tool_outline", m_engine->AssetsPath() + "editor/tool_outline.png");
+	AssetManager::LoadTexture("editor_tool_outline_selected", m_engine->AssetsPath() + "editor/tool_outline_selected.png");
 }
 
 void Editor::CreateObject(std::string _meshName)
@@ -288,6 +290,23 @@ void Editor::DrawGui()
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Editor::Update()
+{
+	glm::vec3 moveVector = glm::vec3();
+	if (Input::GetKey(KEYCODE_D)) moveVector.x = 1;
+	else if (Input::GetKey(KEYCODE_A)) moveVector.x = -1;
+	if (Input::GetKey(KEYCODE_E)) moveVector.y = 1;
+	else if (Input::GetKey(KEYCODE_Q)) moveVector.y = -1;
+	if (Input::GetKey(KEYCODE_W)) moveVector.z = 1;
+	else if (Input::GetKey(KEYCODE_S)) moveVector.z = -1;
+	m_editorCam->entity->transform.Move(moveVector * Time::DeltaTime(), true);
+	if (Input::GetMouseButton(MOUSE_RIGHT))
+	{
+		glm::vec2 movement = Input::GetMouseMovement(1.5f);
+		m_editorCam->entity->transform.Rotate(movement.y * -0.05, movement.x * 0.05, 0);
+	}
 }
 
 void Editor::PlayGame()

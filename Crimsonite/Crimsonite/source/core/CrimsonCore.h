@@ -8,6 +8,7 @@
 
 #include "Window.h"
 
+#include "Input.h"
 #include "../ecs/ECS.h"
 #include "../ecs/Components.h"
 #include "../asset/AssetManager.h"
@@ -48,7 +49,6 @@ public:
 	void SetPlayMode(int _playMode) { m_playMode = _playMode; }
 
 private:
-
 
 	//	Application Settings
 	std::string m_appName = "Crimsonite Engine";

@@ -15,12 +15,7 @@ glm::mat4 CreateModelMatrix(const Transform & _transform)
 
 glm::mat4 CreateViewMatrix(const Camera & _camera)
 {
-	glm::mat4 view;
-	view = glm::rotate(view, glm::radians(_camera.entity->transform.rotation.x), { 1,0,0 });
-	view = glm::rotate(view, glm::radians(_camera.entity->transform.rotation.y), { 0,1,0 });
-	view = glm::rotate(view, glm::radians(_camera.entity->transform.rotation.z), { 0,0,1 });
-	view = glm::translate(glm::mat4(1.0f), -_camera.entity->transform.position);
-	return view;
+	return glm::lookAt(_camera.entity->transform.GetPosition(), _camera.entity->transform.GetPosition() + _camera.entity->transform.Forward(), -_camera.entity->transform.Up());
 }
 
 glm::mat4 CreateProjectionMatrix(const CameraSettings & _settings)

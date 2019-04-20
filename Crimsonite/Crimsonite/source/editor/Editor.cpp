@@ -295,14 +295,14 @@ void Editor::DrawGui()
 void Editor::Update()
 {
 	glm::vec3 moveVector = glm::vec3();
-	if (Input::GetKey(KEYCODE_RIGHT)) moveVector.x = 1;
-	else if (Input::GetKey(KEYCODE_LEFT)) moveVector.x = -1;
-	if (Input::GetKey(KEYCODE_RIGHT_SHIFT)) moveVector.y = 1;
-	else if (Input::GetKey(KEYCODE_RIGHT_CONTROL)) moveVector.y = -1;
-	if (Input::GetKey(KEYCODE_UP)) moveVector.z = 1;
-	else if (Input::GetKey(KEYCODE_DOWN)) moveVector.z = -1;
-	m_editorCam->entity->transform.Move(moveVector * Time::DeltaTime());
-	if (Input::GetKey(KEYCODE_LEFT_ALT))
+	if (Input::GetKey(KEYCODE_D)) moveVector.x = 1;
+	else if (Input::GetKey(KEYCODE_A)) moveVector.x = -1;
+	if (Input::GetKey(KEYCODE_E)) moveVector.y = 1;
+	else if (Input::GetKey(KEYCODE_Q)) moveVector.y = -1;
+	if (Input::GetKey(KEYCODE_W)) moveVector.z = 1;
+	else if (Input::GetKey(KEYCODE_S)) moveVector.z = -1;
+	m_editorCam->entity->transform.Move(moveVector * Time::DeltaTime(), true);
+	if (Input::GetMouseButton(MOUSE_RIGHT))
 	{
 		glm::vec2 movement = Input::GetMouseMovement(1.5f);
 		m_editorCam->entity->transform.Rotate(movement.y * -0.05, movement.x * 0.05, 0);

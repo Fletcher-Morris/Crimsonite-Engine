@@ -126,9 +126,21 @@
 #define KEYCODE_Y				89
 #define KEYCODE_Z				90
 
-#define KEYSTATE_RELEASED	0
-#define KEYSTATE_PRESSED	1
-#define KEYSTATE_HELD		2
+#define INPUTSTATE_RELEASE	0
+#define INPUTSTATE_PRESS	1
+#define INPUTSTATE_HELD		2
+
+#define MOUSE_1	0
+#define MOUSE_2	1
+#define MOUSE_3	2
+#define MOUSE_4	3
+#define MOUSE_5	4
+#define MOUSE_6	5
+#define MOUSE_7	6
+#define MOUSE_8	7
+#define MOUSE_LEFT		MOUSE_1
+#define MOUSE_RIGHT		MOUSE_2
+#define MOUSE_MIDDLE	MOUSE_3
 
 class Input
 {
@@ -143,19 +155,26 @@ public:
 	static glm::vec2 GetMousePos();
 	static glm::vec2 GetMouseMovement();
 	static glm::vec2 GetMouseMovement(float _tollerance);
+	static bool GetMouseButton(int _button);
+	static bool GetMouseButtonDown(int _button);
+	static bool GetMouseButtonUp(int _button);
 
-	static void SetKeyState(int _keycode, int _keyState);
+	static void SetKeyState(int _keycode, int _state);
 	static void SetMousePos(double _x, double _y);
+	static void SetMouseButton(int _button, int _state);
 
 	static std::string KeycodeToName(int _keycode);
 
 private:
 	
 	int m_keyArray[350];
-	int m_keyArrayPrevFrame[350];
+	int m_keyArrayPrev[350];
 
 	glm::vec2 m_mousePos;
-	glm::vec2 m_mousePosPrevFrame;
+	glm::vec2 m_mousePosPrev;
+
+	int m_mouseButtonArray[8];
+	int m_mouseButtonArrayPrev[8];
 
 protected:
 

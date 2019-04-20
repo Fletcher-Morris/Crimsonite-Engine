@@ -52,7 +52,7 @@ public:
 	{
 		up = glm::cross(Forward(), Right());
 		up = glm::normalize(up);
-		return -up;
+		return up;
 	}
 	glm::vec3 Down()
 	{
@@ -77,6 +77,20 @@ public:
 		position.x += _move.x;
 		position.y += _move.y;
 		position.z += _move.z;
+	}
+	//	Adjust the position with another Vec3, using the forward vector.
+	void Move(glm::vec3 _move, bool _useForward)
+	{
+		if (_useForward)
+		{
+			Move(Forward() * _move.z);
+			Move(Right() * _move.x);
+			Move(Up() * _move.y);
+		}
+		else
+		{
+			Move(_move);
+		}
 	}
 	//	Adjust the position with three floats.
 	void Move(float _x, float _y, float _z)

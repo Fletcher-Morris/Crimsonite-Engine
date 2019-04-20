@@ -141,9 +141,8 @@ void EcsEntity::DrawEditorProperties()
 		ImGui::NewLine();
 		ImGui::Separator();
 		ImGui::NewLine();
-		ImGui::Text("%s", m_componentsVector[i]->GetComponentName().c_str());
 		bool componentEnabled = m_componentsVector[i]->IsEnabled();
-		ImGui::Checkbox("Enabled", &componentEnabled);
+		ImGui::Checkbox((m_componentsVector[i]->GetComponentName()).c_str(), &componentEnabled);
 		m_componentsVector[i]->SetEnabled(componentEnabled);
 		ImGui::NewLine();
 		m_componentsVector[i]->DrawEditorProperties();

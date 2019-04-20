@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include "glm/vec2.hpp"
+#include "glm/geometric.hpp"
 
 #define KEYCODE_0				48
 #define KEYCODE_1				49
@@ -127,7 +130,6 @@
 #define KEYSTATE_PRESSED	1
 #define KEYSTATE_HELD		2
 
-
 class Input
 {
 
@@ -138,13 +140,22 @@ public:
 	static bool GetKey(int _keycode);
 	static bool GetKeyDown(int _keycode);
 	static bool GetKeyUp(int _keycode);
+	static glm::vec2 GetMousePos();
+	static glm::vec2 GetMouseMovement();
+	static glm::vec2 GetMouseMovement(float _tollerance);
 
 	static void SetKeyState(int _keycode, int _keyState);
+	static void SetMousePos(double _x, double _y);
+
+	static std::string KeycodeToName(int _keycode);
 
 private:
 	
 	int m_keyArray[350];
 	int m_keyArrayPrevFrame[350];
+
+	glm::vec2 m_mousePos;
+	glm::vec2 m_mousePosPrevFrame;
 
 protected:
 

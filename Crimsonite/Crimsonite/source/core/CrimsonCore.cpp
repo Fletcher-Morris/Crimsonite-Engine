@@ -6,6 +6,7 @@
 
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
 void GlfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods);
+void GlfwMousePosCallback(GLFWwindow * _window, double _x, double _y);
 
 CrimsonCore::CrimsonCore()
 {
@@ -53,6 +54,7 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 	glfwMakeContextCurrent(m_window);
 	glfwSetFramebufferSizeCallback(m_window, GlfwFrameBufferSizeCallback);
 	glfwSetKeyCallback(m_window, GlfwKeyCallback);
+	glfwSetCursorPosCallback(m_window, GlfwMousePosCallback);
 	glfwSwapInterval(0);
 }
 
@@ -159,4 +161,9 @@ void GlfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action,
 {
 	std::cout << _key << ", " << _scancode << ", " << _action << std::endl;
 	Input::SetKeyState(_key, _action);
+}
+
+void GlfwMousePosCallback(GLFWwindow * _window, double _x, double _y)
+{
+	Input::SetMousePos(_x, _y);
 }

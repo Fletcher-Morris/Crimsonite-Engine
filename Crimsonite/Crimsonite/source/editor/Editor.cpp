@@ -16,8 +16,16 @@ Editor::Editor(CrimsonCore * _core)
 	Init();
 }
 
+Editor * Editor::m_instance(0);
+Editor * Editor::GetEditor()
+{
+	return m_instance;
+}
+
 void Editor::Init()
 {
+	m_instance = this;
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -42,6 +50,7 @@ void Editor::CreateEditorCam()
 	m_editorCam->entity->MakeImmortal(true);
 	m_editorCam->entity->SetSerializable(false);
 	m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
+	PushEditorCamTransform();
 }
 
 void Editor::LoadIcons()
@@ -71,6 +80,18 @@ void Editor::CreateObject(std::string _meshName)
 	mesh->entity->AttachComponent<Rotator>();
 }
 
+void Editor::PullEditorCamTransform()
+{
+	m_storedEdCamPos = m_editorCam->entity->transform.GetPosition();
+	m_storedEdCamRot = m_editorCam->entity->transform.GetRotation();
+}
+
+void Editor::PushEditorCamTransform()
+{
+	m_editorCam->entity->transform.SetPosition(m_storedEdCamPos);
+	m_editorCam->entity->transform.SetRotation(m_storedEdCamRot);
+}
+
 void Editor::DrawGui()
 {
 
@@ -94,12 +115,11 @@ void Editor::DrawGui()
 				}
 				if (ImGui::Button("Save Scene"))
 				{
-					m_currentScene->Save();
+					SaveScene();
 				}
 				if (ImGui::Button("Reload Scene"))
 				{
-					m_currentScene->Reload();
-					CreateEditorCam();
+					ReloadScene();
 				}
 			}
 			if (ImGui::Button("Quit"))
@@ -322,8 +342,7 @@ void Editor::PauseGame()
 
 void Editor::StopGame()
 {
-	m_storedEdCamPos = m_editorCam->entity->transform.GetPosition();
-	m_storedEdCamRot = m_editorCam->entity->transform.GetRotation();
+	PullEditorCamTransform();
 	if (m_selectedEditorObject->GetTypeString() == "EcsEntity")
 	{
 		EcsEntity * ent = static_cast<EcsEntity*>(m_selectedEditorObject);
@@ -333,8 +352,6 @@ void Editor::StopGame()
 	m_engine->SetPlayMode(PLAYMODE_STOPPED);
 	m_engine->GetCurrentScene()->Deserialize();
 	CreateEditorCam();
-	m_editorCam->entity->transform.SetPosition(m_storedEdCamPos);
-	m_editorCam->entity->transform.SetRotation(m_storedEdCamRot);
 	if (m_selectedEntityName != "")
 	{
 		m_selectedEditorObject = m_engine->GetCurrentScene()->ECS()->FindEntity(m_selectedEntityName);
@@ -369,4 +386,24 @@ void Editor::CreateAndLoadNewScene(std::string _sceneName)
 	newScene.Save();
 	AssetManager::LoadScene(m_engine->AssetsPath() + "scenes/NewScene");
 	AssetManager::OpenScene("NewScene");
+}
+
+void Editor::SaveScene()
+{
+	if (m_engine->GetPlayMode() != PLAYMODE_STOPPED) return;
+	if (m_currentScene)
+	{
+		m_currentScene->Save();
+	}
+}
+
+void Editor::ReloadScene()
+{
+	if (m_engine->GetPlayMode() != PLAYMODE_STOPPED) return;
+	PullEditorCamTransform();
+	if (m_currentScene)
+	{
+		m_currentScene->Reload();
+		CreateEditorCam();
+	}
 }

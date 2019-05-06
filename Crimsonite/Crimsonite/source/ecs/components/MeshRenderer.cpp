@@ -64,14 +64,18 @@ void MeshRenderer::DrawEditorProperties()
 std::string MeshRenderer::Serialize()
 {
 	std::string serialized = "";
-	serialized += "val " + m_mesh->GetName();
-	serialized += "\nval " + m_material->GetName();
-	serialized += "\nval " + std::to_string(m_renderMode);
+	if (!IsDetached())
+	{
+		serialized += "val " + m_mesh->GetName();
+		serialized += "\nval " + m_material->GetName();
+		serialized += "\nval " + std::to_string(m_renderMode);
+	}
 	return serialized;
 }
 
 void MeshRenderer::Deserialize(std::vector<std::string> _data)
 {
+	if (_data.size() != 5) return;
 	//	_data[0] is just the component name.
 	//	_data[1] is just the enabled state.
 	//	_data[2] is name of the mesh to use.

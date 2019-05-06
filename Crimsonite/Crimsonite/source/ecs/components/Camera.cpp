@@ -69,15 +69,19 @@ void Camera::DrawEditorProperties()
 std::string Camera::Serialize()
 {
 	std::string serialized = "";
-	serialized += "val " + std::to_string(m_settings.fov);
-	serialized += "\nval " + std::to_string(m_settings.nearClip);
-	serialized += "\nval " + std::to_string(m_settings.farClip);
-	serialized += "\nval " + GetFrameBufferName();
+	if (!IsDetached())
+	{
+		serialized += "val " + std::to_string(m_settings.fov);
+		serialized += "\nval " + std::to_string(m_settings.nearClip);
+		serialized += "\nval " + std::to_string(m_settings.farClip);
+		serialized += "\nval " + GetFrameBufferName();
+	}
 	return serialized;
 }
 
 void Camera::Deserialize(std::vector<std::string> _data)
 {
+	if (_data.size() != 6) return;
 	//	_data[0] is just the component name.
 	//	_data[1] is just the enabled state.
 	//	_data[2] is the field of view.

@@ -1,6 +1,7 @@
 #include "ECS.h"
 #include "Components.h"
 #include "ComponentNames.h"
+#include "../editor/Editor.h"
 
 void EcsEntity::SetName(std::string _name)
 {
@@ -66,14 +67,17 @@ std::string EcsEntity::Serialize()
 	serialized += "\nEndEntity";
 	for (int i = 0; i < m_componentsVector.size(); i++)
 	{
-		serialized += "\n";
-		serialized += "BeginComponent ";
-		serialized += m_componentsVector.at(i)->GetComponentName();
-		serialized += "\nval ";
-		serialized += m_componentsVector.at(i)->IsEnabled() == true ? "true" : "false";
-		serialized += "\n";
-		serialized += m_componentsVector.at(i)->Serialize();
-		serialized += "\nEndComponent";
+		if (!m_componentsVector.at(i)->IsDetached())
+		{
+			serialized += "\n";
+			serialized += "BeginComponent ";
+			serialized += m_componentsVector.at(i)->GetComponentName();
+			serialized += "\nval ";
+			serialized += m_componentsVector.at(i)->IsEnabled() == true ? "true" : "false";
+			serialized += "\n";
+			serialized += m_componentsVector.at(i)->Serialize();
+			serialized += "\nEndComponent";
+		}
 	}
 	serialized += "\n";
 	return serialized;
@@ -140,14 +144,24 @@ void EcsEntity::DrawEditorProperties()
 	transform.DrawEditorProperties();
 	for (int i = 0; i < m_componentsCount; i++)
 	{
-		ImGui::NewLine();
-		ImGui::Separator();
-		ImGui::NewLine();
-		bool componentEnabled = m_componentsVector[i]->IsEnabled();
-		ImGui::Checkbox((m_componentsVector[i]->GetComponentName()).c_str(), &componentEnabled);
-		m_componentsVector[i]->SetEnabled(componentEnabled);
-		ImGui::NewLine();
-		m_componentsVector[i]->DrawEditorProperties();
+		if (!m_componentsVector[i]->IsDetached())
+		{
+			ImGui::NewLine();
+			ImGui::Separator();
+			ImGui::NewLine();
+			bool componentEnabled = m_componentsVector[i]->IsEnabled();
+			ImGui::Checkbox(m_componentsVector[i]->GetComponentName().c_str(), &componentEnabled);
+			m_componentsVector[i]->SetEnabled(componentEnabled);
+			ImGui::SameLine();
+			if (ImGui::Button(("Detach " + m_componentsVector[i]->GetComponentName()).c_str()))
+			{
+				m_componentsVector[i]->DetachFromEntity();
+				Editor::GetEditor()->SaveScene();
+				Editor::GetEditor()->ReloadScene();
+			}
+			ImGui::NewLine();
+			m_componentsVector[i]->DrawEditorProperties();
+		}
 	}
 	ImGui::NewLine();
 	ImGui::Separator();
@@ -241,4 +255,10 @@ void EcsSystem::DeserializeEntity(std::vector<std::string> _serializedComponent)
 
 void EcsSystem::DeserializeComponent(std::vector<std::string> _serializedComponent)
 {
+}
+
+void EcsComponent::DetachFromEntity()
+{
+	m_detached = true;
+	Disable();
 }

@@ -79,12 +79,6 @@ val cube
 val crimsontex
 val 4
 EndComponent
-BeginComponent Rotator
-val true
-val 0.000000
-val 90.000000
-val 0.000000
-EndComponent
 
 BeginEntity
 val KNOT
@@ -106,9 +100,5 @@ val knot
 val flat
 val 4
 EndComponent
-BeginComponent Rotator
-val true
-val 0.000000
-val 0.000000
-val 0.000000
-EndComponent
+
+

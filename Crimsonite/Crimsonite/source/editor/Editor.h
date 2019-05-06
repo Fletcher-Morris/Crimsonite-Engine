@@ -23,6 +23,7 @@ private:
 public:
 
 	Editor(CrimsonCore * _core);
+	static Editor * GetEditor();
 	void Init();
 	void CreateEditorCam();
 
@@ -44,6 +45,8 @@ public:
 	Camera * m_editorCam;
 	glm::vec3 m_storedEdCamPos;
 	glm::vec3 m_storedEdCamRot;
+	void PullEditorCamTransform();
+	void PushEditorCamTransform();
 
 	EditorSerializable * m_selectedEditorObject;
 	std::string m_selectedEntityName = "";
@@ -53,5 +56,11 @@ public:
 	Scene * m_currentScene;
 	void SetCurrentSceneData(Scene * _scene);
 	void CreateAndLoadNewScene(std::string _sceneName);
+	void SaveScene();
+	void ReloadScene();
+
+protected:
+
+	static Editor * m_instance;
 
 };

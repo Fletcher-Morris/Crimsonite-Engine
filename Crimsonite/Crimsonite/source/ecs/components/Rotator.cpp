@@ -39,14 +39,18 @@ void Rotator::DrawEditorProperties()
 std::string Rotator::Serialize()
 {
 	std::string serialized = "";
-	serialized += "val " + std::to_string(m_axis.x);
-	serialized += "\nval " + std::to_string(m_axis.y);
-	serialized += "\nval " + std::to_string(m_axis.z);
+	if (!IsDetached())
+	{
+		serialized += "val " + std::to_string(m_axis.x);
+		serialized += "\nval " + std::to_string(m_axis.y);
+		serialized += "\nval " + std::to_string(m_axis.z);
+	}
 	return serialized;
 }
 
 void Rotator::Deserialize(std::vector<std::string> _data)
 {
+	if (_data.size() != 5) return;
 	//	_data[0] is just the component name.
 	//	_data[1] is just the enabled state.
 	SetAxis(glm::vec3(std::stof(_data[2]), std::stof(_data[3]), std::stof(_data[4])));

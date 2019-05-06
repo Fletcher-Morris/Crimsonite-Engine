@@ -45,6 +45,8 @@ private:
 	bool m_enabled = true;
 	//	Can there be more than one of this component on a sngle entity?
 	bool m_uniquePerEntity = false;
+	//	Should this component be detached from it's entity?
+	bool m_detached = false;
 
 public:
 
@@ -76,6 +78,10 @@ public:
 		if (_enable) Enable();
 		else Disable();
 	}
+	//	Detach this component from it's entity.
+	void DetachFromEntity();
+	//	Returns true if this component is detached.
+	bool IsDetached() { return m_detached; }
 	//	Returns true if the component is entity-unique.
 	bool IsUnique() { return m_uniquePerEntity; }
 	//	Returns the unique identity assigned to this component.

@@ -55,8 +55,11 @@ public:
 
 	void SetOutputFrameBuffer(FrameBuffer * _buffer) { m_frameBuffer = _buffer; }
 	void SetOutputFrameBuffer(std::string _bufferName) { SetOutputFrameBuffer(AssetManager::GetFrameBuffer(_bufferName)); }
+	void SetOutputFrameBuffer(std::string _bufferName, bool _create) { SetOutputFrameBuffer(AssetManager::GetFrameBuffer(_bufferName, _create)); }
 	void UpdateOutputBufferSize();
 	FrameBuffer * GetOutputFrameBuffer() { return m_frameBuffer; }
+	std::string GetFrameBufferName() { if (m_frameBuffer) return GetOutputFrameBuffer()->GetName(); else return "NO_BUFFER"; }
+	void EnforceFrameBuffer();
 
 
 private:

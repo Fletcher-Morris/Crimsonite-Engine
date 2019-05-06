@@ -50,6 +50,20 @@ void Camera::DrawEditorProperties()
 	SetCameraSettings(newSettings);
 	ImGui::Text("Width : %i", m_settings.width);
 	ImGui::Text("Height : %i", m_settings.height);
+	if (m_frameBuffer != NULL)
+	{
+		if (ImGui::Button("Detach FrameBuffer"))
+		{
+			m_frameBuffer = NULL;
+		}
+	}
+	else
+	{
+		if (ImGui::Button("Attach FrameBuffer"))
+		{
+			EnforceFrameBuffer();
+		}
+	}
 }
 
 std::string Camera::Serialize()
@@ -58,7 +72,7 @@ std::string Camera::Serialize()
 	serialized += "val " + std::to_string(m_settings.fov);
 	serialized += "\nval " + std::to_string(m_settings.nearClip);
 	serialized += "\nval " + std::to_string(m_settings.farClip);
-	serialized += "\nval " + m_frameBuffer->GetName();
+	serialized += "\nval " + GetFrameBufferName();
 	return serialized;
 }
 
@@ -71,7 +85,7 @@ void Camera::Deserialize(std::vector<std::string> _data)
 	//	_data[4] is the far clipping plane.
 	//	_data[5] is the name of the FrameBuffer.
 	SetCameraSettings(std::stof(_data[2]), std::stof(_data[3]), std::stof(_data[4]));
-	SetOutputFrameBuffer(_data[5]);
+	if(_data[5] != "NO_BUFFER")	SetOutputFrameBuffer(_data[5]);
 }
 
 void Camera::SetCameraSettings(CameraSettings _newSettings)
@@ -124,16 +138,14 @@ void Camera::SetCameraSettings(int _width, int _height)
 
 void Camera::Bind()
 {
-	if (m_frameBuffer == 0)	{}
-	else
-	{
-		m_frameBuffer->Bind();
-	}
+	if(m_frameBuffer)
+	m_frameBuffer->Bind();
 }
 
 void Camera::ReInit()
 {
 	m_projectionMatrix = CreateProjectionMatrix(m_settings);
+	EnforceFrameBuffer();
 }
 
 void Camera::CreateCameraViewMatrix()
@@ -143,4 +155,12 @@ void Camera::CreateCameraViewMatrix()
 
 void Camera::UpdateOutputBufferSize()
 {
+}
+
+void Camera::EnforceFrameBuffer()
+{
+	if (m_frameBuffer == NULL)
+	{
+		SetOutputFrameBuffer(entity->GetName() + "_FrameBuffer", true);
+	}
 }

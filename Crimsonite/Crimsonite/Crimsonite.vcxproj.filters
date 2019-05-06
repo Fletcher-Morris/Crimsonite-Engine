@@ -250,5 +250,8 @@
     <ClInclude Include="source\core\Input.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="source\ecs\ComponentNames.h">
+      <Filter>Header Files\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

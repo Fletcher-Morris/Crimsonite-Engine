@@ -48,6 +48,7 @@
     <ClInclude Include="source\core\Input.h" />
     <ClInclude Include="source\core\Time.h" />
     <ClInclude Include="source\core\Window.h" />
+    <ClInclude Include="source\ecs\ComponentNames.h" />
     <ClInclude Include="source\ecs\Components.h" />
     <ClInclude Include="source\ecs\components\Camera.h" />
     <ClInclude Include="source\ecs\components\MeshRenderer.h" />

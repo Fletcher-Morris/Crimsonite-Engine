@@ -162,6 +162,16 @@ FrameBuffer * AssetManager::GetFrameBuffer(std::string _bufferName)
 	return &m_instance->m_frameBuffers.at(_bufferName);
 }
 
+FrameBuffer * AssetManager::GetFrameBuffer(std::string _bufferName, bool _create)
+{
+	if (!Instance()->FrameBufferExists(_bufferName))
+	{
+		std::cout << "FrameBuffer '" << _bufferName << "' does not exist yet, but something is trying to access it." << std::endl;
+		if(_create) AssetManager::CreateFrameBuffer(_bufferName, Window::Width(), Window::Height());
+	}
+	return &m_instance->m_frameBuffers.at(_bufferName);
+}
+
 void AssetManager::LoadMesh(std::string _meshName, std::string _filePath)
 {
 	//	Temporary error-suppressor.

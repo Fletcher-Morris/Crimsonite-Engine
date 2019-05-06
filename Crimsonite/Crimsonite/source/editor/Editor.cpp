@@ -37,7 +37,7 @@ void Editor::Init()
 
 void Editor::CreateEditorCam()
 {
-	m_editorCam = &m_currentScene->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
+	m_editorCam = m_currentScene->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
 	m_editorCam->SetOutputFrameBuffer("EditorViewport");
 	m_editorCam->entity->MakeImmortal(true);
 	m_editorCam->entity->SetSerializable(false);
@@ -63,7 +63,7 @@ void Editor::LoadIcons()
 void Editor::CreateObject(std::string _meshName)
 {
 	m_currentScene->ECS()->NewEntity(_meshName);
-	MeshRenderer * mesh = &m_currentScene->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
+	MeshRenderer * mesh = m_currentScene->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
 	mesh->SetMesh(_meshName);
 	mesh->SetRenderer(m_engine->GetCurrentScene()->Renderer());
 	mesh->SetMaterial("default");

@@ -188,7 +188,7 @@ public:
 	}
 	//	Add a component to this entity and return a reference.
 	template<typename T, typename... args>
-	T& AttachComponent(args&&... _args);
+	T * AttachComponent(args&&... _args);
 	//	Return a reference to a component on this entity.
 	template<typename T> T& GetComponent()
 	{
@@ -253,20 +253,21 @@ public:
 };
 
 template<typename T, typename ...args>
-inline T & EcsEntity::AttachComponent(args && ..._args)
+inline T * EcsEntity::AttachComponent(args && ..._args)
 {
-	T* newComponent(new T(std::forward<args>(_args)...));
-	newComponent->entity = this;
+	T * newComponent(new T(std::forward<args>(_args)...));
 	std::unique_ptr<EcsComponent> uniquePtr{ newComponent };
+	if (newComponent->IsUnique()) return NULL;
 	m_componentsVector.emplace_back(std::move(uniquePtr));
 	m_componentsArray[GetComponentId<T>()] = newComponent;
 	m_componentsBitset[GetComponentId<T>()] = true;
 	m_componentsCount++;
 	std::string nameStr = typeid(T).name();
 	nameStr.erase(0, 6);
+	newComponent->entity = this;
 	newComponent->SetComponentName(nameStr);
 	newComponent->OnInit();
-	return *newComponent;
+	return newComponent;
 }
 
 template<typename T>

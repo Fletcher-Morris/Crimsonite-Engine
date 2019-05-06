@@ -21,7 +21,7 @@ Scene::Scene()
 	m_ecs = new EcsSystem();
 
 	m_ecs->NewEntity("MainCamera");
-	Camera * cam = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+	Camera * cam = m_ecs->NewestEntity()->AttachComponent<Camera>();
 	cam->SetOutputFrameBuffer("MainCamBuffer");
 }
 
@@ -105,7 +105,7 @@ void Scene::Deserialize()
 				std::string componentName = descriptionLines[0];
 				if (componentName == "Camera")
 				{
-					Camera * comp = &m_ecs->NewestEntity()->AttachComponent<Camera>();
+					Camera * comp = m_ecs->NewestEntity()->AttachComponent<Camera>();
 					comp->SetRenderer(m_renderer);
 					if (descriptionLines.size() >= 1)
 					{
@@ -115,7 +115,7 @@ void Scene::Deserialize()
 				}
 				else if (componentName == "MeshRenderer")
 				{
-					MeshRenderer * comp = &m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
+					MeshRenderer * comp = m_ecs->NewestEntity()->AttachComponent<MeshRenderer>();
 					comp->SetRenderer(m_renderer);
 					if (descriptionLines.size() >= 1)
 					{
@@ -125,7 +125,7 @@ void Scene::Deserialize()
 				}
 				else if (componentName == "Rotator")
 				{
-					Rotator * comp = &m_ecs->NewestEntity()->AttachComponent<Rotator>();
+					Rotator * comp = m_ecs->NewestEntity()->AttachComponent<Rotator>();
 					if (descriptionLines.size() >= 1)
 					{
 						comp->SetEnabled(descriptionLines[1] == "true" ? true : false);

@@ -1,4 +1,6 @@
 #include "ECS.h"
+#include "Components.h"
+#include "ComponentNames.h"
 
 void EcsEntity::SetName(std::string _name)
 {
@@ -146,6 +148,24 @@ void EcsEntity::DrawEditorProperties()
 		m_componentsVector[i]->SetEnabled(componentEnabled);
 		ImGui::NewLine();
 		m_componentsVector[i]->DrawEditorProperties();
+	}
+	ImGui::NewLine();
+	ImGui::Separator();
+	std::vector<std::string> compNames = GetComponentNames();
+	std::string newConponentName = compNames[0];
+	if (ImGui::BeginCombo("Add Component", "Rotator"))
+	{
+
+		for (int i = 0; i < compNames.size(); i++)
+		{
+
+			if (ImGui::Button(compNames[i].c_str()))
+			{
+
+				AttachComponentWithName(this, compNames[i]);
+			}
+		}
+		ImGui::EndCombo();
 	}
 }
 

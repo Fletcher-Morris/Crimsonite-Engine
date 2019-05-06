@@ -47,6 +47,7 @@ public:
 	static void BindFrameBuffer(std::string _bufferName);
 	//	Return a specific FrameBuffer.
 	static FrameBuffer * GetFrameBuffer(std::string _bufferName);
+	static FrameBuffer * GetFrameBuffer(std::string _bufferName, bool _create);
 
 
 	//	Load a Mesh from a file with an assigned name.

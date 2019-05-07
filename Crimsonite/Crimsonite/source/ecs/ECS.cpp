@@ -134,10 +134,13 @@ void EcsEntity::DrawEditorProperties()
 	{
 		SetEnabled(!m_enabled);
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("DESTROY"))
+	if (!m_immortal)
 	{
-		Destroy();
+		ImGui::SameLine();
+		if (ImGui::Button("DESTROY"))
+		{
+			Destroy();
+		}
 	}
 	ImGui::Separator();
 	ImGui::NewLine();

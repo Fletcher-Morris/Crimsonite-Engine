@@ -43,8 +43,6 @@ private:
 	std::string m_componentName;
 	//	Should the component be used?
 	bool m_enabled = true;
-	//	Can there be more than one of this component on a sngle entity?
-	bool m_uniquePerEntity = false;
 	//	Should this component be detached from it's entity?
 	bool m_detached = false;
 
@@ -82,8 +80,6 @@ public:
 	void DetachFromEntity();
 	//	Returns true if this component is detached.
 	bool IsDetached() { return m_detached; }
-	//	Returns true if the component is entity-unique.
-	bool IsUnique() { return m_uniquePerEntity; }
 	//	Returns the unique identity assigned to this component.
 	int GetEcsComponentId() { return m_ecsComponentId; }
 	//	Return the name of this component.
@@ -190,7 +186,9 @@ public:
 	//	Check if this entity has a specific component attached.
 	template<typename T> bool HasComponent()
 	{
-		return m_componentsBitset[GetComponentId<T>];
+		//return m_componentsBitset[GetComponentId<T>];
+		if (&GetComponent<T>() != NULL) return true;
+		return false;
 	}
 	//	Add a component to this entity and return a reference.
 	template<typename T, typename... args>
@@ -261,9 +259,9 @@ public:
 template<typename T, typename ...args>
 inline T * EcsEntity::AttachComponent(args && ..._args)
 {
+	if (HasComponent<T>()) return NULL;
 	T * newComponent(new T(std::forward<args>(_args)...));
 	std::unique_ptr<EcsComponent> uniquePtr{ newComponent };
-	if (newComponent->IsUnique()) return NULL;
 	m_componentsVector.emplace_back(std::move(uniquePtr));
 	m_componentsArray[GetComponentId<T>()] = newComponent;
 	m_componentsBitset[GetComponentId<T>()] = true;

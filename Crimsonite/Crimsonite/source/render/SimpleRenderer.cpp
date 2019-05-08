@@ -77,7 +77,14 @@ void SimpleRenderer::Flush()
 			m->SetShaderMvp(m_cameras[c]);
 
 			glBindVertexArray(m->GetMesh()->GetVao());
-			glDrawElements(m->GetRenderMode(), m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+			if (p_renderModeOverride == -1)
+			{
+				glDrawElements(m->GetRenderMode(), m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+			}
+			else
+			{
+				glDrawElements(p_renderModeOverride, m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+			}
 		}
 
 	}

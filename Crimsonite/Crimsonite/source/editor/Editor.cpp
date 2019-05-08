@@ -208,6 +208,28 @@ void Editor::DrawGui()
 			{
 				m_currentScene->SetName((std::string)m_tempSceneName);
 			}
+			float * newClearColor = m_currentScene->Renderer()->GetClearColor();
+			ImGui::ColorEdit3("Clear Colour", newClearColor);
+			m_currentScene->Renderer()->SetClearColor(newClearColor);
+			if (ImGui::Button("Auto"))
+			{
+				m_currentScene->Renderer()->SetOverrideMode(-1);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Tris"))
+			{
+				m_currentScene->Renderer()->SetOverrideMode(GL_TRIANGLES);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Lines"))
+			{
+				m_currentScene->Renderer()->SetOverrideMode(GL_LINES);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Points"))
+			{
+				m_currentScene->Renderer()->SetOverrideMode(GL_POINTS);
+			}
 			ImGui::EndMenu();
 		}
 

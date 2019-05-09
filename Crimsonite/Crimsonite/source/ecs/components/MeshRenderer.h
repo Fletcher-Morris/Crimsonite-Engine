@@ -37,7 +37,7 @@ public:
 
 	void SetMesh(Mesh * _newMesh);
 	void SetMesh(std::string _meshName);
-	Mesh * GetMesh() { return m_mesh; }
+	Mesh * GetMesh();
 
 	void SetMaterial(Material * _newMaterial);
 	void SetMaterial(std::string _materialName);

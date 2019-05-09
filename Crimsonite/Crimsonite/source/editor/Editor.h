@@ -18,7 +18,8 @@ class Editor
 
 private:
 
-	char m_tempSceneName[128] = "temp";
+	char m_tempSceneName[128] = "New Scene";
+	char m_tempMaterialName[128] = "New Material";
 
 public:
 
@@ -49,9 +50,8 @@ public:
 	void PushEditorCamTransform();
 
 	EditorSerializable * m_selectedEditorObject;
+	void SelectEditorObject(EditorSerializable * _editorObject);
 	std::string m_selectedEntityName = "";
-	/*void SelectEntity(int _id);
-	void DeselectEntity();*/
 
 	Scene * m_currentScene;
 	void SetCurrentSceneData(Scene * _scene);

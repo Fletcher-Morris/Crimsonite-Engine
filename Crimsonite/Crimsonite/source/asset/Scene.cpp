@@ -201,6 +201,11 @@ void Scene::SetName(std::string _newName)
 	m_name = _newName;
 }
 
+Scene * Scene::Current()
+{
+	return AssetManager::GetCurrentScene();
+}
+
 void Scene::Update()
 {
 	for (auto& ent : m_ecs->entities)ent->Update();

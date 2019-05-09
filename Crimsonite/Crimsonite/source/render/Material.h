@@ -8,14 +8,17 @@
 #include <vector>
 
 #include "Shader.h"
+#include "../editor/EditorSerializable.h"
 
-class Material
+class Material : public EditorSerializable
 {
 
 public:
 
 	Material();
 	Material(std::string _name);
+
+	std::string GetTypeString() override { return "Material"; }
 
 	std::map<std::string, bool> boolProperties;
 	std::map<std::string, int> intProperties;

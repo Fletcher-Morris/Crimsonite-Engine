@@ -464,6 +464,23 @@ void AssetManager::AddMaterial(Material _material)
 	m_instance->LoadMaterialName(_material.GetName());
 }
 
+void AssetManager::AddMaterial(std::string _materialName, Shader * _materialShader)
+{
+	if (_materialShader == NULL) return;
+	if (_materialName == "") return;
+
+	Instance()->m_materials[_materialName] = Material(_materialName);
+	m_instance->LoadMaterialName(_materialName);
+	m_instance->m_materials[_materialName].SetShader(_materialShader);
+
+	std::cout << "Created Material '" << _materialName << "' with shader '" << _materialShader->GetName() << "'." << std::endl;
+}
+
+void AssetManager::AddMaterial(std::string _materialName, std::string _shaderName)
+{
+	AddMaterial(_materialName, GetShader(_shaderName));
+}
+
 void AssetManager::LoadMaterial(std::string _filePath)
 {
 	Material newMat = Material();
@@ -749,7 +766,7 @@ void AssetManager::CreatePassthroughShader()
 		"color = texture(MainTex, TexCoord);\n"
 		"}";
 
-	Shader shader = Shader();
+	Shader shader = Shader("passthrough");
 	shader.Compile(vertexString, fragmentString);
 	m_instance->m_shaders["passthrough"] = shader;
 	m_instance->m_passthroughShaderCreated = true;
@@ -1025,4 +1042,9 @@ void AssetManager::ChangeLoadedSceneName(std::string _currentName, std::string _
 			return;
 		}
 	}
+}
+
+Scene * AssetManager::GetCurrentScene()
+{
+	return Instance()->m_core->GetCurrentScene();
 }

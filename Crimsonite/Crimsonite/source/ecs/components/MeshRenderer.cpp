@@ -1,7 +1,7 @@
 #include "MeshRenderer.h"
 
 #include "../../mesh/Mesh.h"
-#include "../../render/Renderer.h"
+#include "../../render/SimpleRenderer.h"
 #include "../../render/Material.h"
 #include "Camera.h"
 #include "../../render/MatrixMaths.h"
@@ -35,11 +35,7 @@ void MeshRenderer::OnDisable()
 
 void MeshRenderer::DrawEditorProperties()
 {
-	std::string currentMeshName = m_mesh->GetName();
-	if (currentMeshName == "" || m_mesh == NULL)
-	{
-		currentMeshName == "error";
-	}
+	std::string currentMeshName = GetMesh()->GetName();
 	if (ImGui::BeginCombo("Mesh", currentMeshName.c_str()))
 	{
 		for (int i = 0; i < AssetManager::MeshCount(); i++)
@@ -49,6 +45,24 @@ void MeshRenderer::DrawEditorProperties()
 			if (ImGui::Button(foundMeshName.c_str()))
 			{
 				SetMesh(foundMeshName);
+			}
+			if (isSelected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
+	std::string currentMaterialName = GetMaterial()->GetName();
+	if (ImGui::BeginCombo("Material", currentMaterialName.c_str()))
+	{
+		for (int i = 0; i < AssetManager::MaterialCount(); i++)
+		{
+			std::string foundMaterialName = AssetManager::GetMaterial(i)->GetName();
+			bool isSelected = (currentMaterialName == foundMaterialName);
+			if (ImGui::Button(foundMaterialName.c_str()))
+			{
+				SetMaterial(foundMaterialName);
 			}
 			if (isSelected)
 			{
@@ -96,6 +110,12 @@ void MeshRenderer::SetMesh(std::string _meshName)
 	SetMesh(AssetManager::GetMesh(_meshName));
 }
 
+Mesh * MeshRenderer::GetMesh()
+{
+	if (m_mesh == NULL) SetMesh("error");
+	return m_mesh;
+}
+
 void MeshRenderer::SetMaterial(Material * _newMaterial)
 {
 	m_material = _newMaterial;
@@ -108,6 +128,7 @@ void MeshRenderer::SetMaterial(std::string _materialName)
 
 Material * MeshRenderer::GetMaterial()
 {
+	if (m_material == NULL) SetMaterial("default");
 	return m_material;
 }
 
@@ -116,24 +137,17 @@ void MeshRenderer::SetRenderer(Renderer * _renderer)
 	if (_renderer != NULL)
 	{
 		m_renderer = _renderer;
-		if (m_mesh != NULL)
-		{
-			m_renderer->Submit(this);
-		}
 	}
-	else
-	std::cout << "NO RENDERER" << std::endl;
 }
 
 void MeshRenderer::SubmitToRenderer()
 {
 	if (m_mesh == NULL) return;
-	if (m_renderer != NULL)
+	if (m_renderer == NULL)
 	{
-		m_renderer->Submit(this);
+		SetRenderer(Scene::Current()->Renderer());
 	}
-	else
-	std::cout << "NO RENDERER" << std::endl;
+	m_renderer->Submit(this);
 }
 
 void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
@@ -141,10 +155,8 @@ void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
 	if (_renderer != NULL)
 	{
 		m_renderer = _renderer;
-		SubmitToRenderer();
 	}
-	else
-	std::cout << "NO RENDERER" << std::endl;
+	SubmitToRenderer();
 }
 
 void MeshRenderer::SetShaderMvp()

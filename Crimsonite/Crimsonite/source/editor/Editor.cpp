@@ -92,6 +92,17 @@ void Editor::PushEditorCamTransform()
 	m_editorCam->entity->transform.SetRotation(m_storedEdCamRot);
 }
 
+void Editor::SelectEditorObject(EditorSerializable * _editorObject)
+{
+	if (_editorObject == NULL) return;
+	m_selectedEditorObject = _editorObject;
+	std::string typeName = m_selectedEditorObject->GetTypeString();
+	if (typeName == "EcsEntity")
+	{
+		m_selectedEntityName = static_cast<EcsEntity*>(m_selectedEditorObject)->GetName();
+	}
+}
+
 void Editor::DrawGui()
 {
 
@@ -158,29 +169,68 @@ void Editor::DrawGui()
 		}
 		if (ImGui::BeginMenu("Create"))
 		{
-			if (ImGui::Button("Cube"))
+			if (ImGui::BeginMenu("New Entity"))
 			{
-				CreateObject("cube");
+				if (ImGui::Button("Cube"))
+				{
+					CreateObject("cube");
+				}
+				if (ImGui::Button("Sphere"))
+				{
+					CreateObject("sphere");
+				}
+				if (ImGui::Button("Quad"))
+				{
+					CreateObject("quad");
+				}
+				if (ImGui::Button("Knot"))
+				{
+					CreateObject("knot");
+				}
+				if (ImGui::Button("Dragon"))
+				{
+					CreateObject("dragon");
+				}
+				if (ImGui::Button("Teapot"))
+				{
+					CreateObject("teapot");
+				}
+				ImGui::EndMenu();
 			}
-			if (ImGui::Button("Sphere"))
+			if (ImGui::Button("New Scene"))
 			{
-				CreateObject("sphere");
+				CreateAndLoadNewScene("New Scene");
 			}
-			if (ImGui::Button("Quad"))
+			if (ImGui::BeginMenu("New Material"))
 			{
-				CreateObject("quad");
-			}
-			if (ImGui::Button("Knot"))
-			{
-				CreateObject("knot");
-			}
-			if (ImGui::Button("Dragon"))
-			{
-				CreateObject("dragon");
-			}
-			if (ImGui::Button("Teapot"))
-			{
-				CreateObject("teapot");
+				ImGui::InputText("Material Name", m_tempMaterialName, 128);
+				Shader * chosenShader = AssetManager::GetShader("default");
+				std::string chosenShaderName = chosenShader->GetName();
+				if (ImGui::BeginCombo("Shader", chosenShaderName.c_str()))
+				{
+					for (int i = 0; i < AssetManager::ShaderCount(); i++)
+					{
+						std::string foundShaderName = AssetManager::GetShader(i)->GetName();
+						bool isSelected = (chosenShaderName == foundShaderName);
+						if (ImGui::Button(foundShaderName.c_str()))
+						{
+							chosenShaderName = foundShaderName;
+							chosenShader = AssetManager::GetShader(chosenShaderName);
+						}
+						if (isSelected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+					}
+					ImGui::EndCombo();
+				}
+				if (ImGui::Button("Create"))
+				{
+					AssetManager::AddMaterial((std::string)m_tempMaterialName, chosenShader);
+					SelectEditorObject(AssetManager::GetMaterial((std::string)m_tempMaterialName));
+					std::string("New Material").copy(m_tempMaterialName, 128);
+				}
+				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();
 		}

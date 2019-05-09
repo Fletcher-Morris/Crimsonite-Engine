@@ -69,26 +69,36 @@ public:
 	static void LoadShader(std::string _shaderName, std::string _vertexPath, std::string _fragmentPath);
 	//	Return a reference to a Shader with a given name.
 	static Shader * GetShader(std::string _shaderName);
+	//	Return a reference to a Shader with a given id.
+	static Shader * GetShader(int _shaderId) { return &Instance()->m_shaders.at(Instance()->m_loadedShaderNames[_shaderId]); }
 	//	Forcibly create the defaut Shader.
 	static void CreateDefaultShader();
 	//	Create the passthrough Shader.
 	static void CreatePassthroughShader();
 	//	Return a reference to the passthrough Shader.
 	static 	Shader * GetPassthroughShader();
+	static int ShaderCount() { return Instance()->m_loadedShaderNames.size(); }
 
 
 	//	Add a Material with a given name.
 	static void AddMaterial(std::string _materialName);
 	//	Add a material to the AssetManager.
 	static void AddMaterial(Material _material);
+	//	Add a mertaial with a given name and shader.
+	static void AddMaterial(std::string _materialName, Shader * _materialShader);
+	//	Add a mertaial with a given name and shader.
+	static void AddMaterial(std::string _materialName, std::string _shaderName);
 	//	Load a Material from a file.
 	static void LoadMaterial(std::string _filePath);
 	//	Return a refernce to a Material with a given name.
 	static Material * GetMaterial(std::string _materialName);
+	//	Return a refernce to a Material with a given id.
+	static Material * GetMaterial(int _materialId) { return &Instance()->m_materials.at(Instance()->m_loadedMaterialNames[_materialId]); }
 	//	Forcibly create the default Material.
 	static void CreateDefaultMaterial();
 	//	Return a reference to the default Material.
 	static Material * GetDefaultMaterial();
+	static int MaterialCount() { return Instance()->m_loadedMaterialNames.size(); }
 
 
 	//	SCENE METHODS
@@ -101,6 +111,7 @@ public:
 	static void OpenScene(std::string _sceneName);
 	static void OpenScene(int _sceneId);
 	static void ChangeLoadedSceneName(std::string _currentName, std::string _newName);
+	static Scene * GetCurrentScene();
 
 private:
 

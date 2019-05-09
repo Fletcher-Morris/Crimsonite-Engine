@@ -36,6 +36,8 @@ public:
 	EcsSystem * ECS() { return m_ecs; }
 	SimpleRenderer * Renderer() { return m_renderer; }
 
+	static Scene * Current();
+
 	void Update();
 	void FixedUpdate();
 	void Render();

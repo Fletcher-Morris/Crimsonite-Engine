@@ -36,7 +36,7 @@ void Editor::Init()
 
 	LoadIcons();
 
-	AssetManager::CreateFrameBuffer("EditorCam_FrameBuffer", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
+	AssetManager::CreateFrameBuffer("EditorCamera_FrameBuffer", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigDockingWithShift = false;
@@ -45,8 +45,8 @@ void Editor::Init()
 
 void Editor::CreateEditorCam()
 {
-	m_editorCam = m_currentScene->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
-	m_editorCam->SetOutputFrameBuffer("EditorCam_FrameBuffer");
+	m_editorCam = m_currentScene->ECS()->NewEntity("EditorCamera").AttachComponent<Camera>();
+	m_editorCam->SetOutputFrameBuffer("EditorCamera_FrameBuffer");
 	m_editorCam->SetAutoResize(false);
 	m_editorCam->entity->MakeImmortal(true);
 	m_editorCam->entity->SetSerializable(false);
@@ -376,7 +376,7 @@ void Editor::DrawGui()
 			m_editorCam->SetCameraSize((int)size.x, (int)size.y, "editor");
 			m_prevCamSize = size;
 		}
-		ImGui::Image((GLuint*)AssetManager::GetTexture("EditorCam_FrameBuffer")->TextureId, ImVec2(size.x - 15, size.y - 15));
+		ImGui::Image((GLuint*)AssetManager::GetTexture("EditorCamera_FrameBuffer")->TextureId, ImVec2(size.x - 15, size.y - 15));
 	}
 	ImGui::End();
 

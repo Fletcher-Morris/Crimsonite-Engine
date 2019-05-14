@@ -95,7 +95,7 @@ void CrimsonCore::SetWindowFullscreen(bool _fullscreen)
 	for (int i = 0; i < cameras.size(); i++)
 	{
 		Camera * cam = cameras[i];
-		if (cam->AutoResize() && cam->entity->GetName() != "EditorCam")
+		if (cam->AutoResize() && cam->entity->GetName() != "EditorCamera")
 			cam->SetCameraSize(m_videoMode->width, m_videoMode->height, "core");
 	}
 }
@@ -185,7 +185,7 @@ void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 	for (int i = 0; i < cameras.size(); i++)
 	{
 		Camera * cam = cameras[i];
-		if (cam->AutoResize() && cam->entity->GetName() != "EditorCam")
+		if (cam->AutoResize() && cam->entity->GetName() != "EditorCamera")
 			cam->SetCameraSize((int)_width, (int)_height, "core");
 	}
 }

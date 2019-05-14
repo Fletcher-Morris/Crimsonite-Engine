@@ -14,11 +14,11 @@ BeginEntity
 val MainCamera
 val true
 val true
-val 0.000000
-val 0.000000
-val 2.050000
-val 0.000000
-val 0.000000
+val 0.600000
+val 0.450000
+val -0.800000
+val -15.750000
+val -34.250000
 val 0.000000
 val 1.000000
 val 1.000000
@@ -29,7 +29,7 @@ val true
 val 60.000000
 val 0.100000
 val 100.000000
-val MainCamBuffer
+val MainCamera_FrameBuffer
 EndComponent
 
 BeginEntity

@@ -41,10 +41,18 @@ void Texture::Unbind()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::SetSize(int width, int height)
+void Texture::SetSize(int _width, int _height)
 {
-	m_width = width;
-	m_height = height;
+	Bind();
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	m_width = _width;
+	m_height = _height;
 }
 
 void Texture::SetWidth(int _width)

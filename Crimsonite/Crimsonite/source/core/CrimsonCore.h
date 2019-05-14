@@ -35,6 +35,7 @@ public:
 	GLFWwindow * GetWindow() { return m_window; }
 	GLFWmonitor * GetMonitor() { return m_monitor; }
 	const GLFWvidmode * GetVideoMode() { return m_videoMode; }
+	void SetWindowFullscreen(bool _fullscreen);
 
 	void RunEngine();
 	void QuitEngine();

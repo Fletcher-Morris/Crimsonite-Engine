@@ -129,6 +129,10 @@ private:
 	int FindExistingVertex(std::vector<Vertex> _inputVector, glm::vec3 _position, glm::vec2 _uv, glm::vec3 _normal);
 	//	Create the error Texture.
 	void CreateErrorTexture();
+	//	Create the white Texture.
+	void CreateWhiteTexture();
+	//	Create the black Texture.
+	void CreateBlackTexture();
 	//	Has the error Texture been created?
 	bool m_errorTextureCreated = false;
 	//	Return a reference to the error Texture.

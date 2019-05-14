@@ -24,7 +24,7 @@ void Camera::OnRender()
 	bool dirty = false;
 	if (m_settings.width != Window::Width()) dirty = true;
 	if (m_settings.height != Window::Height()) dirty = true;
-	if (dirty) SetCameraSettings(Window::Width(), Window::Height());
+	if (dirty) SetCameraClipping(Window::Width(), Window::Height());
 
 	m_renderer->Submit(this);
 }
@@ -50,6 +50,7 @@ void Camera::DrawEditorProperties()
 	SetCameraSettings(newSettings);
 	ImGui::Text("Width : %i", m_settings.width);
 	ImGui::Text("Height : %i", m_settings.height);
+	ImGui::Text("Framebuffer : %s", GetFrameBufferName().c_str());
 	if (m_frameBuffer != NULL)
 	{
 		if (ImGui::Button("Detach FrameBuffer"))
@@ -89,7 +90,17 @@ void Camera::Deserialize(std::vector<std::string> _data)
 	//	_data[4] is the far clipping plane.
 	//	_data[5] is the name of the FrameBuffer.
 	SetCameraSettings(std::stof(_data[2]), std::stof(_data[3]), std::stof(_data[4]));
-	if(_data[5] != "NO_BUFFER")	SetOutputFrameBuffer(_data[5]);
+	if (_data[5] != "NO_BUFFER")
+	{
+		if (_data[5] != entity->GetName() + "_FrameBuffer")
+		{
+			EnforceFrameBuffer();
+		}
+		else
+		{
+			SetOutputFrameBuffer(_data[5]);
+		}
+	}
 }
 
 void Camera::SetCameraSettings(CameraSettings _newSettings)
@@ -108,36 +119,37 @@ void Camera::SetCameraSettings(CameraSettings _newSettings)
 	}
 }
 
-void Camera::SetCameraSettings(float _fov)
+void Camera::SetCameraFov(float _fov)
 {
 	CameraSettings newSettings = GetCameraSettings();
 	newSettings.fov = _fov;
 	SetCameraSettings(newSettings);
 }
 
-void Camera::SetCameraSettings(float _near, float _far)
+void Camera::SetCameraClipping(float _near, float _far)
 {
-	CameraSettings newSettings = GetCameraSettings();
-	newSettings.nearClip = _near;
-	newSettings.farClip = _far;
-	SetCameraSettings(newSettings);
+	//CameraSettings newSettings = GetCameraSettings();
+	//newSettings.nearClip = _near;
+	//newSettings.farClip = _far;
+	//SetCameraSettings(newSettings);
 }
 
 void Camera::SetCameraSettings(float _fov, float _near, float _far)
 {
-	CameraSettings newSettings = GetCameraSettings();
-	newSettings.fov = _fov;
-	newSettings.nearClip = _near;
-	newSettings.farClip = _far;
-	SetCameraSettings(newSettings);
+	//CameraSettings newSettings = GetCameraSettings();
+	//newSettings.fov = _fov;
+	//newSettings.nearClip = _near;
+	//newSettings.farClip = _far;
+	//SetCameraSettings(newSettings);
 }
 
-void Camera::SetCameraSettings(int _width, int _height)
+void Camera::SetCameraSize(int _width, int _height, std::string _code)
 {
 	CameraSettings newSettings = GetCameraSettings();
 	newSettings.width = _width;
 	newSettings.height = _height;
 	SetCameraSettings(newSettings);
+	ResizeFramebuffer(_width, _height);
 }
 
 void Camera::Bind()
@@ -157,8 +169,12 @@ void Camera::CreateCameraViewMatrix()
 	m_viewMatrix = CreateViewMatrix(*this);
 }
 
-void Camera::UpdateOutputBufferSize()
+void Camera::ResizeFramebuffer(int _width, int _height)
 {
+	if (GetOutputFrameBuffer() != NULL)
+	{
+		GetOutputFrameBuffer()->Resize(_width, _height);
+	}
 }
 
 void Camera::EnforceFrameBuffer()

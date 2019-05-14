@@ -170,4 +170,5 @@ void Material::DrawEditorProperties()
 			ImGui::EndCombo();
 		}
 	}
+
 }

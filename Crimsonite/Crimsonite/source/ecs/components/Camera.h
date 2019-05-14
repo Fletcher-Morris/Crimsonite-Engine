@@ -27,13 +27,13 @@ public:
 	//	Set the view settings for this camera.
 	void SetCameraSettings(CameraSettings _newSettings);
 	//	Set the feld of view of this camera.
-	void SetCameraSettings(float _fov);
+	void SetCameraFov(float _fov);
 	//	Set the near and farliiping values for this camera.
-	void SetCameraSettings(float _near, float _far);
+	void SetCameraClipping(float _near, float _far);
 	//	Set the near and farliiping values for this camera.
 	void SetCameraSettings(float _fov, float _near, float _far);
 	//	Set thewidth and height of this camera.
-	void SetCameraSettings(int _width, int _height);
+	void SetCameraSize(int _width, int _height, std::string _code);
 	//	Return the view settingsused for this camera.
 	CameraSettings GetCameraSettings() { return m_settings; }
 
@@ -56,10 +56,13 @@ public:
 	void SetOutputFrameBuffer(FrameBuffer * _buffer) { m_frameBuffer = _buffer; }
 	void SetOutputFrameBuffer(std::string _bufferName) { SetOutputFrameBuffer(AssetManager::GetFrameBuffer(_bufferName)); }
 	void SetOutputFrameBuffer(std::string _bufferName, bool _create) { SetOutputFrameBuffer(AssetManager::GetFrameBuffer(_bufferName, _create)); }
-	void UpdateOutputBufferSize();
+	void ResizeFramebuffer(int _width, int _height);
 	FrameBuffer * GetOutputFrameBuffer() { return m_frameBuffer; }
 	std::string GetFrameBufferName() { if (m_frameBuffer) return GetOutputFrameBuffer()->GetName(); else return "NO_BUFFER"; }
 	void EnforceFrameBuffer();
+
+	bool AutoResize() { return m_autoResize; }
+	void SetAutoResize(bool _autoResize) { m_autoResize = _autoResize; }
 
 
 private:
@@ -77,5 +80,7 @@ private:
 	FrameBuffer * m_frameBuffer;
 
 	Renderer * m_renderer;
+
+	bool m_autoResize = true;
 
 };

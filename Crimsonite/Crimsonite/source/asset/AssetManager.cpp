@@ -5,7 +5,16 @@
 AssetManager * AssetManager::m_instance(0);
 AssetManager * AssetManager::Instance()
 {
-	if (!m_instance) m_instance = new AssetManager();
+	if (!m_instance)
+	{
+		m_instance = new AssetManager();
+		m_instance->CreateErrorTexture();
+		m_instance->CreateWhiteTexture();
+		m_instance->CreateBlackTexture();
+		m_instance->CreateDefaultShader();
+		m_instance->CreateDefaultMaterial();
+		m_instance->CreateErrorMesh();
+	}
 	return m_instance;
 }
 
@@ -827,6 +836,7 @@ void AssetManager::CreateDefaultMaterial()
 	newMat.ReserveTexturePropertyName("MainTex");
 	newMat.SetShader("default");
 	newMat.SetColor({ 1.0f,1.0f,1.0f });
+	newMat.SetMainTex("white");
 	m_instance->m_materials["default"] = newMat;
 	m_instance->m_defaultMaterialCreated = true;
 	std::cout << "Created Default Material." << std::endl;
@@ -935,6 +945,58 @@ void AssetManager::CreateErrorTexture()
 	m_errorTextureCreated = true;
 
 	std::cout << "Created Error Texture." << std::endl;
+}
+
+void AssetManager::CreateWhiteTexture()
+{
+	unsigned char data[4];
+	{
+		data[0] = 255;
+		data[1] = 255;
+		data[2] = 255;
+		data[3] = 255;
+	}
+	m_textures["white"] = Texture("white", 1, 1, data);
+	Texture * tex = &m_textures.at("white");
+	glGenTextures(1, &tex->TextureId);
+	glBindTexture(GL_TEXTURE_2D, tex->TextureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex->GetWidth(), tex->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->ImageData);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	if (!TextureExists("white"))
+	{
+		m_loadedTextureNames.push_back("white");
+	}
+}
+
+void AssetManager::CreateBlackTexture()
+{
+	unsigned char data[4];
+	{
+		data[0] = 0;
+		data[1] = 0;
+		data[2] = 0;
+		data[3] = 255;
+	}
+	m_textures["black"] = Texture("black", 1, 1, data);
+	Texture * tex = &m_textures.at("black");
+	glGenTextures(1, &tex->TextureId);
+	glBindTexture(GL_TEXTURE_2D, tex->TextureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex->GetWidth(), tex->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->ImageData);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	if (!TextureExists("black"))
+	{
+		m_loadedTextureNames.push_back("black");
+	}
 }
 
 Texture * AssetManager::GetErrorTexture()

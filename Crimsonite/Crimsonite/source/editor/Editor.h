@@ -44,6 +44,7 @@ public:
 	void CreateObject(std::string _meshName);
 
 	Camera * m_editorCam;
+	ImVec2 m_prevCamSize;
 	glm::vec3 m_storedEdCamPos;
 	glm::vec3 m_storedEdCamRot;
 	void PullEditorCamTransform();

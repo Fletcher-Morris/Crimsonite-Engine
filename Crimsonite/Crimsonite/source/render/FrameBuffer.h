@@ -27,6 +27,8 @@ public:
 	void Bind();
 	void Unbind() {};
 
+	void Resize(int _width, int _height);
+
 private:
 
 	Texture * m_linkedTex;

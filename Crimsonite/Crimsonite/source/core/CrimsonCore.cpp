@@ -21,7 +21,6 @@ CrimsonCore::CrimsonCore(std::string _appName)
 	std::cout << "==========" << std::endl;
 
 	m_assetPath = (std::string)_getcwd(NULL, 0) + "/assets/";
-	//m_assetPath = "G:/prco304-final-year-project-Fletcher-Morris/Demo (Output)/Debug/assets/";
 	std::cout << "Assets path is : " << m_assetPath << std::endl;
 
 	InitializeEngine(_appName);
@@ -45,13 +44,14 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	m_monitor = glfwGetPrimaryMonitor();
 	m_videoMode = glfwGetVideoMode(m_monitor);
-	//m_window = glfwCreateWindow(1600, 900, _appName.c_str(), NULL, NULL);
-	m_window = glfwCreateWindow(m_videoMode->width, m_videoMode->height, _appName.c_str(), m_monitor, NULL);
-	Window::SetSize(m_videoMode->width, m_videoMode->height);
+	m_window = glfwCreateWindow(1600, 900, _appName.c_str(), NULL, NULL);
+	//m_window = glfwCreateWindow(m_videoMode->width, m_videoMode->height, _appName.c_str(), m_monitor, NULL);
 	if (!m_window)
 	{
 		std::cout << "Failed to create GLFW window!" << std::endl; return;
 	}
+	Window::SetCore(this);
+	Window::UpdateGlfwMode(m_videoMode->width, m_videoMode->height, m_videoMode->refreshRate);
 	glfwMakeContextCurrent(m_window);
 	glfwSetFramebufferSizeCallback(m_window, GlfwFrameBufferSizeCallback);
 	glfwSetKeyCallback(m_window, GlfwKeyCallback);
@@ -73,6 +73,31 @@ void CrimsonCore::InitializeGlew()
 	}
 	std::cout << "Initialised GLEW (" << glewGetString(GLEW_VERSION) << ")" << std::endl;
 	std::cout << "Initialised OpenGL (" << glGetString(GL_VERSION) << ")" << std::endl;
+}
+
+void CrimsonCore::SetWindowFullscreen(bool _fullscreen)
+{
+	if (_fullscreen)
+	{
+		int x;
+		int y;
+		glfwGetWindowPos(m_window, &x, &y);
+		Window::SetTransform(m_videoMode->width, m_videoMode->height, x, y);
+		glfwSetWindowMonitor(m_window, m_monitor, 0, 0, m_videoMode->width, m_videoMode->height, m_videoMode->refreshRate);
+	}
+	else
+	{
+		WindowTransform transform = Window::Transform();
+		glfwSetWindowMonitor(m_window, NULL, 0, 0, transform.width, transform.height, m_videoMode->refreshRate);
+		glfwSetWindowPos(m_window, transform.posX, transform.posY);
+	}
+	std::vector<Camera*> cameras = Scene::Current()->ECS()->GetAllComponentsOfType<Camera>();
+	for (int i = 0; i < cameras.size(); i++)
+	{
+		Camera * cam = cameras[i];
+		if (cam->AutoResize() && cam->entity->GetName() != "EditorCam")
+			cam->SetCameraSize(m_videoMode->width, m_videoMode->height, "core");
+	}
 }
 
 void CrimsonCore::RunEngine()
@@ -101,8 +126,6 @@ void CrimsonCore::RunEngine()
 	AssetManager::LoadMaterial(m_assetPath + "materials/crimsontex");
 	AssetManager::LoadMaterial(m_assetPath + "materials/room");
 	AssetManager::LoadMaterial(m_assetPath + "materials/flat");
-
-	AssetManager::CreateFrameBuffer("MainCamBuffer", Window::Width(), Window::Height());
 
 	AssetManager::LoadScene(m_assetPath + "scenes/scene1");
 
@@ -156,7 +179,15 @@ void CrimsonCore::OpenScene(std::string _sceneName)
 
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
-	Window::SetSize(_width, _height);
+	glViewport(0, 0, _width, _height);
+	Window::UpdateGlfwMode(_width, _height);
+	std::vector<Camera*> cameras = Scene::Current()->ECS()->GetAllComponentsOfType<Camera>();
+	for (int i = 0; i < cameras.size(); i++)
+	{
+		Camera * cam = cameras[i];
+		if (cam->AutoResize() && cam->entity->GetName() != "EditorCam")
+			cam->SetCameraSize((int)_width, (int)_height, "core");
+	}
 }
 void GlfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods)
 {

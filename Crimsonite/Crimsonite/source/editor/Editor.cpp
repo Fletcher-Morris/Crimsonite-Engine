@@ -36,7 +36,7 @@ void Editor::Init()
 
 	LoadIcons();
 
-	AssetManager::CreateFrameBuffer("EditorViewport", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
+	AssetManager::CreateFrameBuffer("EditorCam_FrameBuffer", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigDockingWithShift = false;
@@ -46,7 +46,8 @@ void Editor::Init()
 void Editor::CreateEditorCam()
 {
 	m_editorCam = m_currentScene->ECS()->NewEntity("EditorCam").AttachComponent<Camera>();
-	m_editorCam->SetOutputFrameBuffer("EditorViewport");
+	m_editorCam->SetOutputFrameBuffer("EditorCam_FrameBuffer");
+	m_editorCam->SetAutoResize(false);
 	m_editorCam->entity->MakeImmortal(true);
 	m_editorCam->entity->SetSerializable(false);
 	m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
@@ -109,6 +110,7 @@ void Editor::DrawGui()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -204,6 +206,27 @@ void Editor::DrawGui()
 			if (ImGui::BeginMenu("New Material"))
 			{
 				ImGui::InputText("Material Name", m_tempMaterialName, 128);
+
+				Material * basedOnMaterial = AssetManager::GetDefaultMaterial();
+				std::string basedOnMaterialName = basedOnMaterial->GetName();
+				if (ImGui::BeginCombo("Based On", basedOnMaterialName.c_str()))
+				{
+					for (int i = 0; i < AssetManager::MaterialCount(); i++)
+					{
+						std::string foundMaterialName = AssetManager::GetMaterial(i)->GetName();
+						bool isSelected = (basedOnMaterialName == foundMaterialName);
+						if (ImGui::Button(foundMaterialName.c_str()))
+						{
+							basedOnMaterial = AssetManager::GetMaterial(foundMaterialName);
+						}
+						if (isSelected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+					}
+					ImGui::EndCombo();
+				}
+
 				Shader * chosenShader = AssetManager::GetShader("default");
 				std::string chosenShaderName = chosenShader->GetName();
 				if (ImGui::BeginCombo("Shader", chosenShaderName.c_str()))
@@ -231,22 +254,6 @@ void Editor::DrawGui()
 					std::string("New Material").copy(m_tempMaterialName, 128);
 				}
 				ImGui::EndMenu();
-			}
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Window"))
-		{
-			if (ImGui::Button("Toolbar"))
-			{
-			}
-			if (ImGui::Button("Viewport"))
-			{
-			}
-			if (ImGui::Button("Entities"))
-			{
-			}
-			if (ImGui::Button("Properties"))
-			{
 			}
 			ImGui::EndMenu();
 		}
@@ -282,6 +289,14 @@ void Editor::DrawGui()
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Window"))
+		{
+			if (ImGui::Button("Toggle Fullscreen"))
+			{
+				Window::SetFullscreen(!Window::IsFullscreen());
+			}
+			ImGui::EndMenu();
+		}
 
 		ImGui::Separator();
 		ImGui::SameLine(ImGui::GetWindowWidth() - (80));
@@ -290,7 +305,10 @@ void Editor::DrawGui()
 		ImGui::EndMainMenuBar();
 	}
 	
-	ImGui::Begin("Toolbar");
+	ImGui::SetNextWindowPos(ImVec2(0, 18));
+	ImGui::SetNextWindowSize(ImVec2(Window::Width(), 51));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::Begin("Toolbar", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 	{
 		ImGui::SameLine();
 		if (m_selectedTool == TOOL_MOVE)
@@ -347,13 +365,24 @@ void Editor::DrawGui()
 	}
 	ImGui::End();
 
-	ImGui::Begin("Viewport");
+	ImGui::SetNextWindowPos(ImVec2(150, 68));
+	ImGui::SetNextWindowSize(ImVec2(Window::Width() - 500, Window::Height() - 68));
+	ImGui::Begin("Viewport", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_NoScrollWithMouse);
 	{
-		ImGui::Image((GLuint*)AssetManager::GetTexture("EditorViewport")->TextureId, ImVec2(1280, 720));
+		ImVec2 size = ImGui::GetWindowSize();
+
+		if (size.x != m_prevCamSize.x || size.y != m_prevCamSize.y || size.x * size.y == 0 )
+		{
+			m_editorCam->SetCameraSize((int)size.x, (int)size.y, "editor");
+			m_prevCamSize = size;
+		}
+		ImGui::Image((GLuint*)AssetManager::GetTexture("EditorCam_FrameBuffer")->TextureId, ImVec2(size.x - 15, size.y - 15));
 	}
 	ImGui::End();
 
-	ImGui::Begin("Entities");
+	ImGui::SetNextWindowPos(ImVec2(0, 68));
+	ImGui::SetNextWindowSize(ImVec2(150, Window::Height() - 68));
+	ImGui::Begin("Entities", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 	{
 		for (int i = 0; i < m_currentScene->ECS()->EntityCount(); i++)
 		{
@@ -370,7 +399,9 @@ void Editor::DrawGui()
 	}
 	ImGui::End();
 
-	ImGui::Begin("Properties");
+	ImGui::SetNextWindowPos(ImVec2(Window::Width() - 350, 68));
+	ImGui::SetNextWindowSize(ImVec2(350, Window::Height() - 68));
+	ImGui::Begin("Properties", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 	{
 		if (!m_selectedEditorObject)
 		{
@@ -379,6 +410,8 @@ void Editor::DrawGui()
 		m_selectedEditorObject->DrawEditorProperties();
 	}
 	ImGui::End();
+
+	ImGui::PopStyleVar();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

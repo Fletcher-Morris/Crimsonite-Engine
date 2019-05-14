@@ -20,7 +20,7 @@ Scene::Scene()
 	m_renderer = new SimpleRenderer();
 	m_ecs = new EcsSystem();
 
-	m_ecs->NewEntity("MainCam");
+	m_ecs->NewEntity("MainCamera");
 	Camera * cam = m_ecs->NewestEntity()->AttachComponent<Camera>();
 	cam->EnforceFrameBuffer();
 }

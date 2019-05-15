@@ -1,7 +1,7 @@
 # Crimsonite Scene File
 
 BeginScene
-val TestScene
+val SceneOne
 EndScene
 
 BeginRenderer
@@ -102,6 +102,28 @@ BeginComponent MeshRenderer
 val true
 val knot
 val flat
+val 4
+EndComponent
+
+BeginEntity
+val ship
+val true
+val false
+val 0.000000
+val 0.000000
+val -2.000000
+val 0.000000
+val 0.000000
+val 0.000000
+val 1.000000
+val 1.000000
+val 1.000000
+val NO_PARENT
+EndEntity
+BeginComponent MeshRenderer
+val true
+val cube
+val default
 val 4
 EndComponent
 

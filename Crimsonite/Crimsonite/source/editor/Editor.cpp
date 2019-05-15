@@ -45,13 +45,16 @@ void Editor::Init()
 
 void Editor::CreateEditorCam()
 {
-	m_editorCam = m_currentScene->ECS()->NewEntity("EditorCamera").AttachComponent<Camera>();
-	m_editorCam->SetOutputFrameBuffer("EditorCamera_FrameBuffer");
-	m_editorCam->SetAutoResize(false);
-	m_editorCam->entity->MakeImmortal(true);
-	m_editorCam->entity->SetSerializable(false);
-	m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
-	PushEditorCamTransform();
+	if (Scene::Current()->ECS()->FindEntity("EditorCamera") == false)
+	{
+		m_editorCam = m_currentScene->ECS()->NewEntity("EditorCamera").AttachComponent<Camera>();
+		m_editorCam->SetOutputFrameBuffer("EditorCamera_FrameBuffer");
+		m_editorCam->SetAutoResize(false);
+		m_editorCam->entity->MakeImmortal(true);
+		m_editorCam->entity->SetSerializable(false);
+		m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
+		PushEditorCamTransform();
+	}
 }
 
 void Editor::LoadIcons()
@@ -122,9 +125,17 @@ void Editor::DrawGui()
 				{
 					CreateAndLoadNewScene("New Scene");
 				}
-				if (ImGui::Button("Open Scene"))
+				if (ImGui::BeginMenu("Open Scene"))
 				{
-
+					for (int i = 0; i < AssetManager::SceneCount(); i++)
+					{
+						std::string sceneName = AssetManager::GetScene(i)->GetName();
+						if (ImGui::Button(sceneName.c_str()))
+						{
+							OpenScene(sceneName);
+						}
+					}
+					ImGui::EndMenu();
 				}
 				if (ImGui::Button("Save Scene"))
 				{
@@ -510,4 +521,9 @@ void Editor::ReloadScene()
 		m_currentScene->Reload();
 		CreateEditorCam();
 	}
+}
+
+void Editor::OpenScene(std::string _sceneName)
+{
+	m_engine->OpenScene(_sceneName);
 }

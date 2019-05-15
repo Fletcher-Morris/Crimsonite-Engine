@@ -8,6 +8,7 @@ void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
 void GlfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods);
 void GlfwMousePosCallback(GLFWwindow * _window, double _x, double _y);
 void GlfwMouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods);
+void GlfwFileDropCallback(GLFWwindow * _widow, int _count, const char** _paths);
 
 CrimsonCore::CrimsonCore()
 {
@@ -57,6 +58,7 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 	glfwSetKeyCallback(m_window, GlfwKeyCallback);
 	glfwSetCursorPosCallback(m_window, GlfwMousePosCallback);
 	glfwSetMouseButtonCallback(m_window, GlfwMouseButtonCallback);
+	glfwSetDropCallback(m_window, GlfwFileDropCallback);
 	glfwSwapInterval(0);
 }
 
@@ -200,4 +202,62 @@ void GlfwMousePosCallback(GLFWwindow * _window, double _x, double _y)
 void GlfwMouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods)
 {
 	Input::SetMouseButton(_button, _action);
+}
+
+void GlfwFileDropCallback(GLFWwindow * _widow, int _count, const char ** _paths)
+{
+#if _DEBUG
+	for (int i = 0; i < _count; i++)
+	{
+		std::string path = std::string(_paths[i]);
+		if (path.find(".obj") != std::string::npos)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				path.pop_back();
+			}
+			AssetManager::LoadMesh(path, path);
+		}
+		else if (path.find(".mesh") != std::string::npos)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				path.pop_back();
+			}
+			AssetManager::LoadMesh(path, path);
+		}
+		else if (path.find(".png") != std::string::npos)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				path.pop_back();
+			}
+			AssetManager::LoadTexture(path, path);
+		}
+		else if (path.find(".jpg") != std::string::npos)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				path.pop_back();
+			}
+			AssetManager::LoadTexture(path, path);
+		}
+		else if (path.find(".material") != std::string::npos)
+		{
+			for (int j = 0; j < 9; j++)
+			{
+				path.pop_back();
+			}
+			AssetManager::LoadMaterial(path);
+		}
+		else if (path.find(".crimsn") != std::string::npos)
+		{
+			for (int j = 0; j < 7; j++)
+			{
+				path.pop_back();
+			}
+			AssetManager::LoadScene(path);
+		}
+	}
+#endif // DEBUG
 }

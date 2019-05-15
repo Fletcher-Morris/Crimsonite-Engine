@@ -59,6 +59,7 @@ public:
 	void CreateAndLoadNewScene(std::string _sceneName);
 	void SaveScene();
 	void ReloadScene();
+	void OpenScene(std::string _sceneName);
 
 protected:
 

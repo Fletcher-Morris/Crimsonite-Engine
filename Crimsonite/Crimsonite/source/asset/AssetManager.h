@@ -112,6 +112,7 @@ public:
 	static void OpenScene(int _sceneId);
 	static void ChangeLoadedSceneName(std::string _currentName, std::string _newName);
 	static Scene * GetCurrentScene();
+	static int SceneCount() { return Instance()->m_loadedSceneNames.size(); }
 
 private:
 

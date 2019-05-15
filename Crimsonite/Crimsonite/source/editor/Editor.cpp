@@ -387,12 +387,11 @@ void Editor::DrawGui()
 		for (int i = 0; i < m_currentScene->ECS()->EntityCount(); i++)
 		{
 			EcsEntity * entity = &*m_currentScene->ECS()->entities[i];
-
 			if (entity->IsDestroyed() == false)
 			{
 				if (ImGui::Button(entity->GetName().c_str()))
 				{
-					m_selectedEditorObject = entity;
+					SelectEditorObject(entity);
 				}
 			}
 		}

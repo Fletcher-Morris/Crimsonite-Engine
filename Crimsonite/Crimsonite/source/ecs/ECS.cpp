@@ -209,10 +209,13 @@ void EcsEntity::DrawEditorProperties()
 			}
 			ImGui::EndCombo();
 		}
-		ImGui::SameLine();
-		if (ImGui::Button("Go To"))
+		if (transform.GetParent() != NULL)
 		{
-			Editor::GetEditor()->SelectEditorObject(m_ecsSystem->FindEntityByTransform(transform.GetParent()));
+			ImGui::SameLine();
+			if (ImGui::Button("Go To"))
+			{
+				Editor::GetEditor()->SelectEditorObject(m_ecsSystem->FindEntityByTransform(transform.GetParent()));
+			}
 		}
 	}
 	ImGui::Separator();

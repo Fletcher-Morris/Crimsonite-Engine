@@ -226,3 +226,13 @@ void Scene::Render()
 void Scene::FrameSizeChanged(int _width, int _height)
 {
 }
+
+void Scene::SetFrameSize(int _width, int _height)
+{
+	std::vector<Camera*> cameras = ECS()->GetAllComponentsOfType<Camera>();
+	for (int i = 0; i < cameras.size(); i++)
+	{
+		Camera * cam = cameras[i];
+		if (cam->AutoResize()) cam->SetCameraSize((int)_width, (int)_height);
+	}
+}

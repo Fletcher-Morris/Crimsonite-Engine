@@ -43,6 +43,7 @@ public:
 	void Render();
 
 	void FrameSizeChanged(int _width, int _height);
+	void SetFrameSize(int _width, int _height);
 
 private:
 

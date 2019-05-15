@@ -100,7 +100,7 @@ void CrimsonCore::SetWindowFullscreen(bool _fullscreen)
 	{
 		Camera * cam = cameras[i];
 		if (cam->AutoResize() && cam->entity->GetName() != "EditorCamera")
-			cam->SetCameraSize(m_videoMode->width, m_videoMode->height, "core");
+			cam->SetCameraSize(m_videoMode->width, m_videoMode->height);
 	}
 }
 
@@ -209,13 +209,10 @@ void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
 	glViewport(0, 0, _width, _height);
 	Window::UpdateGlfwMode(_width, _height);
-	std::vector<Camera*> cameras = Scene::Current()->ECS()->GetAllComponentsOfType<Camera>();
-	for (int i = 0; i < cameras.size(); i++)
-	{
-		Camera * cam = cameras[i];
-		if (cam->AutoResize() && cam->entity->GetName() != "EditorCamera")
-			cam->SetCameraSize((int)_width, (int)_height, "core");
-	}
+#if _DEBUG
+#else
+	Scene::Current()->SetFrameSize(_width, _height);
+#endif
 }
 void GlfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods)
 {

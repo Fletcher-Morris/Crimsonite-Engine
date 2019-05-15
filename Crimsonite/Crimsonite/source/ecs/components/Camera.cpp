@@ -46,7 +46,7 @@ void Camera::DrawEditorProperties()
 	CameraSettings newSettings = GetCameraSettings();
 	ImGui::InputFloat("FOV", &newSettings.fov);
 	ImGui::InputFloat("Near Clip", &newSettings.nearClip);
-	ImGui::InputFloat("Far Clip", &newSettings.nearClip);
+	ImGui::InputFloat("Far Clip", &newSettings.farClip);
 	SetCameraSettings(newSettings);
 	ImGui::Text("Width : %i", m_settings.width);
 	ImGui::Text("Height : %i", m_settings.height);
@@ -143,7 +143,7 @@ void Camera::SetCameraSettings(float _fov, float _near, float _far)
 	//SetCameraSettings(newSettings);
 }
 
-void Camera::SetCameraSize(int _width, int _height, std::string _code)
+void Camera::SetCameraSize(int _width, int _height)
 {
 	CameraSettings newSettings = GetCameraSettings();
 	newSettings.width = _width;

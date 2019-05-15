@@ -33,7 +33,7 @@ public:
 	//	Set the near and farliiping values for this camera.
 	void SetCameraSettings(float _fov, float _near, float _far);
 	//	Set thewidth and height of this camera.
-	void SetCameraSize(int _width, int _height, std::string _code);
+	void SetCameraSize(int _width, int _height);
 	//	Return the view settingsused for this camera.
 	CameraSettings GetCameraSettings() { return m_settings; }
 

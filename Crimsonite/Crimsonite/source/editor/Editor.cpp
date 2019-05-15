@@ -48,7 +48,6 @@ void Editor::CreateEditorCam()
 	{
 		m_editorCam = m_currentScene->ECS()->NewEntity("EditorCamera").AttachComponent<Camera>();
 		m_editorCam->SetOutputFrameBuffer("EditorCamera_FrameBuffer");
-		m_editorCam->SetAutoResize(false);
 		m_editorCam->entity->MakeImmortal(true);
 		m_editorCam->entity->SetSerializable(false);
 		m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
@@ -292,6 +291,7 @@ void Editor::DrawGui()
 			{
 				m_currentScene->Renderer()->SetOverrideMode(GL_POINTS);
 			}
+			ImGui::InputFloat("Look Sensitivity", &m_mouseRotateSpeed);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Window"))
@@ -375,13 +375,53 @@ void Editor::DrawGui()
 	ImGui::Begin("Viewport", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar| ImGuiWindowFlags_NoScrollWithMouse);
 	{
 		ImVec2 size = ImGui::GetWindowSize();
-
 		if (size.x != m_prevCamSize.x || size.y != m_prevCamSize.y || size.x * size.y == 0 )
 		{
-			m_editorCam->SetCameraSize((int)size.x, (int)size.y, "editor");
+			m_currentScene->SetFrameSize(size.x, size.y);
 			m_prevCamSize = size;
 		}
-		ImGui::Image((GLuint*)AssetManager::GetTexture("EditorCamera_FrameBuffer")->TextureId, ImVec2(size.x - 15, size.y - 15));
+		if (ImGui::BeginTabBar("ViewportTabBar", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton))
+		{
+			int editorTabFlags = ImGuiTabItemFlags_None;
+			int mainCamTabFlags = ImGuiTabItemFlags_None;
+
+			if (m_matchWindowToPlayMode)
+			{
+				switch (m_engine->GetPlayMode())
+				{
+				case PLAYMODE_STOPPED:
+					editorTabFlags = ImGuiTabItemFlags_SetSelected;
+				case PLAYMODE_PAUSED:
+					editorTabFlags = ImGuiTabItemFlags_SetSelected;
+				case PLAYMODE_RUNNING:
+					mainCamTabFlags = ImGuiTabItemFlags_SetSelected;
+				}
+
+				m_matchWindowToPlayMode = false;
+			}
+			else
+			{
+				editorTabFlags = ImGuiTabItemFlags_None;
+				mainCamTabFlags = ImGuiTabItemFlags_None;
+			}
+
+			if (ImGui::BeginTabItem("Editor", 0, editorTabFlags))
+			{
+				m_usingEditorTab = true;
+				ImGui::Image((GLuint*)AssetManager::GetTexture("EditorCamera_FrameBuffer")->TextureId, ImVec2(size.x - 15, size.y - 15));
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("Game", 0, mainCamTabFlags))
+			{
+				m_usingEditorTab = false;
+				ImGui::Image((GLuint*)AssetManager::GetTexture("MainCamera_FrameBuffer")->TextureId, ImVec2(size.x - 15, size.y - 15));
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
+		}
+
 	}
 	ImGui::End();
 
@@ -423,6 +463,7 @@ void Editor::DrawGui()
 
 void Editor::Update()
 {
+	if (m_usingEditorTab == false) return;
 	glm::vec3 moveVector = glm::vec3();
 	if (Input::GetKey(KEYCODE_D)) moveVector.x = 1;
 	else if (Input::GetKey(KEYCODE_A)) moveVector.x = -1;
@@ -434,23 +475,26 @@ void Editor::Update()
 	if (Input::GetMouseButton(MOUSE_RIGHT))
 	{
 		glm::vec2 movement = Input::GetMouseMovement(1.5f);
-		m_editorCam->entity->transform.Rotate(movement.y * -0.05, movement.x * 0.05, 0);
+		m_editorCam->entity->transform.Rotate(- movement.y * Time::DeltaTime() * m_mouseRotateSpeed, movement.x * Time::DeltaTime() * m_mouseRotateSpeed, 0);
 	}
 }
 
 void Editor::PlayGame()
 {
+	m_matchWindowToPlayMode = true;
 	m_engine->GetCurrentScene()->Serialize();
 	m_engine->SetPlayMode(PLAYMODE_RUNNING);
 }
 
 void Editor::PauseGame()
 {
+	m_matchWindowToPlayMode = true;
 	m_engine->SetPlayMode(PLAYMODE_PAUSED);
 }
 
 void Editor::StopGame()
 {
+	m_matchWindowToPlayMode = true;
 	PullEditorCamTransform();
 	if (m_selectedEditorObject->GetTypeString() == "EcsEntity")
 	{

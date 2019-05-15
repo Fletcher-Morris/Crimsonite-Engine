@@ -4,6 +4,8 @@
 
 #include "../editor/Editor.h"
 
+#include <filesystem>
+
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height);
 void GlfwKeyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods);
 void GlfwMousePosCallback(GLFWwindow * _window, double _x, double _y);
@@ -109,27 +111,50 @@ void CrimsonCore::RunEngine()
 
 	AssetManager::SetEngine(this);
 
-	AssetManager::LoadTexture("noise", m_assetPath + "textures/noise.png");
-	AssetManager::LoadTexture("crimsontex", m_assetPath + "textures/crimsontex.png");
-	AssetManager::LoadTexture("room", m_assetPath + "textures/room.png");
-	AssetManager::LoadTexture("flat", m_assetPath + "textures/flat.png");
-
-	AssetManager::LoadMesh("quad", m_assetPath + "meshes/quad");
-	AssetManager::LoadMesh("cube", m_assetPath + "meshes/cube");
-	AssetManager::LoadMesh("sphere", m_assetPath + "meshes/sphere");
-	AssetManager::LoadMesh("dragon", m_assetPath + "meshes/dragon");
-	AssetManager::LoadMesh("spring", m_assetPath + "meshes/spring");
-	AssetManager::LoadMesh("knot", m_assetPath + "meshes/knot");
-	AssetManager::LoadMesh("teapot", m_assetPath + "meshes/teapot");
-
 	AssetManager::LoadShader("color", m_assetPath + "shaders/vertex.vert", m_assetPath + "shaders/fragment.frag");
+	AssetManager::LoadShader("skybox", m_assetPath + "shaders/vertex.vert", m_assetPath + "shaders/skybox.frag");
 	AssetManager::CreatePassthroughShader();
 
-	AssetManager::LoadMaterial(m_assetPath + "materials/crimsontex");
-	AssetManager::LoadMaterial(m_assetPath + "materials/room");
-	AssetManager::LoadMaterial(m_assetPath + "materials/flat");
-
-	AssetManager::LoadScene(m_assetPath + "scenes/scene1");
+	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "editor"))
+	{
+		std::string path = entry.path().u8string();
+		std::string name = path;
+		std::string editorPath = m_assetPath + "editor\\";
+		name.erase(path.find(editorPath), editorPath.length());
+		AssetManager::ContextualLoad(path, name);
+	}
+	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "textures"))
+	{
+		std::string path = entry.path().u8string();
+		std::string name = path;
+		std::string texturesPath = m_assetPath + "textures\\";
+		name.erase(path.find(texturesPath), texturesPath.length());
+		AssetManager::ContextualLoad(path, name);
+	}
+	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "materials"))
+	{
+		std::string path = entry.path().u8string();
+		std::string name = path;
+		std::string materialsPath = m_assetPath + "materials\\";
+		name.erase(path.find(materialsPath), materialsPath.length());
+		AssetManager::ContextualLoad(path, name);
+	}
+	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "meshes"))
+	{
+		std::string path = entry.path().u8string();
+		std::string name = path;
+		std::string meshesPath = m_assetPath + "meshes\\";
+		name.erase(path.find(meshesPath), meshesPath.length());
+		AssetManager::ContextualLoad(path, name);
+	}
+	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "scenes"))
+	{
+		std::string path = entry.path().u8string();
+		std::string name = path;
+		std::string scenesPath = m_assetPath + "scenes\\";
+		name.erase(path.find(scenesPath), scenesPath.length());
+		AssetManager::ContextualLoad(path, name);
+	}
 
 #if _DEBUG
 	m_editor = new Editor(this);
@@ -167,6 +192,7 @@ void CrimsonCore::OpenScene(int _sceneId)
 
 void CrimsonCore::OpenScene(std::string _sceneName)
 {
+	if (AssetManager::GetScene(_sceneName) == NULL) return;
 	m_currentScene = Assets->GetScene(_sceneName);
 	if (m_editor)
 	{
@@ -210,54 +236,7 @@ void GlfwFileDropCallback(GLFWwindow * _widow, int _count, const char ** _paths)
 	for (int i = 0; i < _count; i++)
 	{
 		std::string path = std::string(_paths[i]);
-		if (path.find(".obj") != std::string::npos)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				path.pop_back();
-			}
-			AssetManager::LoadMesh(path, path);
-		}
-		else if (path.find(".mesh") != std::string::npos)
-		{
-			for (int j = 0; j < 5; j++)
-			{
-				path.pop_back();
-			}
-			AssetManager::LoadMesh(path, path);
-		}
-		else if (path.find(".png") != std::string::npos)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				path.pop_back();
-			}
-			AssetManager::LoadTexture(path, path);
-		}
-		else if (path.find(".jpg") != std::string::npos)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				path.pop_back();
-			}
-			AssetManager::LoadTexture(path, path);
-		}
-		else if (path.find(".material") != std::string::npos)
-		{
-			for (int j = 0; j < 9; j++)
-			{
-				path.pop_back();
-			}
-			AssetManager::LoadMaterial(path);
-		}
-		else if (path.find(".crimsn") != std::string::npos)
-		{
-			for (int j = 0; j < 7; j++)
-			{
-				path.pop_back();
-			}
-			AssetManager::LoadScene(path);
-		}
+		AssetManager::ContextualLoad(path, path);
 	}
 #endif // DEBUG
 }

@@ -44,9 +44,9 @@ void Camera::DrawEditorProperties()
 		ImGui::Image((GLuint*)m_frameBuffer->GetLinkedTexture()->TextureId, ImVec2(267, 150));
 	}
 	CameraSettings newSettings = GetCameraSettings();
-	ImGui::DragFloat("FOV", &newSettings.fov, 1.0f, 179.0f);
-	ImGui::DragFloat("Near Clip", &newSettings.nearClip, 0.0001f, 1000.0f);
-	ImGui::DragFloat("Far Clip", &newSettings.farClip, newSettings.nearClip, 1000.0f);
+	ImGui::InputFloat("FOV", &newSettings.fov);
+	ImGui::InputFloat("Near Clip", &newSettings.nearClip);
+	ImGui::InputFloat("Far Clip", &newSettings.nearClip);
 	SetCameraSettings(newSettings);
 	ImGui::Text("Width : %i", m_settings.width);
 	ImGui::Text("Height : %i", m_settings.height);

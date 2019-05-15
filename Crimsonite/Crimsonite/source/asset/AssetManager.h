@@ -28,6 +28,8 @@ public:
 
 	static void SetEngine(CrimsonCore * _core);
 
+	static void ContextualLoad(std::string _path, std::string _name);
+
 	//	Load a Texture from a file with an assigned name.
 	static void LoadTexture(std::string _textureName, std::string _filePath);
 	//	Create a blank Texture.

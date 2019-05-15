@@ -34,8 +34,6 @@ void Editor::Init()
 	ImGui_ImplOpenGL3_Init("#version 130");
 	std::cout << "Initialized Editor" << std::endl;
 
-	LoadIcons();
-
 	AssetManager::CreateFrameBuffer("EditorCamera_FrameBuffer", m_engine->GetVideoMode()->width, m_engine->GetVideoMode()->height);
 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -45,7 +43,8 @@ void Editor::Init()
 
 void Editor::CreateEditorCam()
 {
-	if (Scene::Current()->ECS()->FindEntity("EditorCamera") == false)
+	EcsEntity * foundCam = Scene::Current()->ECS()->FindEntity("EditorCamera");
+	if (foundCam == NULL)
 	{
 		m_editorCam = m_currentScene->ECS()->NewEntity("EditorCamera").AttachComponent<Camera>();
 		m_editorCam->SetOutputFrameBuffer("EditorCamera_FrameBuffer");
@@ -53,35 +52,25 @@ void Editor::CreateEditorCam()
 		m_editorCam->entity->MakeImmortal(true);
 		m_editorCam->entity->SetSerializable(false);
 		m_editorCam->SetRenderer(m_engine->GetCurrentScene()->Renderer());
-		PushEditorCamTransform();
 	}
-}
-
-void Editor::LoadIcons()
-{
-	AssetManager::LoadTexture("editor_tool_move", m_engine->AssetsPath() + "editor/tool_move.png");
-	AssetManager::LoadTexture("editor_tool_move_selected", m_engine->AssetsPath() + "editor/tool_move_selected.png");
-	AssetManager::LoadTexture("editor_tool_rotate", m_engine->AssetsPath() + "editor/tool_rotate.png");
-	AssetManager::LoadTexture("editor_tool_rotate_selected", m_engine->AssetsPath() + "editor/tool_rotate_selected.png");
-	AssetManager::LoadTexture("editor_tool_scale", m_engine->AssetsPath() + "editor/tool_scale.png");
-	AssetManager::LoadTexture("editor_tool_scale_selected", m_engine->AssetsPath() + "editor/tool_scale_selected.png");
-	AssetManager::LoadTexture("editor_tool_play", m_engine->AssetsPath() + "editor/tool_play.png");
-	AssetManager::LoadTexture("editor_tool_play_selected", m_engine->AssetsPath() + "editor/tool_play_selected.png");
-	AssetManager::LoadTexture("editor_tool_stop", m_engine->AssetsPath() + "editor/tool_stop.png");
-	AssetManager::LoadTexture("editor_tool_stop_selected", m_engine->AssetsPath() + "editor/tool_stop_selected.png");
-	AssetManager::LoadTexture("editor_tool_outline", m_engine->AssetsPath() + "editor/tool_outline.png");
-	AssetManager::LoadTexture("editor_tool_outline_selected", m_engine->AssetsPath() + "editor/tool_outline_selected.png");
+	else
+	{
+		m_editorCam = &foundCam->GetComponent<Camera>();
+	}
+	PushEditorCamTransform();
 }
 
 void Editor::CreateObject(std::string _meshName)
 {
 	m_currentScene->ECS()->NewEntity(_meshName);
-	MeshRenderer * mesh = m_currentScene->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
-	mesh->SetMesh(_meshName);
-	mesh->SetRenderer(m_engine->GetCurrentScene()->Renderer());
-	mesh->SetMaterial("default");
-	mesh->entity->transform.SetLocalPosition(0, 0, -2);
-	mesh->entity->AttachComponent<Rotator>();
+	if (_meshName != "New Entity")
+	{
+		MeshRenderer * mesh = m_currentScene->ECS()->NewestEntity()->AttachComponent<MeshRenderer>();
+		mesh->SetMesh(_meshName);
+		mesh->SetRenderer(m_engine->GetCurrentScene()->Renderer());
+		mesh->SetMaterial("default");
+		mesh->entity->AttachComponent<Rotator>();
+	}
 }
 
 void Editor::PullEditorCamTransform()
@@ -121,9 +110,14 @@ void Editor::DrawGui()
 		{
 			if (m_engine->GetPlayMode() == PLAYMODE_STOPPED)
 			{
-				if (ImGui::Button("New Scene"))
+				if (ImGui::BeginMenu("New Scene"))
 				{
-					CreateAndLoadNewScene("New Scene");
+					ImGui::InputText("Scene Name", m_tempSceneName, 128);
+					if (ImGui::Button("Create"))
+					{
+						CreateAndLoadNewScene(std::string(m_tempSceneName));
+					}
+					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu("Open Scene"))
 				{
@@ -184,6 +178,10 @@ void Editor::DrawGui()
 		{
 			if (ImGui::BeginMenu("New Entity"))
 			{
+				if (ImGui::Button("Entity"))
+				{
+					CreateObject("New Entity");
+				}
 				if (ImGui::Button("Cube"))
 				{
 					CreateObject("cube");
@@ -209,10 +207,6 @@ void Editor::DrawGui()
 					CreateObject("teapot");
 				}
 				ImGui::EndMenu();
-			}
-			if (ImGui::Button("New Scene"))
-			{
-				CreateAndLoadNewScene("New Scene");
 			}
 			if (ImGui::BeginMenu("New Material"))
 			{
@@ -497,10 +491,11 @@ void Editor::SetCurrentSceneData(Scene * _scene)
 void Editor::CreateAndLoadNewScene(std::string _sceneName)
 {
 	Scene newScene = Scene();
-	newScene.SetPath(m_engine->AssetsPath() + "scenes/NewScene");
+	newScene.SetName(_sceneName);
+	newScene.SetPath(m_engine->AssetsPath() + "scenes/" + _sceneName);
 	newScene.Save();
-	AssetManager::LoadScene(m_engine->AssetsPath() + "scenes/NewScene");
-	AssetManager::OpenScene("NewScene");
+	AssetManager::LoadScene(m_engine->AssetsPath() + "scenes/" + _sceneName);
+	AssetManager::OpenScene(_sceneName);
 }
 
 void Editor::SaveScene()

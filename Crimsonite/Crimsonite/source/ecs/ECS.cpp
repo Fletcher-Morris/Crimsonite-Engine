@@ -150,6 +150,8 @@ void EcsEntity::Render()
 
 void EcsEntity::DrawEditorProperties()
 {
+	if (IsDestroyed()) return;
+
 	ImGui::Text("%s", m_name.c_str());
 	ImGui::InputText("", m_tempName, 128);
 	ImGui::SameLine();
@@ -174,7 +176,11 @@ void EcsEntity::DrawEditorProperties()
 	std::string currentParentName = "no parent";
 	if (transform.GetParent() != NULL)
 	{
-		currentParentName = m_ecsSystem->FindEntityByTransform(transform.GetParent())->GetName();
+		EcsEntity * parentEntity = m_ecsSystem->FindEntityByTransform(transform.GetParent());
+		if (parentEntity != NULL)
+		{
+			currentParentName = parentEntity->GetName();
+		}
 	}
 	if (m_name != "EditorCamera")
 	{

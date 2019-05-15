@@ -1,7 +1,7 @@
 # Crimsonite Scene File
 
 BeginScene
-val SceneOne
+val TestScene
 EndScene
 
 BeginRenderer
@@ -14,11 +14,11 @@ BeginEntity
 val MainCamera
 val true
 val true
-val 1.800000
-val 0.550000
-val 0.400000
-val -15.750000
-val -83.750000
+val 0.000000
+val 0.000000
+val 0.000000
+val 0.000000
+val 0.000000
 val 0.000000
 val 1.000000
 val 1.000000
@@ -27,9 +27,9 @@ val NO_PARENT
 EndEntity
 BeginComponent Camera
 val true
-val 60.000000
-val 0.100000
-val 100.000000
+val 70.000000
+val 0.001000
+val 5000.000000
 val MainCamera_FrameBuffer
 EndComponent
 
@@ -39,9 +39,9 @@ val true
 val false
 val 0.000000
 val 0.000000
-val 0.200000
+val 1.400000
 val 0.000000
-val 44.000000
+val -137.500000
 val 0.000000
 val 1.000000
 val 1.000000
@@ -57,7 +57,7 @@ EndComponent
 BeginComponent Rotator
 val true
 val 0.000000
-val 89.000000
+val 50.000000
 val 0.000000
 EndComponent
 
@@ -65,16 +65,16 @@ BeginEntity
 val CUBE
 val true
 val false
-val 0.100000
-val 0.350000
-val 1.000000
+val -0.750000
+val -0.300000
+val 1.100000
 val -25.500000
-val 79.500000
+val -58.000000
 val 0.000000
 val 1.000000
 val 1.000000
 val 1.000000
-val DRAGON
+val NO_PARENT
 EndEntity
 BeginComponent MeshRenderer
 val true
@@ -87,11 +87,11 @@ BeginEntity
 val KNOT
 val true
 val false
-val 0.600000
+val 0.650000
 val 0.000000
 val 1.050000
 val 0.000000
-val 0.000000
+val -305.500000
 val 0.000000
 val 1.000000
 val 1.000000
@@ -124,6 +124,28 @@ BeginComponent MeshRenderer
 val true
 val cube
 val default
+val 4
+EndComponent
+
+BeginEntity
+val SKYBOX
+val true
+val false
+val 0.000000
+val 0.000000
+val 0.000000
+val 0.000000
+val 0.000000
+val 0.000000
+val -2000.000000
+val 2000.000000
+val 2000.000000
+val NO_PARENT
+EndEntity
+BeginComponent MeshRenderer
+val true
+val sphere
+val skybox
 val 4
 EndComponent
 

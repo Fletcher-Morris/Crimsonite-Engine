@@ -28,6 +28,64 @@ void AssetManager::SetEngine(CrimsonCore * _core)
 	Instance()->m_core = _core;
 }
 
+void AssetManager::ContextualLoad(std::string _path, std::string _name)
+{
+	if (_path.find(".obj") != std::string::npos)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			_path.pop_back();
+			_name.pop_back();
+		}
+		Instance()->LoadMesh(_name, _path);
+	}
+	else if (_path.find(".mesh") != std::string::npos)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			_path.pop_back();
+			_name.pop_back();
+		}
+		Instance()->LoadMesh(_name, _path);
+	}
+	else if (_path.find(".png") != std::string::npos)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			_path.pop_back();
+			_name.pop_back();
+		}
+		Instance()->LoadTexture(_name, _path + ".png");
+	}
+	else if (_path.find(".jpg") != std::string::npos)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			_path.pop_back();
+			_name.pop_back();
+		}
+		Instance()->LoadTexture(_name, _path + ".jpg");
+	}
+	else if (_path.find(".material") != std::string::npos)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			_path.pop_back();
+			_name.pop_back();
+		}
+		Instance()->LoadMaterial(_path);
+	}
+	else if (_path.find(".crimsn") != std::string::npos)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			_path.pop_back();
+			_name.pop_back();
+		}
+		Instance()->LoadScene(_path);
+	}
+}
+
 void AssetManager::LoadTexture(std::string _textureName, std::string _filePath)
 {
 	int width;

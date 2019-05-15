@@ -28,8 +28,6 @@ public:
 	void Init();
 	void CreateEditorCam();
 
-	void LoadIcons();
-
 	void DrawGui();
 	void Update();
 

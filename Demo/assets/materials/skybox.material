@@ -1,0 +1,5 @@
+r 1
+name skybox
+shader skybox
+color 1,1,1
+texture-main skybox

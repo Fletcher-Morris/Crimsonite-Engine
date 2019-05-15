@@ -77,20 +77,20 @@ void Editor::CreateObject(std::string _meshName)
 	mesh->SetMesh(_meshName);
 	mesh->SetRenderer(m_engine->GetCurrentScene()->Renderer());
 	mesh->SetMaterial("default");
-	mesh->entity->transform.SetPosition(0, 0, -2);
+	mesh->entity->transform.SetLocalPosition(0, 0, -2);
 	mesh->entity->AttachComponent<Rotator>();
 }
 
 void Editor::PullEditorCamTransform()
 {
-	m_storedEdCamPos = m_editorCam->entity->transform.GetPosition();
-	m_storedEdCamRot = m_editorCam->entity->transform.GetRotation();
+	m_storedEdCamPos = m_editorCam->entity->transform.GetLocalPosition();
+	m_storedEdCamRot = m_editorCam->entity->transform.GetLocalRotation();
 }
 
 void Editor::PushEditorCamTransform()
 {
-	m_editorCam->entity->transform.SetPosition(m_storedEdCamPos);
-	m_editorCam->entity->transform.SetRotation(m_storedEdCamRot);
+	m_editorCam->entity->transform.SetLocalPosition(m_storedEdCamPos);
+	m_editorCam->entity->transform.SetLocalRotation(m_storedEdCamRot);
 }
 
 void Editor::SelectEditorObject(EditorSerializable * _editorObject)

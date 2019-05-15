@@ -137,7 +137,7 @@ public:
 
 	EcsEntity(EcsSystem * _system) { m_system = _system; };
 	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; SetName(_entityName);};
-	EcsEntity(std::string _entityName, EcsSystem * _system) { m_system = _system; SetName(_entityName);};
+	EcsEntity(EcsSystem * _system, std::string _entityName, Transform * _parent) { m_system = _system; SetName(_entityName); transform.SetParent(_parent); };
 	//	Set the name of this entity.
 	void SetName(std::string _name);
 	//	Return the name of this entity.
@@ -228,6 +228,8 @@ public:
 	EcsEntity * NewestEntity() { return m_newestEntity; }
 	//	Create a new entity with a given name.
 	EcsEntity& NewEntity(std::string _entityName);
+	//	Create a new entity with a given name and parent.
+	EcsEntity& NewEntity(std::string _entityName, Transform * _parent);
 	//	Find an entity with a given name.
 	EcsEntity * FindEntity(std::string _entityName);
 	template<typename T>

@@ -72,6 +72,7 @@ val 0.000000
 val 1.000000
 val 1.000000
 val 1.000000
+val DRAGON
 EndEntity
 BeginComponent MeshRenderer
 val true

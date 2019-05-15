@@ -17,6 +17,9 @@ public:
 	{
 		position = glm::vec3();
 		rotation = glm::vec3();
+		localPosition = glm::vec3();
+		localRotation = glm::vec3();
+		m_parentTransform = NULL;
 		scale = glm::vec3(1.0f,1.0f,1.0f);
 	}
 
@@ -27,13 +30,18 @@ public:
 	//	The scale of this transform.
 	glm::vec3 scale;
 
+	//	The local position of this transform in world-space.
+	glm::vec3 localPosition;
+	//	The local rotation of this transform.
+	glm::vec3 localRotation;
+
 	glm::vec3 Forward()
 	{
-		forward.x = sin(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
-		forward.y = sin(glm::radians(rotation.x));
-		forward.z = cos(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
-		forward = glm::normalize(forward);
-		return forward;
+		forward.x = sin(glm::radians(rotation.y + localRotation.y)) * cos(glm::radians(rotation.x + localRotation.x));
+		forward.y = sin(glm::radians(rotation.x + localRotation.x));
+		forward.z = cos(glm::radians(rotation.y + localRotation.y)) * cos(glm::radians(rotation.x + localRotation.x));
+forward = glm::normalize(forward);
+return forward;
 	}
 	glm::vec3 Back()
 	{
@@ -59,24 +67,27 @@ public:
 		return -Up();
 	}
 
-	void SetPosition(glm::vec3 _newPos) { position = _newPos; }
-	void SetPosition(float _x, float _y, float _z) { position = { _x,_y,_z }; }
-	glm::vec3 GetPosition() { return position; }
+	void SetLocalPosition(glm::vec3 _newPos) { localPosition = _newPos; }
+	void SetLocalPosition(float _x, float _y, float _z) { localPosition = { _x,_y,_z }; }
+	glm::vec3 GetLocalPosition() { InheritParentTransformValues(); return localPosition; }
 
-	void SetRotation(glm::vec3 _newRot) { rotation = _newRot; }
-	void SetRotation(float _x, float _y, float _z) { rotation = { _x,_y,_z }; }
-	glm::vec3 GetRotation() { return rotation; }
+	void SetLocalRotation(glm::vec3 _newRot) { localRotation = _newRot; }
+	void SetLocalRotation(float _x, float _y, float _z) { localRotation = { _x,_y,_z }; }
+	glm::vec3 GetLocalRotation() { InheritParentTransformValues(); return localRotation; }
 
 	void SetScale(glm::vec3 _newScale) { scale = _newScale; }
 	void SetScale(float _x, float _y, float _z) { scale = { _x,_y,_z }; }
 	glm::vec3 GetScale() { return scale; }
 
+	glm::vec3 GetWorldPosition() { InheritParentTransformValues(); return position; }
+	glm::vec3 GetWorldRotation() { InheritParentTransformValues(); return rotation; }
+
 	//	Adjust the position with another Vec3.
 	void Move(glm::vec3 _move)
 	{
-		position.x += _move.x;
-		position.y += _move.y;
-		position.z += _move.z;
+		localPosition.x += _move.x;
+		localPosition.y += _move.y;
+		localPosition.z += _move.z;
 	}
 	//	Adjust the position with another Vec3, using the forward vector.
 	void Move(glm::vec3 _move, bool _useForward)
@@ -95,40 +106,104 @@ public:
 	//	Adjust the position with three floats.
 	void Move(float _x, float _y, float _z)
 	{
-		position.x += _x;
-		position.y += _y;
-		position.z += _z;
+		localPosition.x += _x;
+		localPosition.y += _y;
+		localPosition.z += _z;
 	}
 
 	//	Adjust the rotation with another Vec3.
 	void Rotate(glm::vec3 _rotate)
 	{
-		rotation.x += _rotate.x;
-		rotation.y += _rotate.y;
-		rotation.z += _rotate.z;
+		localRotation.x += _rotate.x;
+		localRotation.y += _rotate.y;
+		localRotation.z += _rotate.z;
 	}
 	//	Adjust the rotation with three floats.
 	void Rotate(float _x, float _y, float _z)
 	{
-		rotation.x += _x;
-		rotation.y += _y;
-		rotation.z += _z;
+		localRotation.x += _x;
+		localRotation.y += _y;
+		localRotation.z += _z;
+	}
+
+	Transform * GetParent()
+	{
+		return m_parentTransform;
+	}
+	void SetParent(Transform * _newParentTransform)
+	{
+		SetParent(_newParentTransform, true);
+	}
+	void SetParent(Transform * _newParentTransform, bool _maintainValues)
+	{
+		if (_newParentTransform == NULL)
+		{
+			std::cout << "Cannot set parent of entity to null transform." << std::endl;
+			return;
+		}
+		else
+		{
+			if (_maintainValues)
+			{
+				localPosition.x -= _newParentTransform->position.x;
+				localPosition.y -= _newParentTransform->position.y;
+				localPosition.z -= _newParentTransform->position.z;
+				localRotation.x -= _newParentTransform->rotation.x;
+				localRotation.y -= _newParentTransform->rotation.y;
+				localRotation.z -= _newParentTransform->rotation.z;
+			}
+			if (m_parentTransform != _newParentTransform)
+			{
+
+				std::cout << "Parented entity" << std::endl;
+				m_parentTransform = _newParentTransform;
+			}
+		}
+	}
+	void Unparent()
+	{
+		Unparent(true);
+	}
+	void Unparent(bool _maintainValues)
+	{
+		if (m_parentTransform != NULL)
+		{
+			InheritParentTransformValues();
+			localPosition = position;
+			localRotation = rotation;
+			std::cout << "Unparented entity" << std::endl;
+		}
+		m_parentTransform = NULL;
+	}
+
+	void InheritParentTransformValues()
+	{
+		if (m_parentTransform == NULL)
+		{
+			position = localPosition;
+			rotation = localRotation;
+		}
+		else
+		{
+			position = m_parentTransform->position + localPosition;
+			rotation = m_parentTransform->rotation + localRotation;
+		}
 	}
 
 	std::string Serialize() override
 	{
 		std::string serialized = "val ";
-		serialized += std::to_string(GetPosition().x);
+		serialized += std::to_string(GetLocalPosition().x);
 		serialized += "\nval ";
-		serialized += std::to_string(GetPosition().y);
+		serialized += std::to_string(GetLocalPosition().y);
 		serialized += "\nval ";
-		serialized += std::to_string(GetPosition().z);
+		serialized += std::to_string(GetLocalPosition().z);
 		serialized += "\nval ";
-		serialized += std::to_string(GetRotation().x);
+		serialized += std::to_string(GetLocalRotation().x);
 		serialized += "\nval ";
-		serialized += std::to_string(GetRotation().y);
+		serialized += std::to_string(GetLocalRotation().y);
 		serialized += "\nval ";
-		serialized += std::to_string(GetRotation().z);
+		serialized += std::to_string(GetLocalRotation().z);
 		serialized += "\nval ";
 		serialized += std::to_string(GetScale().x);
 		serialized += "\nval ";
@@ -139,8 +214,8 @@ public:
 	}
 	void Deserialize(std::vector<std::string> _data) override
 	{
-		SetPosition(std::stof(_data[3]), std::stof(_data[4]), std::stof(_data[5]));
-		SetRotation(std::stof(_data[6]), std::stof(_data[7]), std::stof(_data[8]));
+		SetLocalPosition(std::stof(_data[3]), std::stof(_data[4]), std::stof(_data[5]));
+		SetLocalRotation(std::stof(_data[6]), std::stof(_data[7]), std::stof(_data[8]));
 		SetScale(std::stof(_data[9]), std::stof(_data[10]), std::stof(_data[11]));
 	}
 	void DrawEditorProperties()
@@ -148,17 +223,19 @@ public:
 		ImGui::Text("Transform Properties");
 		ImGui::NewLine();
 		float pos[3];
-		pos[0] = GetPosition().x;
-		pos[1] = GetPosition().y;
-		pos[2] = GetPosition().z;
+		pos[0] = GetLocalPosition().x;
+		pos[1] = GetLocalPosition().y;
+		pos[2] = GetLocalPosition().z;
 		ImGui::DragFloat3("Position", pos, 0.05f);
-		SetPosition(glm::vec3{ pos[0],pos[1],pos[2] });
+		SetLocalPosition(glm::vec3{ pos[0],pos[1],pos[2] });
+		ImGui::Text("World Position : %f, %f, %f", position.x, position.y, position.z);
 		float rot[3];
-		rot[0] = GetRotation().x;
-		rot[1] = GetRotation().y;
-		rot[2] = GetRotation().z;
+		rot[0] = GetLocalRotation().x;
+		rot[1] = GetLocalRotation().y;
+		rot[2] = GetLocalRotation().z;
 		ImGui::DragFloat3("Rotation", rot, 0.25f);
-		SetRotation(glm::vec3{ rot[0],rot[1],rot[2] });
+		SetLocalRotation(glm::vec3{ rot[0],rot[1],rot[2] });
+		ImGui::Text("World Rotation : %f, %f, %f", rotation.x, rotation.y, rotation.z);
 		float scale[3];
 		scale[0] = GetScale().x;
 		scale[1] = GetScale().y;
@@ -172,5 +249,7 @@ private:
 	glm::vec3 forward;
 	glm::vec3 right;
 	glm::vec3 up;
+
+	Transform * m_parentTransform;
 
 };

@@ -2,20 +2,21 @@
 #include "../ecs/Transform.h"
 #include "../ecs/components/Camera.h"
 
-glm::mat4 CreateModelMatrix(const Transform & _transform)
+glm::mat4 CreateModelMatrix(Transform * _transform)
 {
 	glm::mat4 matrix = glm::mat4(1.0f);
-	matrix = glm::translate(matrix, _transform.position);
-	matrix = glm::rotate(matrix, glm::radians(_transform.rotation.x), { 1,0,0 });
-	matrix = glm::rotate(matrix, glm::radians(_transform.rotation.y), { 0,1,0 });
-	matrix = glm::rotate(matrix, glm::radians(_transform.rotation.z), { 0,0,1 });
-	matrix = glm::scale(matrix, _transform.scale);
+	glm::vec3 rot = _transform->GetWorldRotation();
+	matrix = glm::translate(matrix, _transform->GetWorldPosition());
+	matrix = glm::rotate(matrix, glm::radians(rot.x), { 1,0,0 });
+	matrix = glm::rotate(matrix, glm::radians(rot.y), { 0,1,0 });
+	matrix = glm::rotate(matrix, glm::radians(rot.z), { 0,0,1 });
+	matrix = glm::scale(matrix, _transform->GetScale());
 	return matrix;
 }
 
 glm::mat4 CreateViewMatrix(const Camera & _camera)
 {
-	return glm::lookAt(_camera.entity->transform.GetPosition(), _camera.entity->transform.GetPosition() + _camera.entity->transform.Forward(), -_camera.entity->transform.Up());
+	return glm::lookAt(_camera.entity->transform.GetWorldPosition(), _camera.entity->transform.GetWorldPosition() + _camera.entity->transform.Forward(), -_camera.entity->transform.Up());
 }
 
 glm::mat4 CreateProjectionMatrix(const CameraSettings & _settings)

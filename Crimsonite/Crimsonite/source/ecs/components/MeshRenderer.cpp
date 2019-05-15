@@ -174,7 +174,7 @@ void MeshRenderer::SetShaderMvp(Camera * _camera)
 
 void MeshRenderer::UpdateShaderMvp()
 {
-	m_modelMatrix = CreateModelMatrix(entity->transform);
+	m_modelMatrix = CreateModelMatrix(&entity->transform);
 	m_mvpMatrix = m_projMatrix * m_viewMatrix *  m_modelMatrix;
 
 	m_material->GetShader()->SetMvpMatrix(m_modelMatrix, m_viewMatrix, m_projMatrix);

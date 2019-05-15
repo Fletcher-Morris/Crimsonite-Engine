@@ -199,8 +199,13 @@ void EcsEntity::SetEnabled(bool _enable)
 
 EcsEntity & EcsSystem::NewEntity(std::string _entityName)
 {
+	return NewEntity(_entityName, NULL);
+}
+
+EcsEntity & EcsSystem::NewEntity(std::string _entityName, Transform * _parent)
+{
 	if (_entityName == "") _entityName = "New Entity";
-	EcsEntity * newEntity = new EcsEntity(this, _entityName);
+	EcsEntity * newEntity = new EcsEntity(this, _entityName, _parent);
 	std::unique_ptr<EcsEntity>entPtr{ newEntity };
 	entities.emplace_back(std::move(entPtr));
 	m_newestEntity = newEntity;
@@ -252,7 +257,26 @@ std::string EcsSystem::Serialize()
 
 void EcsSystem::DeserializeEntity(std::vector<std::string> _serializedComponent)
 {
-	NewEntity(_serializedComponent[0]);
+	if (_serializedComponent.size() <= 12)
+	{
+		NewEntity(_serializedComponent[0]);
+	}
+	else if (_serializedComponent[12] == "NO_PARENT")
+	{
+		NewEntity(_serializedComponent[0]);
+	}
+	else
+	{
+		EcsEntity * foundParent = FindEntity(_serializedComponent[12]);
+		if (foundParent != NULL)
+		{
+			NewEntity(_serializedComponent[0], &foundParent->transform);
+		}
+		else
+		{
+			NewEntity(_serializedComponent[0]);
+		}
+	}
 	m_newestEntity->Deserialize(_serializedComponent);
 }
 

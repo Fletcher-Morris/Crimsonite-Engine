@@ -11,7 +11,7 @@ void EcsEntity::SetName(std::string _name)
 
 	while (uniqueNameFound == false)
 	{
-		if (EcsEntity * ent = m_system->FindEntity(tempName))
+		if (EcsEntity * ent = m_ecsSystem->FindEntity(tempName))
 		{
 			if (ent != this)
 			{
@@ -39,8 +39,28 @@ void EcsEntity::Destroy()
 		return;
 	}
 	std::cout << "Destroyed entity : " << m_name << std::endl;
-	m_system->AlertEntityDestruction();
+	m_ecsSystem->AlertEntityDestruction();
 	m_doDestroy = true;
+}
+
+void EcsEntity::SetParent(Transform * _parent)
+{
+	transform.SetParent(_parent, false);
+	if(_parent != NULL)
+	std::cout << "Set parent of entity '" << m_name << "'." << std::endl;
+}
+
+void EcsEntity::SetParent(EcsEntity * _entity)
+{
+	transform.SetParent(&_entity->transform, false);
+	if(_entity != NULL)
+	std::cout << "Parented entity '" << m_name << "' to '" << _entity->GetName() << "'." << std::endl;
+}
+
+void EcsEntity::Unparent()
+{
+	transform.Unparent(false);
+	std::cout << "Unparented entity '" << m_name << "'." << std::endl;
 }
 
 void EcsEntity::Deserialize(std::vector<std::string> _data)
@@ -64,6 +84,15 @@ std::string EcsEntity::Serialize()
 	serialized += m_immortal == true ? "true" : "false";
 	serialized += "\n";
 	serialized += transform.Serialize();
+	serialized += "\nval ";
+	if (m_ecsSystem->FindEntityByTransform(transform.GetParent()) != NULL)
+	{
+		serialized += m_ecsSystem->FindEntityByTransform(transform.GetParent())->GetName();
+	}
+	else
+	{
+		serialized += "NO_PARENT";
+	}
 	serialized += "\nEndEntity";
 	for (int i = 0; i < m_componentsVector.size(); i++)
 	{
@@ -140,6 +169,50 @@ void EcsEntity::DrawEditorProperties()
 		if (ImGui::Button("DESTROY"))
 		{
 			Destroy();
+		}
+	}
+	std::string currentParentName = "no parent";
+	if (transform.GetParent() != NULL)
+	{
+		currentParentName = m_ecsSystem->FindEntityByTransform(transform.GetParent())->GetName();
+	}
+	if (m_name != "EditorCamera")
+	{
+		if (ImGui::BeginCombo("Parent", currentParentName.c_str()))
+		{
+			if (ImGui::Button("no parent"))
+			{
+				Unparent();
+			}
+			for (int i = 0; i < m_ecsSystem->EntityCount(); i++)
+			{
+				bool showEntity = true;
+				EcsEntity * ent = &*m_ecsSystem->entities[i];
+				if (ent->IsDestroyed() == true) showEntity = false;
+				if (ent == this) showEntity = false;
+				if (ent->transform.GetParent() == GetTransformRef()) showEntity = false;
+				std::string entName = ent->GetName();
+				if (entName == "EditorCamera") showEntity = false;;
+
+				if (showEntity)
+				{
+					bool isSelected = (currentParentName == entName);
+					if (ImGui::Button(entName.c_str()))
+					{
+						SetParent(ent);
+					}
+					if (isSelected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Go To"))
+		{
+			Editor::GetEditor()->SelectEditorObject(m_ecsSystem->FindEntityByTransform(transform.GetParent()));
 		}
 	}
 	ImGui::Separator();
@@ -230,6 +303,24 @@ EcsEntity * EcsSystem::FindEntity(std::string _entityName)
 	return NULL;
 }
 
+EcsEntity * EcsSystem::FindEntityByTransform(Transform * _transform)
+{
+	if (_transform != NULL)
+	{
+		for (int i = 0; i < m_totalEntityCount; i++)
+		{
+			if (entities[i]->IsDestroyed() == false)
+			{
+				if (&entities[i]->transform == _transform)
+				{
+					return &*entities[i];
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
 void EcsSystem::Refresh()
 {
 	entities.erase(std::remove_if(std::begin(entities), std::end(entities),
@@ -242,16 +333,82 @@ void EcsSystem::Refresh()
 std::string EcsSystem::Serialize()
 {
 	std::string serialized = "";
-	for (int i = 0; i < EntityCount(); i++)
+	int capacity = 0;
+	int attempts = 0;
+	std::vector<EcsEntity*> serializedEntities;
+
 	{
-		EcsEntity * ent = &*entities[i];
-		if (ent->IsDestroyed() == false)
+		for (int i = 0; i < EntityCount(); i++)
 		{
-			if (ent->Serializable())
-				serialized += ent->Serialize();
-			serialized += "\n";
+			EcsEntity * ent = &*entities[i];
+			if (ent->IsDestroyed() == false)
+			{
+				if (ent->Serializable())
+				{
+					capacity++;
+				}
+			}
 		}
 	}
+
+	while (serializedEntities.size() < capacity && attempts < capacity * 2)
+	{
+		for (int i = 0; i < EntityCount(); i++)
+		{
+			EcsEntity * ent = &*entities[i];
+			if (ent->IsDestroyed() == false)
+			{
+				if (ent->Serializable())
+				{
+					bool allreadySerialized = false;
+					for (int k = 0; k < serializedEntities.size(); k++)
+					{
+						if (serializedEntities[k] == ent)
+						{
+							allreadySerialized = true;
+
+							break;
+						}
+
+					}
+					if (allreadySerialized == false)
+					{
+
+						bool parentAllreadySerialized = false;
+						Transform * parentTransform = ent->transform.GetParent();
+						if (parentTransform != NULL)
+						{
+							EcsEntity * parent = FindEntityByTransform(ent->transform.GetParent());
+
+							for (int j = 0; j < serializedEntities.size(); j++)
+							{
+								if (serializedEntities[j] == parent)
+								{
+									parentAllreadySerialized = true;
+									break;
+								}
+							}
+						}
+						else
+						{
+							parentAllreadySerialized = true;
+						}
+						if (parentAllreadySerialized)
+						{
+							serialized += ent->Serialize();
+							serialized += "\n";
+							serializedEntities.push_back(ent);
+						}
+						else
+						{
+							attempts++;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return serialized;
 }
 

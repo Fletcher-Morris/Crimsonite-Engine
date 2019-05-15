@@ -138,7 +138,6 @@ return forward;
 	{
 		if (_newParentTransform == NULL)
 		{
-			std::cout << "Cannot set parent of entity to null transform." << std::endl;
 			return;
 		}
 		else
@@ -154,8 +153,6 @@ return forward;
 			}
 			if (m_parentTransform != _newParentTransform)
 			{
-
-				std::cout << "Parented entity" << std::endl;
 				m_parentTransform = _newParentTransform;
 			}
 		}

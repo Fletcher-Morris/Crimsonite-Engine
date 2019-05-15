@@ -106,7 +106,7 @@ class EcsEntity : public EditorSerializable
 private:
 
 	//	Pointer to the EcsSystem this entity is part of.
-	EcsSystem * m_system;
+	EcsSystem * m_ecsSystem;
 	//	The unique id assigned to this entity.
 	int m_ecsEntityId;
 	//	The name of this entity.
@@ -135,9 +135,9 @@ private:
 
 public:
 
-	EcsEntity(EcsSystem * _system) { m_system = _system; };
-	EcsEntity(EcsSystem * _system, std::string _entityName) { m_system = _system; SetName(_entityName);};
-	EcsEntity(EcsSystem * _system, std::string _entityName, Transform * _parent) { m_system = _system; SetName(_entityName); transform.SetParent(_parent); };
+	EcsEntity(EcsSystem * _system) { m_ecsSystem = _system; };
+	EcsEntity(EcsSystem * _system, std::string _entityName) { m_ecsSystem = _system; SetName(_entityName);};
+	EcsEntity(EcsSystem * _system, std::string _entityName, Transform * _parent) { m_ecsSystem = _system; SetName(_entityName); transform.SetParent(_parent); };
 	//	Set the name of this entity.
 	void SetName(std::string _name);
 	//	Return the name of this entity.
@@ -157,11 +157,16 @@ public:
 	//	Return the unique identity assigned to this entity.
 	int GetEcsEntityId() { return m_ecsEntityId; }
 	//	Return the EcsSystem this entity is part of.
-	EcsSystem * GetEcsSystem() { return m_system; }
+	EcsSystem * GetEcsSystem() { return m_ecsSystem; }
 	//	The Transform of the entity.
 	Transform transform;
 	//	Return a reference to the entity's Transform.
 	Transform * GetTransformRef() { return &transform; }
+	//	Set the Entity's Transform's parent.
+	void SetParent(Transform * _parent);
+	void SetParent(EcsEntity * _entity);
+	//	Unparent the Entity.
+	void Unparent();
 	//	Return the number of components on this entity.
 	int ComponentCount() { return m_componentsArray.size(); }
 	//	Called when loading the scene.
@@ -236,6 +241,7 @@ public:
 	std::vector<EcsEntity*> FindEntitiesWithComponent();
 	template<typename T> std::vector<T*> GetAllComponentsOfType();
 	EcsEntity * GetEntityById(int _id) { return &*entities[_id]; }
+	EcsEntity * FindEntityByTransform(Transform * _transform);
 	//	Destroy a given entity.
 	void DestroyEntity(EcsEntity & _deleteEntity) { _deleteEntity.Destroy(); }
 	//	Destroy an entity with a given name.

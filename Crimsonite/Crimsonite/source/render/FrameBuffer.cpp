@@ -21,4 +21,7 @@ void FrameBuffer::Resize(int _width, int _height)
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	m_width = _width;
+	m_height = _height;
 }

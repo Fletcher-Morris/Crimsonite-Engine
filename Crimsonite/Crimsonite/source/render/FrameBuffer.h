@@ -28,10 +28,14 @@ public:
 	void Unbind() {};
 
 	void Resize(int _width, int _height);
+	int Width() { return m_width; }
+	int Height() { return m_height; }
 
 private:
 
 	Texture * m_linkedTex;
 	std::string m_name;
+	int m_width;
+	int m_height;
 
 };

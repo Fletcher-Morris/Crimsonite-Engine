@@ -53,15 +53,24 @@ public:
 	//	Get the view-projection matrix for this camera.
 	const glm::mat4 GetProjectionViewMatrix() { return m_projectionViewMatrix; }
 
+	//	Set the output FrameBuffer for this Camera.
 	void SetOutputFrameBuffer(FrameBuffer * _buffer) { m_frameBuffer = _buffer; }
+	//	Set the output FrameBuffer for this Camera by name.
 	void SetOutputFrameBuffer(std::string _bufferName) { SetOutputFrameBuffer(AssetManager::GetFrameBuffer(_bufferName)); }
+	//	Set the output FrameBuffer for this Camera by name, creating onf if it does not exist.
 	void SetOutputFrameBuffer(std::string _bufferName, bool _create) { SetOutputFrameBuffer(AssetManager::GetFrameBuffer(_bufferName, _create)); }
+	//	Resize this Camera's FrameBuffer.
 	void ResizeFramebuffer(int _width, int _height);
+	//	Return this Camera's FrameBuffer.
 	FrameBuffer * GetOutputFrameBuffer() { return m_frameBuffer; }
+	//	Return the name of this Camera' FrameBuffer, or 'NO_BUFFER' if it does not exist.
 	std::string GetFrameBufferName() { if (m_frameBuffer) return GetOutputFrameBuffer()->GetName(); else return "NO_BUFFER"; }
+	//	Force this camera to use a FrameBuffer.
 	void EnforceFrameBuffer();
 
+	//	Does this Camera's FrameBuffer automatically resize to match the window?
 	bool AutoResize() { return m_autoResize; }
+	//	Set whether this Camera's FrameBuffer automatically resizes to match the window.
 	void SetAutoResize(bool _autoResize) { m_autoResize = _autoResize; }
 
 
@@ -77,10 +86,13 @@ private:
 	//	The view-projection matrix of the camera.
 	glm::mat4 m_projectionViewMatrix;
 
+	//	The FrameBuffer used by this Camera.
 	FrameBuffer * m_frameBuffer;
 
+	//	The Renderer used by this Camera.
 	Renderer * m_renderer;
 
+	//	Does this Camera auto-resize?
 	bool m_autoResize = true;
 
 };

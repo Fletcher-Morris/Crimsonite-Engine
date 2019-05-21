@@ -58,12 +58,6 @@ void SimpleRenderer::Flush()
 		glClearColor(p_r, p_g, p_b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-		if (!m_cameras[c]->GetOutputFrameBuffer())
-		{
-			//glViewport(0, 0, m_cameras[c]->GetOutputFrameBuffer()->GetLinkedTexture()->GetWidth(), m_cameras[c]->GetOutputFrameBuffer()->GetLinkedTexture()->GetHeight());
-		}
-
 		for (int i = 0; i < m_meshes.size(); i++)
 		{
 			glBindVertexArray(m_meshes[i]->GetVao());
@@ -86,7 +80,6 @@ void SimpleRenderer::Flush()
 				glDrawElements(p_renderModeOverride, m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
 			}
 		}
-
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

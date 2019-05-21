@@ -54,7 +54,7 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 		std::cout << "Failed to create GLFW window!" << std::endl; return;
 	}
 	Window::SetCore(this);
-	Window::UpdateGlfwMode(m_videoMode->width, m_videoMode->height, m_videoMode->refreshRate);
+	Window::UpdateWindowStats(m_videoMode->width, m_videoMode->height, m_videoMode->refreshRate);
 	glfwMakeContextCurrent(m_window);
 	glfwSetFramebufferSizeCallback(m_window, GlfwFrameBufferSizeCallback);
 	glfwSetKeyCallback(m_window, GlfwKeyCallback);
@@ -208,7 +208,7 @@ void CrimsonCore::OpenScene(std::string _sceneName)
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
 	glViewport(0, 0, _width, _height);
-	Window::UpdateGlfwMode(_width, _height);
+	Window::UpdateWindowStats(_width, _height);
 #if _DEBUG
 #else
 	Scene::Current()->SetFrameSize(_width, _height);

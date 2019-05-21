@@ -44,6 +44,7 @@
     <ClInclude Include="source\asset\AssetManager.h" />
     <ClInclude Include="source\asset\Scene.h" />
     <ClInclude Include="source\core.h" />
+    <ClInclude Include="source\core\Common.h" />
     <ClInclude Include="source\core\CrimsonCore.h" />
     <ClInclude Include="source\core\Input.h" />
     <ClInclude Include="source\core\Time.h" />

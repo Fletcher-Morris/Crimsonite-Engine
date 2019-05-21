@@ -8,8 +8,7 @@
 #include <iostream>
 #include <typeinfo>
 
-#include "../asset/AssetManager.h"
-#include "../core/Time.h"
+#include "../core/Common.h"
 #include "Transform.h"
 
 //	Forward-declare ECS classes for compiler.
@@ -17,15 +16,16 @@ class EcsEntity;
 class EcsComponent;
 class EcsSystem;
 
-//	Tyhe maximum number of components on any entity.
+//	The maximum number of components on any entity.
 const int MAX_ENT_COMPONENTS = 32;
+//	Get the unique ID for this component.
 inline int GetComponentId()
 {
 	static int prevComponentId = 0;
 	return prevComponentId++;
 }
-template <typename T>
-inline int GetComponentId() noexcept
+//	Get the unique ID for this component.
+template <typename T> inline int GetComponentId() noexcept
 {
 	static int id = GetComponentId();
 	return id;
@@ -114,7 +114,9 @@ private:
 	char m_tempName[128] = "temp name";
 	//	The enabled state of this entity.
 	bool m_enabled = true;
+	//	Was this Entity enabled during the previous frame?
 	bool m_enabledPrev = true;
+	//	If the enabled state of this Entity recently changed, call the SetEnabled method.
 	void EnabledChangedCheck()
 	{
 		if (m_enabled != m_enabledPrev)
@@ -131,12 +133,16 @@ private:
 	std::vector<std::unique_ptr<EcsComponent>> m_componentsVector;
 	std::array<EcsComponent*, MAX_ENT_COMPONENTS> m_componentsArray;
 	std::bitset<MAX_ENT_COMPONENTS> m_componentsBitset;
+	//	The total number of Components on this Entity.
 	int m_componentsCount = 0;
 
 public:
 
+	//	Create an Entity using a reference to the ECS System.
 	EcsEntity(EcsSystem * _system) { m_ecsSystem = _system; };
-	EcsEntity(EcsSystem * _system, std::string _entityName) { m_ecsSystem = _system; SetName(_entityName);};
+	//	Create an Entity using an ECS System reference, and a name for the Entity.
+	EcsEntity(EcsSystem * _system, std::string _entityName) { m_ecsSystem = _system; SetName(_entityName); };
+	//	Create an Entity using an ECS System reference, a name for the Entity, and a desired parent Transform.
 	EcsEntity(EcsSystem * _system, std::string _entityName, Transform * _parent) { m_ecsSystem = _system; SetName(_entityName); transform.SetParent(_parent); };
 	//	Set the name of this entity.
 	void SetName(std::string _name);
@@ -226,9 +232,11 @@ private:
 
 public:
 
+	//	Refersh the ECS, perform garbage collection, etc.
 	EcsSystem() { Refresh(); }
 	//	A vector of all created entities.
 	std::vector<std::unique_ptr<EcsEntity>> entities;
+	//	Return the total number of Entities in use.
 	int EntityCount() { return m_totalEntityCount; }
 	EcsEntity * NewestEntity() { return m_newestEntity; }
 	//	Create a new entity with a given name.
@@ -237,10 +245,13 @@ public:
 	EcsEntity& NewEntity(std::string _entityName, Transform * _parent);
 	//	Find an entity with a given name.
 	EcsEntity * FindEntity(std::string _entityName);
-	template<typename T>
-	std::vector<EcsEntity*> FindEntitiesWithComponent();
-	template<typename T> std::vector<T*> GetAllComponentsOfType();
+	//	Retun references to all Entities with an attached Component of a specific type.
+	template <typename T> std::vector<EcsEntity*> FindEntitiesWithComponent();
+	//	Return references to all Components of a specific type on existing Entities.
+	template <typename T> std::vector<T*> GetAllComponentsOfType();
+	//	Return an Entity with a specific ID.
 	EcsEntity * GetEntityById(int _id) { return &*entities[_id]; }
+	//	Return an Entity with a specific TRansform reference.
 	EcsEntity * FindEntityByTransform(Transform * _transform);
 	//	Destroy a given entity.
 	void DestroyEntity(EcsEntity & _deleteEntity) { _deleteEntity.Destroy(); }
@@ -254,16 +265,18 @@ public:
 	}
 	//	Clear out all destroyed entities and reset counters.
 	void Refresh();
+	//	Serialzie the ECS.
 	std::string Serialize() override;
 	//	Called by the editor.
 	std::string GetTypeString() override
 	{
 		return "EcsSystem";
 	}
+	//	
 	void DeserializeEntity(std::vector<std::string> _serializedComponent);
-	void DeserializeComponent(std::vector<std::string> _serializedComponent);
 };
 
+//	Attach a Component of a specific type to an Entity.
 template<typename T, typename ...args>
 inline T * EcsEntity::AttachComponent(args && ..._args)
 {
@@ -282,6 +295,7 @@ inline T * EcsEntity::AttachComponent(args && ..._args)
 	return newComponent;
 }
 
+//	Retun references to all Entities with an attached Component of a specific type.
 template<typename T>
 inline std::vector<EcsEntity*> EcsSystem::FindEntitiesWithComponent()
 {
@@ -296,6 +310,7 @@ inline std::vector<EcsEntity*> EcsSystem::FindEntitiesWithComponent()
 	return foundEntities;
 }
 
+//	Return references to all Components of a specific type on existing Entities.
 template<typename T>
 inline std::vector<T*> EcsSystem::GetAllComponentsOfType()
 {

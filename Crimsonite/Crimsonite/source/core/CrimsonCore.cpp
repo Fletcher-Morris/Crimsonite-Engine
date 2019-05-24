@@ -115,14 +115,6 @@ void CrimsonCore::RunEngine()
 	AssetManager::LoadShader("skybox", m_assetPath + "shaders/vertex.vert", m_assetPath + "shaders/skybox.frag");
 	AssetManager::CreatePassthroughShader();
 
-	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "editor"))
-	{
-		std::string path = entry.path().u8string();
-		std::string name = path;
-		std::string editorPath = m_assetPath + "editor\\";
-		name.erase(path.find(editorPath), editorPath.length());
-		AssetManager::ContextualLoad(path, name);
-	}
 	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "textures"))
 	{
 		std::string path = entry.path().u8string();
@@ -157,6 +149,14 @@ void CrimsonCore::RunEngine()
 	}
 
 #if _DEBUG
+	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "editor"))
+	{
+		std::string path = entry.path().u8string();
+		std::string name = path;
+		std::string editorPath = m_assetPath + "editor\\";
+		name.erase(path.find(editorPath), editorPath.length());
+		AssetManager::ContextualLoad(path, name);
+	}
 	m_editor = new Editor(this);
 #endif // DEBUG
 

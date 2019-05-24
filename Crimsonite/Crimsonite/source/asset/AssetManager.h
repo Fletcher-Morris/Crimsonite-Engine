@@ -80,6 +80,10 @@ public:
 	static void CreatePassthroughShader();
 	//	Return a reference to the passthrough Shader.
 	static 	Shader * GetPassthroughShader();
+	//	Create the wireframe shader.
+	static void CreateWireframeShader();
+	//	Return a reference to the wireframe Shader.
+	static 	Shader * GetWireframeShader();
 	static int ShaderCount() { return Instance()->m_loadedShaderNames.size(); }
 
 
@@ -184,6 +188,8 @@ private:
 	Shader * GetDefaultShader();
 	//	Has the passthrough Shader been created?
 	bool m_passthroughShaderCreated = false;
+	//	Has the wireframe Shader been created?
+	bool m_wireframeShaderCreated = false;
 
 
 	//	The map of all loaded materials.

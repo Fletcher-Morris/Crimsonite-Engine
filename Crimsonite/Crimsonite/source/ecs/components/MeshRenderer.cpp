@@ -73,6 +73,8 @@ void MeshRenderer::DrawEditorProperties()
 	}
 	ImGui::NewLine();
 	m_material->DrawEditorProperties();
+
+	DrawAdditionalWireframe(true);
 }
 
 std::string MeshRenderer::Serialize()
@@ -159,6 +161,11 @@ void MeshRenderer::SubmitToRenderer(Renderer * _renderer)
 	SubmitToRenderer();
 }
 
+void MeshRenderer::DrawAdditionalWireframe(bool _draw)
+{
+	m_drawWireframe = _draw;
+}
+
 void MeshRenderer::SetShaderMvp()
 {
 	m_projMatrix = CreateProjectionMatrix(60.0f, 16.0f / 9.0f, 0.1f, 1000.0f);
@@ -176,6 +183,5 @@ void MeshRenderer::UpdateShaderMvp()
 {
 	m_modelMatrix = CreateModelMatrix(&entity->transform);
 	m_mvpMatrix = m_projMatrix * m_viewMatrix *  m_modelMatrix;
-
 	m_material->GetShader()->SetMvpMatrix(m_modelMatrix, m_viewMatrix, m_projMatrix);
 }

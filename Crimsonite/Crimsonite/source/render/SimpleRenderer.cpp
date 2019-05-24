@@ -74,6 +74,13 @@ void SimpleRenderer::Flush()
 			if (p_renderModeOverride == -1)
 			{
 				glDrawElements(m->GetRenderMode(), m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+				if (m->DoDrawWireframe() && m_cameras[c]->entity->GetName() == "EditorCamera")
+				{
+					AssetManager::GetWireframeShader()->Bind();
+					AssetManager::GetWireframeShader()->SetMvpMatrix(m->GetModelMatrix(), m->GetViewMatrix(), m->GetProjMatrix());
+					glDrawElements(GL_LINES, m->GetMesh()->IndexCount(), GL_UNSIGNED_INT, 0);
+					m->DrawAdditionalWireframe(false);
+				}
 			}
 			else
 			{

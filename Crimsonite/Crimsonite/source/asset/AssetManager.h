@@ -28,6 +28,7 @@ public:
 
 	static void SetEngine(CrimsonCore * _core);
 
+	//	Attempt to load an asset based off of it's extension.
 	static void ContextualLoad(std::string _path, std::string _name);
 
 	//	Load a Texture from a file with an assigned name.

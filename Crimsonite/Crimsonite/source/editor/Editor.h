@@ -21,6 +21,7 @@ private:
 	char m_tempSceneName[128] = "New Scene";
 	char m_tempMaterialName[128] = "New Material";
 	float m_mouseRotateSpeed = 25.0f;
+	float  m_tempTimeScale = 1.0f;
 
 	bool m_matchWindowToPlayMode = false;
 	bool m_usingEditorTab = false;

@@ -6,12 +6,10 @@
 #include <gl/glew.h>
 #include <glfw3.h>
 
-#include "Window.h"
+#include "Common.h"
 
-#include "Input.h"
 #include "../ecs/ECS.h"
 #include "../ecs/Components.h"
-#include "../asset/AssetManager.h"
 #include "../render/SimpleRenderer.h"
 
 class Editor;

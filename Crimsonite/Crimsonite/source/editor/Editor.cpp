@@ -272,6 +272,13 @@ void Editor::DrawGui()
 			float * newClearColor = m_currentScene->Renderer()->GetClearColor();
 			ImGui::ColorEdit3("Clear Colour", newClearColor);
 			m_currentScene->Renderer()->SetClearColor(newClearColor);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Global"))
+		{
+			m_tempTimeScale = Time::GetTimeScale();
+			ImGui::InputFloat("Time Scale", &m_tempTimeScale);
+			Time::SetTimeScale(m_tempTimeScale);
 			if (ImGui::Button("Auto"))
 			{
 				m_currentScene->Renderer()->SetOverrideMode(-1);
@@ -300,6 +307,10 @@ void Editor::DrawGui()
 			{
 				Window::SetFullscreen(!Window::IsFullscreen());
 			}
+			if (ImGui::Button("Quit"))
+			{
+				Quit();
+			}
 			ImGui::EndMenu();
 		}
 
@@ -315,7 +326,7 @@ void Editor::DrawGui()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 	ImGui::Begin("Toolbar", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 	{
-		ImGui::SameLine();
+		/*ImGui::SameLine();
 		if (m_selectedTool == TOOL_MOVE)
 		{
 			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_move_selected")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255))) {}
@@ -348,7 +359,7 @@ void Editor::DrawGui()
 		{
 			if (ImGui::ImageButton((GLuint*)AssetManager::GetTexture("editor_tool_scale")->TextureId, ImVec2(35.0f, 35.0f), ImVec2(0, 0), ImVec2(1, 1), 0, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255)))
 			{ SelectEditorTool(TOOL_SCALE); }
-		}
+		}*/
 
 		if (m_engine->GetPlayMode() == PLAYMODE_STOPPED)
 		{
@@ -471,6 +482,7 @@ void Editor::Update()
 	else if (Input::GetKey(KEYCODE_Q)) moveVector.y = -1;
 	if (Input::GetKey(KEYCODE_W)) moveVector.z = 1;
 	else if (Input::GetKey(KEYCODE_S)) moveVector.z = -1;
+	if (Input::GetKey(KEYCODE_LEFT_SHIFT)) moveVector *= 2;
 	m_editorCam->entity->transform.Move(moveVector * Time::DeltaTime(), true);
 	if (Input::GetMouseButton(MOUSE_RIGHT))
 	{

@@ -101,7 +101,6 @@ void Scene::Deserialize()
 			}
 			else if (strcmp(lineData, "EndComponent") == 0)
 			{
-				m_ecs->DeserializeComponent(descriptionLines);
 				std::string componentName = descriptionLines[0];
 				if (componentName == "Camera")
 				{

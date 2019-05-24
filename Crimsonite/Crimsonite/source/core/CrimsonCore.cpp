@@ -54,7 +54,7 @@ void CrimsonCore::InitializeGlfw(std::string _appName)
 		std::cout << "Failed to create GLFW window!" << std::endl; return;
 	}
 	Window::SetCore(this);
-	Window::UpdateGlfwMode(m_videoMode->width, m_videoMode->height, m_videoMode->refreshRate);
+	Window::UpdateWindowStats(m_videoMode->width, m_videoMode->height, m_videoMode->refreshRate);
 	glfwMakeContextCurrent(m_window);
 	glfwSetFramebufferSizeCallback(m_window, GlfwFrameBufferSizeCallback);
 	glfwSetKeyCallback(m_window, GlfwKeyCallback);
@@ -115,14 +115,6 @@ void CrimsonCore::RunEngine()
 	AssetManager::LoadShader("skybox", m_assetPath + "shaders/vertex.vert", m_assetPath + "shaders/skybox.frag");
 	AssetManager::CreatePassthroughShader();
 
-	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "editor"))
-	{
-		std::string path = entry.path().u8string();
-		std::string name = path;
-		std::string editorPath = m_assetPath + "editor\\";
-		name.erase(path.find(editorPath), editorPath.length());
-		AssetManager::ContextualLoad(path, name);
-	}
 	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "textures"))
 	{
 		std::string path = entry.path().u8string();
@@ -157,6 +149,14 @@ void CrimsonCore::RunEngine()
 	}
 
 #if _DEBUG
+	for (const auto & entry : std::filesystem::recursive_directory_iterator(m_assetPath + "editor"))
+	{
+		std::string path = entry.path().u8string();
+		std::string name = path;
+		std::string editorPath = m_assetPath + "editor\\";
+		name.erase(path.find(editorPath), editorPath.length());
+		AssetManager::ContextualLoad(path, name);
+	}
 	m_editor = new Editor(this);
 #endif // DEBUG
 
@@ -208,7 +208,7 @@ void CrimsonCore::OpenScene(std::string _sceneName)
 void GlfwFrameBufferSizeCallback(GLFWwindow * _window, int _width, int _height)
 {
 	glViewport(0, 0, _width, _height);
-	Window::UpdateGlfwMode(_width, _height);
+	Window::UpdateWindowStats(_width, _height);
 #if _DEBUG
 #else
 	Scene::Current()->SetFrameSize(_width, _height);

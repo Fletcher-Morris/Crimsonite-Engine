@@ -12,9 +12,13 @@ class SimpleRenderer : public Renderer
 
 private:
 
+	//	A vector of Camera references.
 	std::vector<Camera*> m_cameras;
+	//	A vector of Mesh references.
 	std::vector<Mesh*> m_meshes;
+	//	A vector of Shader references.
 	std::vector<Shader*> m_shaders;
+	//	A vector of MeshRenderer references.
 	std::vector<MeshRenderer*> m_meshRenderers;
 
 public:

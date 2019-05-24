@@ -17,6 +17,7 @@ private:
 	Renderer * m_renderer;
 
 	int m_renderMode = GL_TRIANGLES;
+	bool m_drawWireframe = false;
 
 	glm::mat4 m_modelMatrix;
 	glm::mat4 m_viewMatrix;
@@ -47,10 +48,17 @@ public:
 	void SubmitToRenderer();
 	void SubmitToRenderer(Renderer * _renderer);
 
+	bool DoDrawWireframe() { return m_drawWireframe; }
+	void DrawAdditionalWireframe(bool _draw);
+
 	void SetShaderMvp();
 	void SetShaderMvp(Camera * _camera);
 	void SetShaderMvp(float _fov, float _ratio, float _near, float _far);
 	void UpdateShaderMvp();
+
+	glm::mat4 GetModelMatrix() { return m_modelMatrix; }
+	glm::mat4 GetViewMatrix() { return m_viewMatrix; }
+	glm::mat4 GetProjMatrix() { return m_projMatrix; }
 
 	void SetRenderMode(int _mode)
 	{

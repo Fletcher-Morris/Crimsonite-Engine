@@ -3,6 +3,7 @@
 #include <vector>
 #include "Components.h"
 
+//	Return the names of created Components.
 static std::vector<std::string> GetComponentNames()
 {
 	std::vector<std::string> names;
@@ -12,6 +13,7 @@ static std::vector<std::string> GetComponentNames()
 	return names;
 }
 
+//	Attach a Component with a given name to a specific Entity.
 static void AttachComponentWithName(EcsEntity * _entity, std::string _componentName)
 {
 	if (_componentName == "Camera")

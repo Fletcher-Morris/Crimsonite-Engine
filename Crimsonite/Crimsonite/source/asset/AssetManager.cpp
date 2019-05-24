@@ -853,6 +853,43 @@ Shader * AssetManager::GetPassthroughShader()
 	return &m_instance->m_shaders.at("passthrough");
 }
 
+void AssetManager::CreateWireframeShader()
+{
+	if (Instance()->m_wireframeShaderCreated == true) return;
+	std::string vertexString =
+		"#version 330 core\n"
+		"layout(location = 0) in vec3 position;\n"
+		"mat4 MVP;\n"
+		"uniform mat4 Model;\n"
+		"uniform mat4 View;\n"
+		"uniform mat4 Projection;\n"
+		"void main()\n"
+		"{\n"
+		"MVP = Projection * View * Model;\n"
+		"gl_Position = MVP * vec4(position.x, position.y, position.z, 1.0);\n"
+		"}";
+	std::string fragmentString =
+		"#version 330 core\n"
+		"layout(location = 0) out vec4 color;\n"
+		"void main()\n"
+		"{\n"
+		"color = vec4(0.86,0.08,0.24,1.0);\n"
+		"}";
+
+	Shader shader = Shader("wireframe");
+	shader.Compile(vertexString, fragmentString);
+	m_instance->m_shaders["wireframe"] = shader;
+	m_instance->m_wireframeShaderCreated = true;
+	m_instance->LoadShaderName("wireframe");
+	std::cout << "Created Wireframe Shader." << std::endl;
+}
+
+Shader * AssetManager::GetWireframeShader()
+{
+	CreateWireframeShader();
+	return &m_instance->m_shaders.at("wireframe");
+}
+
 bool AssetManager::MaterialExists(std::string _materialName)
 {
 	for (int i = 0; i < m_loadedMaterialNames.size(); i++)

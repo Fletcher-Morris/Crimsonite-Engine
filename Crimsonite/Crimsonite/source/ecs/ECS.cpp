@@ -446,10 +446,6 @@ void EcsSystem::DeserializeEntity(std::vector<std::string> _serializedComponent)
 	m_newestEntity->Deserialize(_serializedComponent);
 }
 
-void EcsSystem::DeserializeComponent(std::vector<std::string> _serializedComponent)
-{
-}
-
 void EcsComponent::DetachFromEntity()
 {
 	m_detached = true;

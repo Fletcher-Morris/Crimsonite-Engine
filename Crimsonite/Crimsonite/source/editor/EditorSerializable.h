@@ -14,8 +14,9 @@ public:
 	//	Get the serializable properties of the class.
 	virtual std::string Serialize() { return std::string(); }
 
-	//	Used for drawing editor properties and tools.
+	//	Draw the editor properties and tools.
 	virtual void DrawEditorProperties() {}
 
+	//	Return the 'Type' of serialized object, e.g. EcsEntity/EcsComponent.
 	virtual std::string GetTypeString() { return std::string(); }
 };

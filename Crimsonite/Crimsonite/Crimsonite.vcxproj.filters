@@ -253,5 +253,8 @@
     <ClInclude Include="source\ecs\ComponentNames.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\Common.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -482,6 +482,7 @@ void Editor::Update()
 	else if (Input::GetKey(KEYCODE_Q)) moveVector.y = -1;
 	if (Input::GetKey(KEYCODE_W)) moveVector.z = 1;
 	else if (Input::GetKey(KEYCODE_S)) moveVector.z = -1;
+	if (Input::GetKey(KEYCODE_LEFT_SHIFT)) moveVector *= 2;
 	m_editorCam->entity->transform.Move(moveVector * Time::DeltaTime(), true);
 	if (Input::GetMouseButton(MOUSE_RIGHT))
 	{
